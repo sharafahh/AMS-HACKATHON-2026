@@ -250,14 +250,15 @@ export const verifyPayment = async (req, res) => {
       savedRegistration = registrationPayload;
     }
 
-    // 4. Send Confirmation Email (Keep existing functionality)
+    // 4. Send Confirmation Email (Triggered strictly after payment verification & DB save)
     sendConfirmationEmail({
       toEmail: teamData.leaderEmail,
+      leaderName: teamData.leaderName,
       teamName: teamData.teamName,
       registrationId,
       paymentId: razorpay_payment_id,
       amount: amountPaid,
-      track: teamData.track,
+      numMembers,
       college: teamData.college,
     });
 
