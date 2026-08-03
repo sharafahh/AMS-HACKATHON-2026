@@ -42,8 +42,8 @@ function Portal() {
     setError("");
 
     try {
-      // Call Backend API to fetch team
-      const res = await fetch(`http://localhost:5000/api/teams/${encodeURIComponent(q.trim())}`);
+      // Call Backend API to fetch team by ID or email
+      const res = await fetch(`/api/teams/${encodeURIComponent(q.trim())}`);
       const data = await res.json();
 
       if (data.success && data.team) {

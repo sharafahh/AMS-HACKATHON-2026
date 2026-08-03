@@ -173,28 +173,92 @@ export const getTeams = async (req, res) => {
   }
 };
 
-// @desc    Get single team by ID or registrationId
+// @desc    Get single team by ID, registrationId, email, or phone
 // @route   GET /api/teams/:id
 // @access  Public
 export const getTeamById = async (req, res) => {
   try {
     const { id } = req.params;
+    const queryStr = decodeURIComponent(id).trim();
+    if (!queryStr) {
+      return res.status(400).json({ success: false, message: "Please provide a valid search query" });
+    }
+
+    const regexQuery = new RegExp(`^${queryStr}$`, "i");
+    const containsQuery = new RegExp(queryStr, "i");
+
     let team = null;
 
+    // 1. Search Team collection
     try {
       team = await Team.findOne({
-        $or: [{ registrationId: id.toUpperCase() }, { _id: id }],
+        $or: [
+          { registrationId: regexQuery },
+          { registrationId: queryStr.toUpperCase() },
+          { "leader.email": regexQuery },
+          { "leader.email": containsQuery },
+          { "leader.phone": regexQuery },
+          { teamName: regexQuery },
+          { _id: queryStr.match(/^[0-9a-fA-F]{24}$/) ? queryStr : null },
+        ],
       });
     } catch (err) {
       team = localMemoryTeams.find(
-        (t) => t.registrationId === id.toUpperCase() || t._id === id
+        (t) =>
+          t.registrationId === queryStr.toUpperCase() ||
+          t.leader?.email?.toLowerCase() === queryStr.toLowerCase() ||
+          t._id === queryStr
       );
+    }
+
+    // 2. If not found in Team collection, search Registration collection
+    if (!team) {
+      try {
+        const reg = await Registration.findOne({
+          $or: [
+            { razorpayOrderId: queryStr },
+            { razorpayPaymentId: queryStr },
+            { email: regexQuery },
+            { email: containsQuery },
+            { phoneNumber: queryStr },
+            { teamName: regexQuery },
+            { _id: queryStr.match(/^[0-9a-fA-F]{24}$/) ? queryStr : null },
+          ],
+        });
+
+        if (reg) {
+          const numMembers = Array.isArray(reg.teamMembers) && reg.teamMembers.length > 0 ? reg.teamMembers.length : 3;
+          team = {
+            _id: reg._id,
+            registrationId: reg.razorpayOrderId || `REG-${reg._id.toString().slice(-6).toUpperCase()}`,
+            teamName: reg.teamName,
+            teamSize: numMembers,
+            leader: {
+              name: reg.teamLeaderName,
+              email: reg.email,
+              phone: reg.phoneNumber,
+              college: reg.collegeName,
+              department: reg.department,
+              year: reg.year || "3rd Year",
+            },
+            members: reg.teamMembers || [],
+            track: "Open Innovation",
+            problemTitle: "AMS Hackathon Challenge",
+            problemAbstract: "Submitted during registration",
+            paymentStatus: reg.paymentStatus || "PAID",
+            status: "CONFIRMED",
+            createdAt: reg.registrationTimestamp || reg.createdAt,
+          };
+        }
+      } catch (regErr) {
+        console.warn("Could not query Registration collection in getTeamById:", regErr.message);
+      }
     }
 
     if (!team) {
       return res.status(404).json({
         success: false,
-        message: "Registration not found",
+        message: `No registration found matching "${queryStr}".`,
       });
     }
 
@@ -203,6 +267,7 @@ export const getTeamById = async (req, res) => {
       team,
     });
   } catch (error) {
+    console.error("Error in getTeamById:", error);
     return res.status(500).json({
       success: false,
       message: "Error retrieving team details",
