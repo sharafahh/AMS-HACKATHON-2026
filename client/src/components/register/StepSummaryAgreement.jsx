@@ -1,11 +1,11 @@
 import { FiCheckCircle, FiShield, FiUsers, FiCpu, FiCreditCard, FiZap } from "react-icons/fi";
-import { REGISTRATION_FEE } from "../../constants/fee";
+import { REGISTRATION_FEE_PER_PERSON } from "../../constants/fee";
 
 function StepSummaryAgreement({ register, errors, watch }) {
   const formValues = watch();
   const teamSize = Number(formValues.teamSize || 4);
   const members = formValues.members || [];
-  const feePerPerson = REGISTRATION_FEE;
+  const feePerPerson = REGISTRATION_FEE_PER_PERSON;
   const totalFeeINR = teamSize * feePerPerson;
 
   return (
@@ -28,10 +28,10 @@ function StepSummaryAgreement({ register, errors, watch }) {
           </div>
           <div>
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-400">
-              Mandatory Registration Fee (₹{REGISTRATION_FEE} / Person)
+              Mandatory Registration Fee (₹{REGISTRATION_FEE_PER_PERSON} / Person)
             </span>
             <h3 className="text-xl font-bold font-['Space_Grotesk'] text-white">
-              ₹{totalFeeINR} INR ({teamSize} Team Members × ₹{REGISTRATION_FEE})
+              ₹{totalFeeINR} INR ({teamSize} Team Members × ₹{REGISTRATION_FEE_PER_PERSON})
             </h3>
             <p className="text-gray-300 text-xs font-light">
               Secures lab space, refreshments, mentorship, and participation certificates.
@@ -132,7 +132,7 @@ function StepSummaryAgreement({ register, errors, watch }) {
             className="mt-1 w-4 h-4 rounded border-white/20 text-cyan-500 focus:ring-cyan-500 bg-white/5"
           />
           <span className="text-xs text-gray-300 font-light leading-relaxed">
-            I confirm that all team details are accurate, agree to pay the mandatory fee of ₹{totalFeeINR} (₹{REGISTRATION_FEE} × {teamSize} members), and abide by the official <strong className="text-cyan-400">AMS HACKATHON 2026 Code of Conduct & Rules</strong>.
+            I confirm that all team details are accurate, agree to pay the mandatory fee of ₹{totalFeeINR} (₹{REGISTRATION_FEE_PER_PERSON} × {teamSize} members), and abide by the official <strong className="text-cyan-400">AMS HACKATHON 2026 Code of Conduct & Rules</strong>.
           </span>
         </label>
         {errors.agreement && (

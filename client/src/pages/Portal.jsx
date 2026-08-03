@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { REGISTRATION_FEE } from "../constants/fee";
+import { REGISTRATION_FEE_PER_PERSON } from "../constants/fee";
 import {
   FiSearch,
   FiUser,
@@ -280,7 +280,7 @@ function Portal() {
                     <FiPrinter size={18} /> Official Payment Receipt
                   </h4>
                   <p className="text-gray-300 font-light">
-                    Amount Paid: <strong>₹{(teamResult.teamSize || 4) * REGISTRATION_FEE} INR</strong> (Razorpay Secured).
+                    Amount Paid: <strong>₹{(teamResult.teamSize || 4) * REGISTRATION_FEE_PER_PERSON} INR</strong> (Razorpay Secured).
                   </p>
                 </div>
                 <button

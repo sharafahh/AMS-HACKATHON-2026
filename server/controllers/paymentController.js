@@ -6,7 +6,7 @@ import Payment from "../models/Payment.js";
 import Registration from "../models/Registration.js";
 import { generateRegistrationId } from "../utils/generateId.js";
 import { sendConfirmationEmail } from "../utils/emailService.js";
-import { REGISTRATION_FEE } from "../config/constants.js";
+import { REGISTRATION_FEE_PER_PERSON } from "../config/constants.js";
 
 dotenv.config();
 
@@ -32,7 +32,7 @@ const getRazorpayInstance = () => {
 const processedPayments = new Set();
 const localMemoryTeams = [];
 
-// @desc    Create Razorpay Order (Uses REGISTRATION_FEE constant = ₹1 per member)
+// @desc    Create Razorpay Order (Calculates total = numMembers * REGISTRATION_FEE_PER_PERSON)
 // @route   POST /api/payments/create-order
 // @access  Public
 export const createOrder = async (req, res) => {
@@ -47,8 +47,8 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR) || REGISTRATION_FEE; // REGISTRATION_FEE = 1
-    const totalAmountINR = numMembers * feePerMember;
+    // Single source of truth calculation: totalAmount = numMembers * REGISTRATION_FEE_PER_PERSON
+    const totalAmountINR = numMembers * REGISTRATION_FEE_PER_PERSON;
     const amountInPaise = totalAmountINR * 100; // Razorpay uses paise (100 paise = ₹1)
 
     const receipt = `rcpt_${Date.now()}`;
@@ -59,7 +59,7 @@ export const createOrder = async (req, res) => {
       notes: {
         event: "AMS HACKATHON 2026",
         teamSize: numMembers,
-        feePerPerson: feePerMember,
+        feePerPerson: REGISTRATION_FEE_PER_PERSON,
       },
     };
 
@@ -159,8 +159,7 @@ export const verifyPayment = async (req, res) => {
 
     // 3. Payment Verified -> Save Registration Model to MongoDB Atlas
     const numMembers = Number(teamData.teamSize || 4);
-    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR) || REGISTRATION_FEE;
-    const amountPaid = numMembers * feePerMember;
+    const amountPaid = numMembers * REGISTRATION_FEE_PER_PERSON;
     const registrationId = generateRegistrationId();
 
     const registrationPayload = {

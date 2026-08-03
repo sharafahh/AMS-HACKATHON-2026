@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiChevronDown, FiHelpCircle, FiSearch } from "react-icons/fi";
-import { REGISTRATION_FEE } from "../../constants/fee";
+import { REGISTRATION_FEE_PER_PERSON } from "../../constants/fee";
 
 const faqData = [
   {
@@ -22,7 +22,7 @@ const faqData = [
   {
     category: "Registration",
     question: "Is there any registration fee?",
-    answer: `Yes, a mandatory registration fee of ₹${REGISTRATION_FEE} per member (₹${REGISTRATION_FEE * 3} for 3 members, ₹${REGISTRATION_FEE * 4} for 4, ₹${REGISTRATION_FEE * 5} for 5, ₹${REGISTRATION_FEE * 6} for 6) is payable during registration.`,
+    answer: `Yes, a mandatory registration fee of ₹${REGISTRATION_FEE_PER_PERSON} per member (₹${REGISTRATION_FEE_PER_PERSON * 3} for 3 members, ₹${REGISTRATION_FEE_PER_PERSON * 4} for 4, ₹${REGISTRATION_FEE_PER_PERSON * 5} for 5, ₹${REGISTRATION_FEE_PER_PERSON * 6} for 6) is payable during registration.`,
   },
   {
     category: "Tracks & Project",
