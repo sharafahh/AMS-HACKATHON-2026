@@ -1,5 +1,6 @@
 import Team from "../models/Team.js";
 import Payment from "../models/Payment.js";
+import Registration from "../models/Registration.js";
 import { generateRegistrationId } from "../utils/generateId.js";
 
 // In-memory fallback store if local MongoDB is disconnected
@@ -115,7 +116,47 @@ export const getTeams = async (req, res) => {
     try {
       teams = await Team.find().sort({ createdAt: -1 });
     } catch (err) {
-      teams = localMemoryTeams;
+      teams = [...localMemoryTeams];
+    }
+
+    // Fetch registrations from Registration collection
+    let registrations = [];
+    try {
+      registrations = await Registration.find().sort({ registrationTimestamp: -1, createdAt: -1 });
+    } catch (regErr) {
+      console.warn("Could not query Registration collection:", regErr.message);
+    }
+
+    // Merge registration documents into teams list if not already present
+    const existingRegistrationIds = new Set(teams.map(t => t.registrationId).filter(Boolean));
+    const existingTeamNames = new Set(teams.map(t => t.teamName?.toLowerCase()).filter(Boolean));
+
+    for (const reg of registrations) {
+      const regId = reg.razorpayOrderId || `REG-${reg._id.toString().slice(-6).toUpperCase()}`;
+      if (!existingRegistrationIds.has(regId) && !existingTeamNames.has(reg.teamName?.toLowerCase())) {
+        const numMembers = Array.isArray(reg.teamMembers) && reg.teamMembers.length > 0 ? reg.teamMembers.length : 3;
+        teams.push({
+          _id: reg._id,
+          registrationId: regId,
+          teamName: reg.teamName,
+          teamSize: numMembers,
+          leader: {
+            name: reg.teamLeaderName,
+            email: reg.email,
+            phone: reg.phoneNumber,
+            college: reg.collegeName,
+            department: reg.department,
+            year: reg.year || "3rd Year",
+          },
+          members: reg.teamMembers || [],
+          track: "Open Innovation",
+          problemTitle: "AMS Hackathon Challenge",
+          problemAbstract: "Submitted during registration",
+          paymentStatus: reg.paymentStatus || "PAID",
+          status: "CONFIRMED",
+          createdAt: reg.registrationTimestamp || reg.createdAt,
+        });
+      }
     }
 
     return res.status(200).json({
@@ -124,6 +165,7 @@ export const getTeams = async (req, res) => {
       teams,
     });
   } catch (error) {
+    console.error("Error fetching teams:", error);
     return res.status(500).json({
       success: false,
       message: "Error fetching teams",
