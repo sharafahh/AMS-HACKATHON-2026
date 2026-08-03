@@ -38,9 +38,17 @@ app.use(errorHandler);
 
 export default async function handler(req, res) {
   try {
-    await connectDB();
-  } catch (error) {
-    console.warn("MongoDB connection warning in Vercel function:", error.message);
+    try {
+      await connectDB();
+    } catch (dbErr) {
+      console.warn("MongoDB connection warning in Vercel function:", dbErr.message);
+    }
+    return app(req, res);
+  } catch (err) {
+    console.error("Vercel Serverless Function Error:", err);
+    return res.status(500).json({
+      success: false,
+      message: err.message || "Internal Vercel Server Error",
+    });
   }
-  return app(req, res);
 }
