@@ -1,8 +1,9 @@
-﻿import Admin from "../models/Admin.js";
+import Admin from "../models/Admin.js";
+import Registration from "../models/Registration.js";
 import jwt from "jsonwebtoken";
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || "ams_hackathon_secret_key", {
+  return jwt.sign({ id }, process.env.JWT_SECRET || "ams_hackathon_secret_key_2026", {
     expiresIn: "30d",
   });
 };
@@ -20,7 +21,7 @@ export const adminLogin = async (req, res) => {
 
     // Default admin fallback if DB empty
     if (username === "admin" && password === "amshackathon2026") {
-      const token = jwt.sign({ id: "admin-default" }, process.env.JWT_SECRET || "ams_hackathon_secret_key", {
+      const token = jwt.sign({ id: "admin-default" }, process.env.JWT_SECRET || "ams_hackathon_secret_key_2026", {
         expiresIn: "30d",
       });
       return res.status(200).json({
@@ -54,4 +55,98 @@ export const getAdminProfile = async (req, res) => {
     success: true,
     admin: req.admin || { username: "admin", role: "SUPER_ADMIN" },
   });
+};
+
+// @desc    Get All Registrations (Sorted Newest First)
+// @route   GET /api/admin/registrations
+// @access  Public / Admin
+export const getRegistrations = async (req, res) => {
+  try {
+    const registrations = await Registration.find()
+      .sort({ registrationTimestamp: -1, createdAt: -1 });
+
+    const formattedRegistrations = registrations.map((reg) => ({
+      _id: reg._id,
+      teamName: reg.teamName,
+      teamLeader: reg.teamLeaderName,
+      college: reg.collegeName,
+      email: reg.email,
+      phone: reg.phoneNumber,
+      paymentStatus: reg.paymentStatus,
+      registrationDate: reg.registrationTimestamp || reg.createdAt,
+      department: reg.department,
+      year: reg.year,
+      razorpayOrderId: reg.razorpayOrderId,
+      razorpayPaymentId: reg.razorpayPaymentId,
+      teamMembers: reg.teamMembers,
+    }));
+
+    return res.status(200).json({
+      success: true,
+      count: formattedRegistrations.length,
+      registrations: formattedRegistrations,
+    });
+  } catch (error) {
+    console.error("Error fetching registrations:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch registrations",
+    });
+  }
+};
+
+// @desc    Export All Registrations as CSV File
+// @route   GET /api/admin/registrations/export-csv or GET /api/admin/export-csv
+// @access  Public / Admin
+export const exportRegistrationsCSV = async (req, res) => {
+  try {
+    const registrations = await Registration.find()
+      .sort({ registrationTimestamp: -1, createdAt: -1 });
+
+    const headers = [
+      "Team Name",
+      "Team Leader",
+      "College",
+      "Email",
+      "Phone",
+      "Department",
+      "Year",
+      "Payment Status",
+      "Razorpay Order ID",
+      "Razorpay Payment ID",
+      "Registration Date",
+    ];
+
+    const escapeCSV = (val) => {
+      if (val === null || val === undefined) return '""';
+      const str = String(val).replace(/"/g, '""');
+      return `"${str}"`;
+    };
+
+    const rows = registrations.map((reg) => [
+      escapeCSV(reg.teamName),
+      escapeCSV(reg.teamLeaderName),
+      escapeCSV(reg.collegeName),
+      escapeCSV(reg.email),
+      escapeCSV(reg.phoneNumber),
+      escapeCSV(reg.department),
+      escapeCSV(reg.year),
+      escapeCSV(reg.paymentStatus),
+      escapeCSV(reg.razorpayOrderId),
+      escapeCSV(reg.razorpayPaymentId),
+      escapeCSV(new Date(reg.registrationTimestamp || reg.createdAt).toISOString()),
+    ]);
+
+    const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+
+    res.setHeader("Content-Type", "text/csv; charset=utf-8");
+    res.setHeader("Content-Disposition", "attachment; filename=ams_hackathon_registrations.csv");
+    return res.status(200).send(csvContent);
+  } catch (error) {
+    console.error("Error exporting registrations CSV:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to export registrations CSV",
+    });
+  }
 };
