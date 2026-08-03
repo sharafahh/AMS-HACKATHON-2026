@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -219,7 +219,8 @@ function RegisterForm() {
   };
 
   const progressPercentage = (currentStep / steps.length) * 100;
-  const currentTotalFee = watchTeamSize * 100;
+  // Temporary testing fee. Change back to 100 before production.
+  const currentTotalFee = watchTeamSize * 1;
 
   if (isDeadlinePassed) {
     return (

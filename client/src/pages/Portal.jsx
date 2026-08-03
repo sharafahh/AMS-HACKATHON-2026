@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -279,7 +279,7 @@ function Portal() {
                     <FiPrinter size={18} /> Official Payment Receipt
                   </h4>
                   <p className="text-gray-300 font-light">
-                    Amount Paid: <strong>₹{(teamResult.teamSize || 4) * 100} INR</strong> (Razorpay Secured).
+                    Amount Paid: <strong>₹{(teamResult.teamSize || 4) * 1} INR</strong> (Razorpay Secured).
                   </p>
                 </div>
                 <button

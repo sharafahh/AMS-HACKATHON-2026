@@ -1,4 +1,4 @@
-﻿import { useLocation, Link, useNavigate } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FiCheckCircle,
@@ -152,8 +152,8 @@ function Success() {
                 <tbody className="divide-y divide-white/5 text-gray-300 print:divide-gray-200 print:text-black">
                   <tr>
                     <td className="p-3 font-medium">AMS HACKATHON 2026 Registration Fee</td>
-                    <td className="p-3 text-center">{Math.round(amountPaid / 100)} Members</td>
-                    <td className="p-3 text-right">₹100</td>
+                    <td className="p-3 text-center">{(teamData?.teamSize || Math.round(amountPaid / 1) || 4)} Members</td>
+                    <td className="p-3 text-right">₹1</td>
                     <td className="p-3 text-right font-bold text-white print:text-black">₹{amountPaid}</td>
                   </tr>
                 </tbody>

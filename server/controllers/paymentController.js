@@ -31,7 +31,8 @@ const getRazorpayInstance = () => {
 const processedPayments = new Set();
 const localMemoryTeams = [];
 
-// @desc    Create Razorpay Order (Calculates ₹100 per member: 3=₹300, 4=₹400, 5=₹500, 6=₹600)
+// Temporary testing fee. Change back to ₹100 before production.
+// @desc    Create Razorpay Order (Calculates ₹1 per member: 3=₹3, 4=₹4, 5=₹5, 6=₹6)
 // @route   POST /api/payments/create-order
 // @access  Public
 export const createOrder = async (req, res) => {
@@ -46,9 +47,10 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR || 100);
-    const totalAmountINR = numMembers * feePerMember; // 300, 400, 500, or 600
-    const amountInPaise = totalAmountINR * 100; // 30000, 40000, 50000, 60000
+    // Temporary testing fee. Change back to ₹100 before production.
+    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR || 1);
+    const totalAmountINR = numMembers * feePerMember; // 3, 4, 5, or 6 INR
+    const amountInPaise = totalAmountINR * 100; // 300, 400, 500, 600 paise (₹1 per member)
 
     const receipt = `rcpt_${Date.now()}`;
     const options = {
@@ -158,7 +160,8 @@ export const verifyPayment = async (req, res) => {
 
     // 3. Payment Verified -> Save Registration Model to MongoDB Atlas
     const numMembers = Number(teamData.teamSize || 4);
-    const amountPaid = numMembers * 100;
+    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR || 1);
+    const amountPaid = numMembers * feePerMember;
     const registrationId = generateRegistrationId();
 
     const registrationPayload = {
