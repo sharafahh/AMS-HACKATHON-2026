@@ -854,7 +854,6 @@ function AdminDashboard() {
                   <span className="text-gray-400 text-xs uppercase font-bold">Fee Breakdown</span>
                   <div className="text-xl font-bold text-cyan-400 mt-2 font-['Space_Grotesk']">₹{REGISTRATION_FEE} / Member</div>
                 </div>
-                </div>
               </div>
             </div>
           )}
