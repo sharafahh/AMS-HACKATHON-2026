@@ -5,8 +5,7 @@ function StepSummaryAgreement({ register, errors, watch }) {
   const teamSize = Number(formValues.teamSize || 4);
   const members = formValues.members || [];
   // Temporary testing fee. Change back to ₹100 before production.
-  const feePerPerson = 1;
-  const totalFeeINR = teamSize * feePerPerson;
+  const totalFeeINR = 3;
 
   return (
     <div className="space-y-6">
@@ -28,10 +27,10 @@ function StepSummaryAgreement({ register, errors, watch }) {
           </div>
           <div>
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-400">
-              Mandatory Registration Fee (₹1 / Person)
+              Mandatory Registration Fee (₹3 Total Testing Fee)
             </span>
             <h3 className="text-xl font-bold font-['Space_Grotesk'] text-white">
-              ₹{totalFeeINR} INR ({teamSize} Team Members × ₹1)
+              ₹3 INR ({teamSize} Team Members)
             </h3>
             <p className="text-gray-300 text-xs font-light">
               Secures lab space, refreshments, mentorship, and participation certificates.
@@ -132,7 +131,7 @@ function StepSummaryAgreement({ register, errors, watch }) {
             className="mt-1 w-4 h-4 rounded border-white/20 text-cyan-500 focus:ring-cyan-500 bg-white/5"
           />
           <span className="text-xs text-gray-300 font-light leading-relaxed">
-            I confirm that all team details are accurate, agree to pay the mandatory fee of ₹{totalFeeINR} (₹1 × {teamSize} members), and abide by the official <strong className="text-cyan-400">AMS HACKATHON 2026 Code of Conduct & Rules</strong>.
+            I confirm that all team details are accurate, agree to pay the mandatory fee of ₹3 (testing fee for {teamSize} members), and abide by the official <strong className="text-cyan-400">AMS HACKATHON 2026 Code of Conduct & Rules</strong>.
           </span>
         </label>
         {errors.agreement && (
