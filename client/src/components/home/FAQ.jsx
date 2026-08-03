@@ -21,7 +21,7 @@ const faqData = [
   {
     category: "Registration",
     question: "Is there any registration fee?",
-    answer: "Yes, a mandatory registration fee of ₹1 per member (₹3 for 3 members, ₹4 for 4, ₹5 for 5, ₹6 for 6) is payable during registration.",
+    answer: "Yes, a temporary testing registration fee of ₹3 is payable during registration.",
   },
   {
     category: "Tracks & Project",

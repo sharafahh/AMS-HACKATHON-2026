@@ -31,8 +31,8 @@ const getRazorpayInstance = () => {
 const processedPayments = new Set();
 const localMemoryTeams = [];
 
-// Temporary testing fee. Change back to ₹100 before production.
-// @desc    Create Razorpay Order (Calculates ₹1 per member: 3=₹3, 4=₹4, 5=₹5, 6=₹6)
+// Temporary testing fee. Change back to ₹100 per member before production.
+// @desc    Create Razorpay Order (Final payment: ₹3 total)
 // @route   POST /api/payments/create-order
 // @access  Public
 export const createOrder = async (req, res) => {
@@ -47,10 +47,9 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    // Temporary testing fee. Change back to ₹100 before production.
-    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR || 1);
-    const totalAmountINR = numMembers * feePerMember; // 3, 4, 5, or 6 INR
-    const amountInPaise = totalAmountINR * 100; // 300, 400, 500, 600 paise (₹1 per member)
+    // Temporary testing fee. Final payment set to ₹3 total. Change back before production.
+    const totalAmountINR = Number(process.env.TEST_PAYMENT_AMOUNT_INR || 3); // ₹3 total
+    const amountInPaise = totalAmountINR * 100; // 300 paise (₹3)
 
     const receipt = `rcpt_${Date.now()}`;
     const options = {
@@ -60,7 +59,7 @@ export const createOrder = async (req, res) => {
       notes: {
         event: "AMS HACKATHON 2026",
         teamSize: numMembers,
-        feePerPerson: feePerMember,
+        feePerPerson: totalAmountINR,
       },
     };
 
@@ -160,8 +159,7 @@ export const verifyPayment = async (req, res) => {
 
     // 3. Payment Verified -> Save Registration Model to MongoDB Atlas
     const numMembers = Number(teamData.teamSize || 4);
-    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR || 1);
-    const amountPaid = numMembers * feePerMember;
+    const amountPaid = Number(process.env.TEST_PAYMENT_AMOUNT_INR || 3);
     const registrationId = generateRegistrationId();
 
     const registrationPayload = {

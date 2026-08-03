@@ -220,7 +220,7 @@ function RegisterForm() {
 
   const progressPercentage = (currentStep / steps.length) * 100;
   // Temporary testing fee. Change back to 100 before production.
-  const currentTotalFee = watchTeamSize * 1;
+  const currentTotalFee = 3;
 
   if (isDeadlinePassed) {
     return (
