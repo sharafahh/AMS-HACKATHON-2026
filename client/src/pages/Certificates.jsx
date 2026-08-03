@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
@@ -15,7 +15,7 @@ import {
   FiDownload,
 } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
-import hackverseLogo from "../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
 import { searchCertificatesAPI } from "../services/api";
 
 function Certificates() {
@@ -43,7 +43,7 @@ function Certificates() {
         setCertificates(data.certificates);
       } else {
         setCertificates([]);
-        setError(`No certificates found for "${q}". Certificates are generated upon evaluation during HACKVERSE 2026.`);
+        setError(`No certificates found for "${q}". Certificates are generated upon evaluation during AMS HACKATHON 2026.`);
       }
     } catch (err) {
       // Fallback demo certificate if backend search fails
@@ -85,17 +85,17 @@ function Certificates() {
             to="/"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-white/10 text-xs font-semibold text-cyan-400 hover:text-white hover:border-cyan-500/40 transition-all"
           >
-            <FiArrowLeft size={16} /> Return to HACKVERSE 2026
+            <FiArrowLeft size={16} /> Return to AMS HACKATHON 2026
           </Link>
 
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 p-1.5 rounded-xl bg-white/5 border border-white/10">
               <img src={collegeLogo} alt="College Logo" className="h-8 w-auto object-contain" />
               <div className="h-5 w-[1px] bg-white/20" />
-              <img src={hackverseLogo} alt="Hackverse Logo" className="h-8 w-auto object-contain" />
+              <img src={amsHackathonLogo} alt="AMS HACKATHON 2026 Logo" className="h-8 w-auto object-contain" />
             </div>
             <span className="text-white font-bold font-['Space_Grotesk'] text-base">
-              HACKVERSE 2026
+              AMS HACKATHON 2026
             </span>
           </div>
         </div>
@@ -106,7 +106,7 @@ function Certificates() {
             <FiAward /> Official Certificate Portal
           </span>
           <h1 className="text-3xl sm:text-5xl font-extrabold font-['Space_Grotesk'] text-white">
-            Download Your <span className="text-gradient-gold">Digital Certificate</span>
+            Verify Your <span className="text-gradient-gold">Physical Certificate</span>
           </h1>
           <p className="text-gray-400 text-xs sm:text-sm font-light">
             Search by your unique <strong>Registration ID</strong> (e.g. HV26-XXXXX) or registered email.
@@ -178,7 +178,7 @@ function Certificates() {
                   <div className="flex items-center justify-center gap-4 mb-2">
                     <img src={collegeLogo} alt="College Logo" className="h-12 sm:h-14 w-auto object-contain" />
                     <div className="h-8 w-[1px] bg-white/30 print:bg-black" />
-                    <img src={hackverseLogo} alt="Hackverse Logo" className="h-12 sm:h-14 w-auto object-contain" />
+                    <img src={amsHackathonLogo} alt="AMS HACKATHON 2026 Logo" className="h-12 sm:h-14 w-auto object-contain" />
                   </div>
                   <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-amber-400 font-['Space_Grotesk'] print:text-black">
                     AALIM MUHAMMED SALEGH COLLEGE OF ENGINEERING
@@ -200,7 +200,7 @@ function Certificates() {
                   </h1>
 
                   <p className="text-xs sm:text-sm text-gray-300 font-light leading-relaxed print:text-gray-800">
-                    from <strong className="text-white font-semibold print:text-black">{cert.college}</strong> for successfully participating and building solutions in the <strong className="text-cyan-400 font-semibold print:text-black">{cert.track}</strong> track at <strong>HACKVERSE 2026</strong> National Level 24-Hour Hackathon.
+                    from <strong className="text-white font-semibold print:text-black">{cert.college}</strong> for successfully participating and building solutions in the <strong className="text-cyan-400 font-semibold print:text-black">{cert.track}</strong> track at <strong>AMS HACKATHON 2026</strong> Internal Level 24-Hour Hackathon.
                   </p>
                 </div>
 
@@ -234,7 +234,7 @@ function Certificates() {
                         Scan To Verify
                       </span>
                       <span className="text-gray-400 block leading-tight print:text-gray-700">
-                        Official HACKVERSE 2026 Record Verification
+                        Official AMS HACKATHON 2026 Record Verification
                       </span>
                     </div>
                   </div>
@@ -254,7 +254,7 @@ function Certificates() {
                   onClick={() => window.print()}
                   className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-extrabold font-['Space_Grotesk'] text-xs tracking-wider shadow-lg shadow-amber-500/30 hover:scale-105 transition-transform flex items-center gap-2"
                 >
-                  <FiPrinter size={18} /> Download Certificate (PDF/Print)
+                  <FiPrinter size={18} /> Print Physical Certificate Record
                 </button>
               </div>
             </motion.div>

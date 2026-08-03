@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -19,7 +19,7 @@ import {
   FiUsers,
 } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
-import hackverseLogo from "../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
 
 function Portal() {
   const [searchParams] = useSearchParams();
@@ -107,17 +107,17 @@ function Portal() {
             to="/"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-white/10 text-xs font-semibold text-cyan-400 hover:text-white hover:border-cyan-500/40 transition-all"
           >
-            <FiArrowLeft size={16} /> Return to HACKVERSE 2026
+            <FiArrowLeft size={16} /> Return to AMS HACKATHON 2026
           </Link>
 
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 p-1.5 rounded-xl bg-white/5 border border-white/10">
               <img src={collegeLogo} alt="College Logo" className="h-8 w-auto object-contain" />
               <div className="h-5 w-[1px] bg-white/20" />
-              <img src={hackverseLogo} alt="Hackverse Logo" className="h-8 w-auto object-contain" />
+              <img src={amsHackathonLogo} alt="AMS HACKATHON 2026 Logo" className="h-8 w-auto object-contain" />
             </div>
             <span className="text-white font-bold font-['Space_Grotesk'] text-base">
-              HACKVERSE 2026
+              AMS HACKATHON 2026
             </span>
           </div>
         </div>
@@ -266,10 +266,10 @@ function Portal() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
               <div className="p-5 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-xs space-y-2">
                 <h4 className="font-bold text-cyan-400 flex items-center gap-2 text-sm font-['Space_Grotesk']">
-                  <FiAward size={18} /> Digital Certificate Status
+                  <FiAward size={18} /> Physical Certificate Status
                 </h4>
                 <p className="text-gray-300 font-light">
-                  Certificates will be issued automatically upon live evaluation during the Valedictory Ceremony on <strong>August 23, 2026</strong>.
+                  Physical certificates will be distributed at the venue upon live evaluation during the Valedictory Ceremony on <strong>August 23, 2026</strong>.
                 </p>
               </div>
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -12,11 +12,11 @@ import {
   FiZap,
 } from "react-icons/fi";
 import collegeLogo from "../../assets/logos/college-logo.png";
-import hackverseLogo from "../../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../../assets/logos/ams-hackathon-logo.png";
 import heroCampus from "../../assets/images/hero-campus.jpg";
 
 function Hero() {
-  // Target date set for Hackverse 2026 launch (22 August 2026 9:00 AM IST)
+  // Target date set for AMS HACKATHON 2026 launch (22 August 2026 9:00 AM IST)
   const targetDate = new Date("2026-08-22T09:00:00").getTime();
 
   const [timeLeft, setTimeLeft] = useState({
@@ -66,7 +66,7 @@ function Hero() {
     },
     {
       icon: FiGlobe,
-      title: "National Level",
+      title: "Internal Level",
       subtitle: "B.E. & B.Tech Hackers",
       color: "from-blue-500 to-indigo-700",
       border: "border-blue-500/40",
@@ -133,23 +133,23 @@ function Hero() {
             {/* Badges */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
               <span className="px-3.5 py-1 rounded-full text-xs font-extrabold bg-blue-600/20 text-blue-300 border border-blue-500/40 tracking-wider uppercase font-['Space_Grotesk']">
-                National Level 24-Hour Hackathon
+                Internal Level 24-Hour Hackathon
               </span>
               <span className="px-3.5 py-1 rounded-full text-xs font-semibold bg-white/10 text-white border border-white/20 tracking-wider font-['Space_Grotesk']">
                 B.E. & B.Tech Engineering Students
               </span>
             </div>
 
-            {/* BIGGER Hackverse Logo + Title */}
+            {/* BIGGER AMS HACKATHON 2026 Logo + Title */}
             <div className="flex flex-col items-center lg:items-start gap-4">
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <img
-                  src={hackverseLogo}
-                  alt="Hackverse Logo"
+                  src={amsHackathonLogo}
+                  alt="AMS HACKATHON 2026 Logo"
                   className="h-28 sm:h-36 lg:h-40 w-auto object-contain filter drop-shadow-[0_0_35px_rgba(59,130,246,0.6)] transform hover:scale-105 transition-transform duration-300"
                 />
                 <h1 className="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight font-['Space_Grotesk'] text-white">
-                  HACKVERSE <span className="text-gradient-tech-blue">2026</span>
+                  AMS HACKATHON <span className="text-gradient-tech-blue">2026</span>
                 </h1>
               </div>
 

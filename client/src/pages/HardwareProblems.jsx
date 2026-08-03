@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -13,7 +13,7 @@ import {
   FiCode,
 } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
-import hackverseLogo from "../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
 
 function HardwareProblems() {
   // Release date for Hardware Problem Statements: 19 August 2026 09:00 AM IST (3 days prior to Aug 22)
@@ -66,17 +66,17 @@ function HardwareProblems() {
             to="/"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-white/10 text-xs font-semibold text-cyan-400 hover:text-white transition-all"
           >
-            <FiArrowLeft size={16} /> Return to HACKVERSE 2026
+            <FiArrowLeft size={16} /> Return to AMS HACKATHON 2026
           </Link>
 
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 p-1.5 rounded-xl bg-white/5 border border-white/10">
               <img src={collegeLogo} alt="College Logo" className="h-8 w-auto object-contain" />
               <div className="h-5 w-[1px] bg-white/20" />
-              <img src={hackverseLogo} alt="Hackverse Logo" className="h-8 w-auto object-contain" />
+              <img src={amsHackathonLogo} alt="AMS HACKATHON 2026 Logo" className="h-8 w-auto object-contain" />
             </div>
             <span className="text-white font-bold font-['Space_Grotesk'] text-base">
-              HACKVERSE 2026
+              AMS HACKATHON 2026
             </span>
           </div>
         </div>

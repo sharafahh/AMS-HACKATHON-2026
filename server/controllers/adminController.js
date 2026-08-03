@@ -1,8 +1,8 @@
-import Admin from "../models/Admin.js";
+﻿import Admin from "../models/Admin.js";
 import jwt from "jsonwebtoken";
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || "hackverse_secret_key", {
+  return jwt.sign({ id }, process.env.JWT_SECRET || "ams_hackathon_secret_key", {
     expiresIn: "30d",
   });
 };
@@ -19,8 +19,8 @@ export const adminLogin = async (req, res) => {
     }
 
     // Default admin fallback if DB empty
-    if (username === "admin" && password === "hackverse2026") {
-      const token = jwt.sign({ id: "admin-default" }, process.env.JWT_SECRET || "hackverse_secret_key", {
+    if (username === "admin" && password === "amshackathon2026") {
+      const token = jwt.sign({ id: "admin-default" }, process.env.JWT_SECRET || "ams_hackathon_secret_key", {
         expiresIn: "30d",
       });
       return res.status(200).json({

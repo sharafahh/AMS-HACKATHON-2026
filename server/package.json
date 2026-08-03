@@ -1,7 +1,7 @@
-{
-  "name": "hackverse-server",
+﻿{
+  "name": "ams-hackathon-2026-server",
   "version": "1.0.0",
-  "description": "Backend REST API for HACKVERSE 2026",
+  "description": "Backend REST API for AMS HACKATHON 2026",
   "main": "server.js",
   "type": "module",
   "scripts": {

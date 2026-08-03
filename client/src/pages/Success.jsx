@@ -1,4 +1,4 @@
-import { useLocation, Link, useNavigate } from "react-router-dom";
+﻿import { useLocation, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FiCheckCircle,
@@ -16,7 +16,7 @@ import {
   FiPrinter,
 } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
-import hackverseLogo from "../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
 
 function Success() {
   const location = useLocation();
@@ -53,7 +53,7 @@ function Success() {
           <div className="flex items-center justify-center gap-3">
             <img src={collegeLogo} alt="College Logo" className="h-10 w-auto object-contain" />
             <div className="h-6 w-[1px] bg-white/20" />
-            <img src={hackverseLogo} alt="Hackverse Logo" className="h-10 w-auto object-contain" />
+            <img src={amsHackathonLogo} alt="AMS HACKATHON 2026 Logo" className="h-10 w-auto object-contain" />
           </div>
           <span className="px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-wider font-['Space_Grotesk']">
             Aalim Muhammed Salegh College of Engineering
@@ -76,7 +76,7 @@ function Success() {
               Registration & Payment Confirmed!
             </h1>
             <p className="text-gray-300 text-xs sm:text-sm font-light print:text-gray-700">
-              Welcome to HACKVERSE 2026. Your team details and Razorpay payment receipt have been saved.
+              Welcome to AMS HACKATHON 2026. Your team details and Razorpay payment receipt have been saved.
             </p>
           </div>
 
@@ -151,7 +151,7 @@ function Success() {
                 </thead>
                 <tbody className="divide-y divide-white/5 text-gray-300 print:divide-gray-200 print:text-black">
                   <tr>
-                    <td className="p-3 font-medium">HACKVERSE 2026 Registration Fee</td>
+                    <td className="p-3 font-medium">AMS HACKATHON 2026 Registration Fee</td>
                     <td className="p-3 text-center">{Math.round(amountPaid / 100)} Members</td>
                     <td className="p-3 text-right">₹100</td>
                     <td className="p-3 text-right font-bold text-white print:text-black">₹{amountPaid}</td>

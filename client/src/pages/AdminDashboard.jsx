@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -23,7 +23,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
-import hackverseLogo from "../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
 import {
   getTeamsAPI,
   getAnnouncementsAPI,
@@ -81,7 +81,7 @@ function AdminDashboard() {
 
   // Check JWT Token
   useEffect(() => {
-    const token = localStorage.getItem("hackverse_admin_token");
+    const token = localStorage.getItem("ams_hackathon_2026_admin_token");
     if (!token) {
       navigate("/admin/login");
     } else {
@@ -108,8 +108,8 @@ function AdminDashboard() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("hackverse_admin_token");
-    localStorage.removeItem("hackverse_admin_user");
+    localStorage.removeItem("ams_hackathon_2026_admin_token");
+    localStorage.removeItem("ams_hackathon_2026_admin_user");
     navigate("/admin/login");
   };
 
@@ -156,7 +156,7 @@ function AdminDashboard() {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `HACKVERSE_2026_Registrations_${Date.now()}.csv`);
+    link.setAttribute("download", `AMS_HACKATHON_2026_Registrations_${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -265,11 +265,11 @@ function AdminDashboard() {
           <div className="flex items-center gap-2 p-1.5 rounded-xl bg-white/5 border border-white/10">
             <img src={collegeLogo} alt="College Logo" className="h-8 w-auto object-contain" />
             <div className="h-5 w-[1px] bg-white/20" />
-            <img src={hackverseLogo} alt="Hackverse Logo" className="h-8 w-auto object-contain" />
+            <img src={amsHackathonLogo} alt="AMS HACKATHON 2026 Logo" className="h-8 w-auto object-contain" />
           </div>
           <div>
             <h1 className="text-lg font-bold font-['Space_Grotesk'] text-white">
-              HACKVERSE 2026 <span className="text-cyan-400 font-medium text-xs">Admin Control Panel</span>
+              AMS HACKATHON 2026 <span className="text-cyan-400 font-medium text-xs">Admin Control Panel</span>
             </h1>
             <p className="text-[10px] text-gray-400">Aalim Muhammed Salegh College of Engineering</p>
           </div>
@@ -717,14 +717,14 @@ function AdminDashboard() {
                   Issue & Revoke Certificates
                 </h2>
                 <p className="text-gray-400 text-xs font-light mt-1">
-                  Generate digital certificates for team members with QR verification codes or revoke existing ones.
+                  Generate physical certificate records for team members with QR verification codes or revoke existing ones.
                 </p>
               </div>
 
               {/* Generate Form */}
               <div className="glass-card p-8 rounded-3xl border border-amber-500/30 space-y-4">
                 <h3 className="text-lg font-bold font-['Space_Grotesk'] text-white flex items-center gap-2">
-                  <FiAward className="text-amber-400" /> Issue New Digital Certificate
+                  <FiAward className="text-amber-400" /> Issue New Certificate Record
                 </h3>
 
                 <form onSubmit={handleGenerateCertificate} className="space-y-4">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -127,7 +127,7 @@ function RegisterForm() {
           key: keyId,
           amount: orderRes.amountInPaise,
           currency: "INR",
-          name: "HACKVERSE 2026",
+          name: "AMS HACKATHON 2026",
           description: `Registration Fee - Team ${data.teamName} (${data.teamSize} Members)`,
           order_id: orderId,
           handler: async function (response) {
@@ -229,14 +229,14 @@ function RegisterForm() {
         </div>
         <div className="space-y-2">
           <h2 className="text-2xl sm:text-3xl font-extrabold font-['Space_Grotesk'] text-white">
-            Registrations for HACKVERSE 2026 are closed.
+            Registrations for AMS HACKATHON 2026 are closed.
           </h2>
           <p className="text-rose-300 font-semibold text-sm">
             Registration deadline was 12 August 2026.
           </p>
         </div>
         <p className="text-gray-300 text-xs sm:text-sm font-light max-w-lg mx-auto">
-          Online team registration and payment submission for HACKVERSE 2026 ended on 12 August 2026 at 11:59 PM IST.
+          Online team registration and payment submission for AMS HACKATHON 2026 ended on 12 August 2026 at 11:59 PM IST.
         </p>
         <div className="pt-4 flex justify-center">
           <Link

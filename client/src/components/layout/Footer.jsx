@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import {
   FiGithub,
   FiLinkedin,
@@ -10,7 +10,7 @@ import {
   FiFileText,
 } from "react-icons/fi";
 import collegeLogo from "../../assets/logos/college-logo.png";
-import hackverseLogo from "../../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../../assets/logos/ams-hackathon-logo.png";
 
 function Footer() {
   const scrollToTop = () => {
@@ -36,18 +36,18 @@ function Footer() {
                 />
                 <div className="h-5 w-[1px] bg-white/20" />
                 <img
-                  src={hackverseLogo}
-                  alt="Hackverse Logo"
+                  src={amsHackathonLogo}
+                  alt="AMS HACKATHON 2026 Logo"
                   className="h-8 w-auto object-contain"
                 />
               </div>
               <span className="text-white font-bold tracking-wider text-lg font-['Space_Grotesk']">
-                HACKVERSE 2026
+                AMS HACKATHON 2026
               </span>
             </div>
 
             <p className="text-gray-400 text-xs sm:text-sm font-light leading-relaxed max-w-md">
-              National Level 24-Hour Hackathon organized by AALIM MUHAMMED SALEGH COLLEGE OF ENGINEERING. Empowering student coders and hardware creators to build the future.
+              Internal Level 24-Hour Hackathon organized by AALIM MUHAMMED SALEGH COLLEGE OF ENGINEERING. Empowering student coders and hardware creators to build the future.
             </p>
 
             {/* Social Icons */}
@@ -88,7 +88,7 @@ function Footer() {
               </li>
               <li>
                 <a href="#about" className="hover:text-cyan-400 transition-colors">
-                  About Hackverse
+                  About AMS HACKATHON 2026
                 </a>
               </li>
               <li>
@@ -166,12 +166,12 @@ function Footer() {
           <div className="flex items-center gap-2 text-gray-400">
             <span>Designed with</span>
             <FiHeart className="text-rose-500 fill-rose-500 animate-pulse" />
-            <span>by <strong className="text-white">Team HACKVERSE</strong></span>
+            <span>by <strong className="text-white">Team AMS HACKATHON 2026</strong></span>
           </div>
 
           <div className="flex items-center gap-6">
             <span className="text-gray-400">
-              © 2026 HACKVERSE. All rights reserved.
+              © 2026 AMS HACKATHON 2026. All rights reserved.
             </span>
             <a href="#faq" className="text-gray-400 hover:text-cyan-400 transition-colors flex items-center gap-1">
               <FiShield size={12} /> Privacy & Terms

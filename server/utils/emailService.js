@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+﻿import nodemailer from "nodemailer";
 
 export const sendConfirmationEmail = async ({
   toEmail,
@@ -15,11 +15,11 @@ export const sendConfirmationEmail = async ({
 ============================================================
 📧 SIMULATED EMAIL CONFIRMATION DISPATCHED
 To: ${toEmail}
-Subject: Registration Confirmed - HACKVERSE 2026 (${registrationId})
+Subject: Registration Confirmed - AMS HACKATHON 2026 (${registrationId})
 Body:
 Dear ${teamName} Team Leader,
 
-Congratulations! Your team registration for HACKVERSE 2026 has been successfully confirmed.
+Congratulations! Your team registration for AMS HACKATHON 2026 has been successfully confirmed.
 
 Registration ID: ${registrationId}
 Payment ID: ${paymentId}
@@ -29,7 +29,7 @@ College: ${college}
 Venue: Aalim Muhammed Salegh College of Engineering, Chennai
 Event Dates: September 15–16, 2026
 
-Welcome to HACKVERSE 2026!
+Welcome to AMS HACKATHON 2026!
 ============================================================
     `);
     return true;

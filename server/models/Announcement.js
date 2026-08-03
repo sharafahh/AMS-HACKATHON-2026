@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+﻿import mongoose from "mongoose";
 
 const announcementSchema = new mongoose.Schema(
   {
@@ -23,7 +23,7 @@ const announcementSchema = new mongoose.Schema(
     },
     author: {
       type: String,
-      default: "HACKVERSE Committee",
+      default: "AMS HACKATHON 2026 Committee",
     },
   },
   { timestamps: true }

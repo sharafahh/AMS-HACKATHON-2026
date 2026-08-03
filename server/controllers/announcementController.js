@@ -1,13 +1,13 @@
-import Announcement from "../models/Announcement.js";
+﻿import Announcement from "../models/Announcement.js";
 
 const demoAnnouncements = [
   {
     _id: "ann-1",
-    title: "Registration Now Open for HACKVERSE 2026!",
+    title: "Registration Now Open for AMS HACKATHON 2026!",
     content: "Assemble your teams (3 to 6 members) and register online. Early registrations get dedicated mentor allocations.",
     category: "IMPORTANT",
     isPinned: true,
-    author: "HACKVERSE Organizing Committee",
+    author: "AMS HACKATHON 2026 Organizing Committee",
     createdAt: new Date("2026-08-01T09:00:00"),
   },
   {

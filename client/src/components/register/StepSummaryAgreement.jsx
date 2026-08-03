@@ -1,4 +1,4 @@
-import { FiCheckCircle, FiShield, FiUsers, FiCpu, FiCreditCard, FiZap } from "react-icons/fi";
+﻿import { FiCheckCircle, FiShield, FiUsers, FiCpu, FiCreditCard, FiZap } from "react-icons/fi";
 
 function StepSummaryAgreement({ register, errors, watch }) {
   const formValues = watch();
@@ -131,7 +131,7 @@ function StepSummaryAgreement({ register, errors, watch }) {
             className="mt-1 w-4 h-4 rounded border-white/20 text-cyan-500 focus:ring-cyan-500 bg-white/5"
           />
           <span className="text-xs text-gray-300 font-light leading-relaxed">
-            I confirm that all team details are accurate, agree to pay the mandatory fee of ₹{totalFeeINR} (₹100 × {teamSize} members), and abide by the official <strong className="text-cyan-400">HACKVERSE 2026 Code of Conduct & Rules</strong>.
+            I confirm that all team details are accurate, agree to pay the mandatory fee of ₹{totalFeeINR} (₹100 × {teamSize} members), and abide by the official <strong className="text-cyan-400">AMS HACKATHON 2026 Code of Conduct & Rules</strong>.
           </span>
         </label>
         {errors.agreement && (

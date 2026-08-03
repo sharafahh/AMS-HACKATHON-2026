@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX, FiChevronRight } from "react-icons/fi";
 import collegeLogo from "../../assets/logos/college-logo.png";
-import hackverseLogo from "../../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../../assets/logos/ams-hackathon-logo.png";
 
 const navLinks = [
   { name: "Home", href: "#hero" },
@@ -65,8 +65,8 @@ function Navbar() {
             />
             <div className="h-6 w-[1px] bg-white/20" />
             <img
-              src={hackverseLogo}
-              alt="Hackverse Logo"
+              src={amsHackathonLogo}
+              alt="AMS HACKATHON 2026 Logo"
               className="h-9 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(59,130,246,0.5)] transform group-hover:scale-110 transition-transform"
             />
           </div>
@@ -74,7 +74,7 @@ function Navbar() {
           <div className="hidden sm:block text-left">
             <div className="flex items-center gap-2">
               <span className="text-white font-extrabold font-['Space_Grotesk'] text-base tracking-wider">
-                HACKVERSE
+                AMS HACKATHON 2026
               </span>
               <span className="bg-blue-600 text-[10px] font-extrabold text-white px-2 py-0.5 rounded uppercase tracking-wider">
                 2026

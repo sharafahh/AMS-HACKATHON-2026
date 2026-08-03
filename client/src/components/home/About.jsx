@@ -18,10 +18,10 @@ const aboutPillars = [
     gradient: "from-cyan-500 to-blue-600",
     border: "border-cyan-500/30",
     description:
-      "To foster a culture of rapid innovation, creative problem solving, and interdisciplinary collaboration among engineering students nationwide. HACKVERSE 2026 bridges academia and industry through hands-on technical creation.",
+      "To foster a culture of rapid innovation, creative problem solving, and interdisciplinary collaboration among engineering students campus-wide. AMS HACKATHON 2026 bridges academia and industry through hands-on technical creation.",
     points: [
       "Empower students with real-world problem statements inspired by Smart India Hackathon.",
-      "Promote hardware-software synthesis to solve pressing national issues.",
+      "Promote hardware-software synthesis to solve pressing technical issues.",
       "Cultivate entrepreneurial mindsets and prototype readiness.",
     ],
   },
@@ -34,7 +34,7 @@ const aboutPillars = [
     description:
       "To establish Aalim Muhammed Salegh College of Engineering as a premier epicenter for tech talent, where futuristic ideas evolve into impactful enterprise solutions and social innovations.",
     points: [
-      "Building a sustainable national network of student developers and mentors.",
+      "Building a sustainable internal network of student developers and mentors.",
       "Recognizing breakthrough innovations in AI, IoT, FinTech, and Green Tech.",
       "Directing student projects toward incubation and patent assistance.",
     ],
@@ -60,7 +60,7 @@ const aboutPillars = [
     gradient: "from-emerald-400 to-teal-600",
     border: "border-emerald-500/30",
     description:
-      "HACKVERSE 2026 is more than a contest; it is a launchpad. Connect with like-minded coders, test your limits under pressure, and take home attractive cash rewards.",
+      "AMS HACKATHON 2026 is more than a contest; it is a launchpad. Connect with like-minded coders, test your limits under pressure, and take home attractive cash rewards.",
     points: [
       "Win from a total prize pool of ₹25,500 + certificates.",
       "Gain direct visibility with potential employers and incubator programs.",
@@ -69,7 +69,7 @@ const aboutPillars = [
   },
   {
     id: "impact",
-    title: "National Impact",
+    title: "Internal Impact",
     icon: FiTrendingUp,
     gradient: "from-pink-500 to-rose-600",
     border: "border-pink-500/30",
@@ -88,7 +88,7 @@ const aboutPillars = [
     gradient: "from-cyan-400 to-emerald-500",
     border: "border-cyan-400/30",
     description:
-      "Whether developing LLM agents, cyber defense platforms, or embedded IoT systems, HACKVERSE provides the ultimate canvas for your technological mastery.",
+      "Whether developing LLM agents, cyber defense platforms, or embedded IoT systems, AMS HACKATHON 2026 provides the ultimate canvas for your technological mastery.",
     points: [
       "Dedicated hardware track for robotics, microcontrollers, and sensor kits.",
       "Software track for web3, AI/ML, cloud-native apps, and mobile tech.",
@@ -116,7 +116,7 @@ function About() {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider font-['Space_Grotesk']"
           >
-            About Hackverse 2026
+            About AMS HACKATHON 2026
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -134,7 +134,7 @@ function About() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-gray-400 text-base sm:text-lg font-light leading-relaxed"
           >
-            Organized by Aalim Muhammed Salegh College of Engineering, HACKVERSE 2026 is designed to push the boundaries of technical problem solving over 24 relentless hours.
+            Organized by Aalim Muhammed Salegh College of Engineering, AMS HACKATHON 2026 is designed to push the boundaries of technical problem solving over 24 relentless hours.
           </motion.p>
         </div>
 
@@ -187,7 +187,7 @@ function About() {
                     {activePillar.title}
                   </h3>
                   <span className="text-xs text-cyan-400 font-medium tracking-wider uppercase">
-                    HACKVERSE Pillar Overview
+                    AMS HACKATHON 2026 Pillar Overview
                   </span>
                 </div>
               </div>
@@ -218,7 +218,7 @@ function About() {
                 </li>
                 <li className="flex justify-between border-b border-white/10 pb-2">
                   <span className="text-gray-400">Eligibility</span>
-                  <span className="font-semibold text-white">College Students Nationwide</span>
+                  <span className="font-semibold text-white">College Students campus-wide</span>
                 </li>
                 <li className="flex justify-between border-b border-white/10 pb-2">
                   <span className="text-gray-400">Team Size</span>

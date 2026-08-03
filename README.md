@@ -1,4 +1,4 @@
-# HACKVERSE 2026 - National Level 24-Hour Hackathon Platform
+# AMS HACKATHON 2026 - Internal Level 24-Hour Hackathon Platform
 
 > **24 Hours. Infinite Possibilities.**
 > Organized by **AALIM MUHAMMED SALEGH COLLEGE OF ENGINEERING**, Avadi-IAF, Chennai, Tamil Nadu.
@@ -7,7 +7,7 @@
 
 ## 📌 Project Overview
 
-**HACKVERSE 2026** is an enterprise-grade, dark futuristic web application built for the college’s flagship national 24-hour hackathon. Inspired by Smart India Hackathon problem statements, the platform encompasses a complete participant registration workflow, Razorpay payment gateway integration, self-service participant tracking portal, digital certificate generator with QR verification, and an administrative control panel with real-time analytics and CSV report exporting.
+**AMS HACKATHON 2026** is an enterprise-grade, dark futuristic web application built for the college's flagship internal 24-hour hackathon. Inspired by Smart India Hackathon problem statements, the platform encompasses a complete participant registration workflow, Razorpay payment gateway integration, self-service participant tracking portal, certificate verification record generator with QR verification, and an administrative control panel with real-time analytics and CSV report exporting.
 
 ---
 
@@ -59,11 +59,11 @@
    - Displays Registration status, Payment status, Team member list, Track specs, Receipt download, and Certificate status.
 
 5. **Certificate Engine & Verification (`/certificates` & `/verify`)**:
-   - Official Gold-bordered Digital Certificate view with **Certificate ID**, **QR Code**, and **Verification URL**.
+   - Official Gold-bordered Physical Certificate Verification view with **Certificate ID**, **QR Code**, and **Verification URL**.
    - Public Certificate Verification page (`/verify/:id`) showing 🟢 **VERIFIED & AUTHENTIC** status badge.
 
 6. **Admin Dashboard (`/admin/dashboard`)**:
-   - JWT Login (`/admin/login` - Demo credentials: `admin` / `hackverse2026`).
+   - JWT Login (`/admin/login` - Demo credentials: `admin` / `amshackathon2026`).
    - Live analytics overview: Total Teams, Total Participants, Total Revenue (₹), Verified Ratios.
    - Registrations table with search, filters, team inspect modal, and **Export Excel / CSV**.
    - Track distribution manager, Announcement poster/deleter, Certificate generator/revoker.
@@ -86,10 +86,10 @@ npm install
 Create `.env` inside `server/`:
 ```env
 PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/hackverse2026
-JWT_SECRET=hackverse_2026_super_secret_jwt_key_amsce_national_hackathon
-RAZORPAY_KEY_ID=rzp_test_hackverse2026
-RAZORPAY_KEY_SECRET=hackverse_secret_key_2026
+MONGO_URI=mongodb://127.0.0.1:27017/ams_hackathon_2026
+JWT_SECRET=ams_hackathon_2026_super_secret_jwt_key_amsce_internal_hackathon
+RAZORPAY_KEY_ID=rzp_test_amshackathon2026
+RAZORPAY_KEY_SECRET=ams_hackathon_secret_key_2026
 FEE_PER_MEMBER_INR=100
 NODE_ENV=development
 ```
@@ -139,4 +139,4 @@ npm run build
 ## 🛡️ License & Branding
 
 Organized by **AALIM MUHAMMED SALEGH COLLEGE OF ENGINEERING**.
-Designed & Developed by **Team HACKVERSE**. All rights reserved © 2026.
+Designed & Developed by **Team AMS HACKATHON 2026**. All rights reserved © 2026.

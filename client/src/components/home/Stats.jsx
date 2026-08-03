@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+﻿import { useEffect, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { FiClock, FiLayers, FiAward, FiUsers, FiFileText } from "react-icons/fi";
 
@@ -117,7 +117,7 @@ function Stats() {
             Hackathon Numbers
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold font-['Space_Grotesk'] text-white mt-3">
-            HACKVERSE 2026 By The <span className="text-gradient-cyan-purple">Numbers</span>
+            AMS HACKATHON 2026 By The <span className="text-gradient-cyan-purple">Numbers</span>
           </h2>
         </div>
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -14,7 +14,7 @@ import {
   FiAward,
 } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
-import hackverseLogo from "../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
 import { verifyCertificateAPI } from "../services/api";
 
 function Verify() {
@@ -78,12 +78,12 @@ function Verify() {
             to="/"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-white/10 text-xs font-semibold text-cyan-400 hover:text-white transition-all"
           >
-            <FiArrowLeft size={16} /> Return to HACKVERSE 2026
+            <FiArrowLeft size={16} /> Return to AMS HACKATHON 2026
           </Link>
 
           <div className="flex items-center gap-2">
             <img src={collegeLogo} alt="College Logo" className="h-7 w-auto object-contain" />
-            <img src={hackverseLogo} alt="Hackverse Logo" className="h-7 w-auto object-contain" />
+            <img src={amsHackathonLogo} alt="AMS HACKATHON 2026 Logo" className="h-7 w-auto object-contain" />
           </div>
         </div>
 
@@ -96,7 +96,7 @@ function Verify() {
             Certificate <span className="text-gradient-cyan-purple">Verification</span>
           </h1>
           <p className="text-gray-400 text-xs sm:text-sm font-light">
-            Enter a Certificate ID to verify recipient authenticity in the HACKVERSE 2026 database.
+            Enter a Certificate ID to verify recipient authenticity in the AMS HACKATHON 2026 database.
           </p>
         </div>
 
@@ -151,7 +151,7 @@ function Verify() {
                     🟢 Verification Status: Verified & Authentic
                   </span>
                   <h2 className="text-2xl font-bold font-['Space_Grotesk'] text-white pt-2">
-                    Official HACKVERSE 2026 Record Verified
+                    Official AMS HACKATHON 2026 Record Verified
                   </h2>
                 </div>
 
@@ -174,7 +174,7 @@ function Verify() {
 
                   <div className="flex justify-between border-b border-white/10 pb-2">
                     <span className="text-gray-400 flex items-center gap-1.5"><FiShield className="text-amber-400" /> Hackathon Event</span>
-                    <span className="font-semibold text-white">HACKVERSE 2026 (AMSCE)</span>
+                    <span className="font-semibold text-white">AMS HACKATHON 2026 (AMSCE)</span>
                   </div>
 
                   <div className="flex justify-between border-b border-white/10 pb-2">
@@ -199,7 +199,7 @@ function Verify() {
                     to={`/certificates?query=${result.certificateCode}`}
                     className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-cyan-500 text-black font-bold text-xs uppercase tracking-wider hover:bg-cyan-400 transition-colors"
                   >
-                    View Official Digital Certificate
+                    View Official Certificate Record
                   </Link>
                 </div>
               </>
@@ -217,7 +217,7 @@ function Verify() {
                     No Matching Record Found
                   </h2>
                   <p className="text-gray-400 text-xs max-w-md mx-auto">
-                    The Certificate ID "{certCode}" could not be verified in the official HACKVERSE 2026 database. Please check for typos.
+                    The Certificate ID "{certCode}" could not be verified in the official AMS HACKATHON 2026 database. Please check for typos.
                   </p>
                 </div>
               </>

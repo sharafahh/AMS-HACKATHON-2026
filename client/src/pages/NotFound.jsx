@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { FiAlertTriangle, FiHome } from "react-icons/fi";
 
 function NotFound() {
@@ -18,7 +18,7 @@ function NotFound() {
             Page Lost in Cyberspace
           </h2>
           <p className="text-gray-400 text-xs font-light">
-            The page or route you requested does not exist in HACKVERSE 2026.
+            The page or route you requested does not exist in AMS HACKATHON 2026.
           </p>
         </div>
 
@@ -26,7 +26,7 @@ function NotFound() {
           to="/"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold text-xs uppercase tracking-wider hover:scale-105 transition-transform"
         >
-          <FiHome /> Back to HACKVERSE
+          <FiHome /> Back to AMS HACKATHON 2026
         </Link>
       </div>
     </div>

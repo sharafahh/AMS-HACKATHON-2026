@@ -50,18 +50,13 @@ const prizes = [
 
 const perksList = [
   {
-    title: "Digital Participation Certificate",
-    desc: "Instantly verifiable digital credentials issued for all team members.",
-    icon: FiCheckCircle,
-  },
-  {
-    title: "Physical Certificate from College",
-    desc: "Official printed certificate available at Aalim Muhammed Salegh College of Engineering.",
+    title: "Physical Participation Certificate",
+    desc: "Every registered participant will receive an official Physical Participation Certificate, distributed at the venue after the successful completion of the hackathon.",
     icon: FiAward,
   },
   {
-    title: "Complimentary Refreshments & Food",
-    desc: "Full meals, snacks, and continuous beverages provided throughout the 24 hours.",
+    title: "Complimentary Tea & Snacks",
+    desc: "Tea and light snacks will be provided to all participants at scheduled intervals throughout the 24-hour hackathon.",
     icon: FiCoffee,
   },
   {
@@ -70,7 +65,7 @@ const perksList = [
     icon: FiStar,
   },
   {
-    title: "National Networking",
+    title: "Campus & Internal Networking",
     desc: "Connect with student developers, hiring partners, and academic innovators across India.",
     icon: FiShield,
   },
@@ -109,7 +104,7 @@ function PrizePool() {
             transition={{ delay: 0.2 }}
             className="text-gray-400 text-base sm:text-lg font-light"
           >
-            Compete for cash prizes, trophies, national recognition, and career-boosting certificates.
+            Compete for cash prizes, trophies, internal recognition, and career-boosting certificates.
           </motion.p>
         </div>
 

@@ -1,4 +1,4 @@
-import Navbar from "../components/layout/Navbar";
+﻿import Navbar from "../components/layout/Navbar";
 import Hero from "../components/home/Hero";
 import About from "../components/home/About";
 import Stats from "../components/home/Stats";
@@ -21,7 +21,7 @@ function Home() {
         {/* 1. Hero Section */}
         <Hero />
 
-        {/* 2. About Hackverse */}
+        {/* 2. About AMS HACKATHON 2026 */}
         <About />
 
         {/* 3. Hackathon Statistics */}

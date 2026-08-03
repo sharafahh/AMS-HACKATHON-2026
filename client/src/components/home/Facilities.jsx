@@ -27,15 +27,15 @@ const facilities = [
   },
   {
     icon: FiHome,
-    title: "Campus Accommodation",
-    description: "Hacker rest area & overnight accommodation provided on campus. Note: Breakfast & lunch are NOT provided.",
+    title: "In-Campus Accommodation",
+    description: "Safe, secure, and comfortable accommodation will be provided inside the college campus for all registered participants during the entire 24-hour hackathon. Participants will remain within the college campus for the entire duration of the event.",
     gradient: "from-amber-400 to-orange-500",
     border: "border-amber-500/30",
   },
   {
     icon: FiCoffee,
-    title: "Snacks & Drinks Provided",
-    description: "Complimentary tea, coffee, energy beverages, and snacks kept stocked in hacker lounges throughout the event.",
+    title: "Tea & Snacks Provided",
+    description: "Complimentary tea and snacks will be provided for all participants during the hackathon.",
     gradient: "from-emerald-400 to-teal-600",
     border: "border-emerald-500/30",
   },
@@ -55,15 +55,15 @@ const facilities = [
   },
   {
     icon: FiCheckCircle,
-    title: "External Industry Jury",
-    description: "Distinguished external corporate experts, senior engineering managers, and industry leaders judge all final prototypes.",
+    title: "Internal & External Jury",
+    description: "Both internal faculty experts and external industry leaders will be evaluating all projects and prototypes.",
     gradient: "from-blue-400 to-cyan-500",
     border: "border-blue-500/30",
   },
   {
     icon: FiAward,
     title: "Participation Certificate",
-    description: "Official digital & printed certificates issued by Aalim Muhammed Salegh College of Engineering.",
+    description: "Only physical certificates will be provided for participants on spot upon evaluation.",
     gradient: "from-yellow-400 to-amber-500",
     border: "border-yellow-500/30",
   },
@@ -99,7 +99,7 @@ function Facilities() {
             transition={{ delay: 0.2 }}
             className="text-gray-400 text-base sm:text-lg font-light"
           >
-            Essential guidelines: Accommodation provided, snacks & beverages provided. Bring your own extension boxes!
+            Essential guidelines: In-campus accommodation provided, tea & snacks provided. Bring your own extension boxes!
           </motion.p>
         </div>
 

@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "HACKVERSE 2026 API Server is running smoothly!",
+    message: "AMS HACKATHON 2026 API Server is running smoothly!",
     organizer: "Aalim Muhammed Salegh College of Engineering",
     timestamp: new Date(),
   });
@@ -47,5 +47,5 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 HACKVERSE 2026 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 AMS HACKATHON 2026 Server running on http://localhost:${PORT}`);
 });

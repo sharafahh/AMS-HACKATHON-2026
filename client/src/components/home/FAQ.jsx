@@ -5,8 +5,8 @@ import { FiChevronDown, FiHelpCircle, FiSearch } from "react-icons/fi";
 const faqData = [
   {
     category: "General",
-    question: "What is HACKVERSE 2026?",
-    answer: "HACKVERSE 2026 is a flagship National Level 24-Hour Hackathon organized by Aalim Muhammed Salegh College of Engineering. It brings together engineering innovators to build hardware and software prototypes.",
+    question: "What is AMS HACKATHON 2026?",
+    answer: "AMS HACKATHON 2026 is a flagship Internal Level 24-Hour Hackathon organized by Aalim Muhammed Salegh College of Engineering. It brings together engineering innovators to build hardware and software prototypes.",
   },
   {
     category: "General",
@@ -35,8 +35,8 @@ const faqData = [
   },
   {
     category: "Logistics",
-    question: "Is food and accommodation provided?",
-    answer: "Accommodation is provided on campus for all participants. Please note: Breakfast and lunch are NOT provided. Only snacks, tea, coffee, and beverages will be served throughout the event.",
+    question: "Will accommodation be provided?",
+    answer: "Yes. Safe and secure in-campus accommodation will be provided for all registered participants throughout the hackathon.",
   },
   {
     category: "Logistics",

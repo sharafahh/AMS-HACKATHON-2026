@@ -1,9 +1,9 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiLock, FiUser, FiArrowLeft, FiShield, FiAlertCircle } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
-import hackverseLogo from "../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
 import { adminLoginAPI } from "../services/api";
 
 function AdminLogin() {
@@ -21,8 +21,8 @@ function AdminLogin() {
     try {
       const data = await adminLoginAPI(username, password);
       if (data.success && data.token) {
-        localStorage.setItem("hackverse_admin_token", data.token);
-        localStorage.setItem("hackverse_admin_user", JSON.stringify(data.admin));
+        localStorage.setItem("ams_hackathon_2026_admin_token", data.token);
+        localStorage.setItem("ams_hackathon_2026_admin_user", JSON.stringify(data.admin));
         navigate("/admin/dashboard");
       } else {
         setError(data.message || "Invalid credentials");
@@ -47,7 +47,7 @@ function AdminLogin() {
             to="/"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-white/10 text-xs font-semibold text-cyan-400 hover:text-white transition-all"
           >
-            <FiArrowLeft size={16} /> Return to HACKVERSE 2026
+            <FiArrowLeft size={16} /> Return to AMS HACKATHON 2026
           </Link>
         </div>
 
@@ -60,7 +60,7 @@ function AdminLogin() {
           <div className="flex items-center justify-center gap-3 mb-2">
             <img src={collegeLogo} alt="College Logo" className="h-9 w-auto object-contain" />
             <div className="h-6 w-[1px] bg-white/20" />
-            <img src={hackverseLogo} alt="Hackverse Logo" className="h-9 w-auto object-contain" />
+            <img src={amsHackathonLogo} alt="AMS HACKATHON 2026 Logo" className="h-9 w-auto object-contain" />
           </div>
 
           <div className="space-y-1">
@@ -123,7 +123,7 @@ function AdminLogin() {
           </form>
 
           <div className="pt-4 border-t border-white/10 text-[11px] text-gray-400">
-            Demo Credentials: <strong className="text-cyan-400">admin</strong> / <strong className="text-cyan-400">hackverse2026</strong>
+            Demo Credentials: <strong className="text-cyan-400">admin</strong> / <strong className="text-cyan-400">amshackathon2026</strong>
           </div>
         </motion.div>
       </div>

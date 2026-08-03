@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import collegeLogo from "../../assets/logos/college-logo.png";
-import hackverseLogo from "../../assets/logos/hackverse-logo.png";
+import amsHackathonLogo from "../../assets/logos/ams-hackathon-logo.png";
 
 function LoadingScreen() {
   return (
@@ -18,7 +18,7 @@ function LoadingScreen() {
         <div className="flex items-center gap-3 p-2 rounded-2xl bg-white/5 border border-white/10">
           <img src={collegeLogo} alt="College Logo" className="h-10 w-auto object-contain" />
           <div className="h-6 w-[1px] bg-white/20" />
-          <img src={hackverseLogo} alt="Hackverse Logo" className="h-10 w-auto object-contain" />
+          <img src={amsHackathonLogo} alt="AMS HACKATHON 2026 Logo" className="h-10 w-auto object-contain" />
         </div>
 
         {/* Spinner Ring */}
@@ -29,7 +29,7 @@ function LoadingScreen() {
 
         <div className="space-y-1">
           <h2 className="text-xl font-bold font-['Space_Grotesk'] text-white tracking-wide">
-            HACKVERSE <span className="text-cyan-400">2026</span>
+            AMS HACKATHON <span className="text-cyan-400">2026</span>
           </h2>
           <p className="text-xs text-gray-400 font-light tracking-wider uppercase">
             Loading Cyber Experience...

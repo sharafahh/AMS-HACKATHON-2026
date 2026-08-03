@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+﻿import jwt from "jsonwebtoken";
 import Admin from "../models/Admin.js";
 
 export const protectAdmin = async (req, res, next) => {
@@ -10,7 +10,7 @@ export const protectAdmin = async (req, res, next) => {
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || "hackverse_secret_key");
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || "ams_hackathon_secret_key");
       req.admin = await Admin.findById(decoded.id).select("-password");
       if (!req.admin) {
         return res.status(401).json({ success: false, message: "Not authorized, admin not found" });

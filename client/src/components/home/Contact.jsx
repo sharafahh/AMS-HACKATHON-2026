@@ -55,7 +55,7 @@ function Contact() {
             transition={{ delay: 0.1 }}
             className="text-3xl sm:text-5xl font-extrabold font-['Space_Grotesk'] text-white"
           >
-            Contact <span className="text-gradient-cyan-purple">HACKVERSE Team</span>
+            Contact <span className="text-gradient-cyan-purple">AMS HACKATHON 2026 Team</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -112,10 +112,10 @@ function Contact() {
                       Official Email
                     </h4>
                     <a
-                      href="mailto:hackverse2026@aalimec.ac.in"
+                      href="mailto:amstrust@yahoo.com"
                       className="text-gray-300 hover:text-white text-xs sm:text-sm font-light transition-colors"
                     >
-                      hackverse2026@aalimec.ac.in
+                      amstrust@yahoo.com
                     </a>
                   </div>
                 </div>
@@ -126,10 +126,10 @@ function Contact() {
                   </div>
                   <div>
                     <h4 className="text-white text-xs uppercase font-extrabold tracking-wider text-amber-400 mb-1">
-                      Helpline Numbers
+                      Faculty Coordinators
                     </h4>
                     <p className="text-gray-300 text-xs sm:text-sm font-light">
-                      +91 98765 43210 &nbsp;|&nbsp; +91 44 2684 2627
+                      +91 86106 84529 &nbsp;|&nbsp; +91 98841 01997
                     </p>
                   </div>
                 </div>
@@ -184,7 +184,7 @@ function Contact() {
                     Message Sent Successfully!
                   </h4>
                   <p className="text-gray-300 text-sm font-light">
-                    Thank you for reaching out. A representative from HACKVERSE 2026 will reply to your registered email shortly.
+                    Thank you for reaching out. A representative from AMS HACKATHON 2026 will reply to your registered email shortly.
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}

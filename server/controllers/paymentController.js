@@ -1,4 +1,4 @@
-import crypto from "crypto";
+﻿import crypto from "crypto";
 import Razorpay from "razorpay";
 import Team from "../models/Team.js";
 import Payment from "../models/Payment.js";
@@ -6,8 +6,8 @@ import { generateRegistrationId } from "../utils/generateId.js";
 import { sendConfirmationEmail } from "../utils/emailService.js";
 
 // Initialize Razorpay instance if keys provided
-const razorpayKeyId = process.env.RAZORPAY_KEY_ID || "rzp_test_hackverse2026";
-const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET || "hackverse_secret_key_2026";
+const razorpayKeyId = process.env.RAZORPAY_KEY_ID || "rzp_test_amshackathon2026";
+const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET || "ams_hackathon_secret_key_2026";
 
 let razorpayInstance = null;
 try {
@@ -48,7 +48,7 @@ export const createOrder = async (req, res) => {
       currency: "INR",
       receipt,
       notes: {
-        event: "HACKVERSE 2026",
+        event: "AMS HACKATHON 2026",
         teamSize: numMembers,
         feePerPerson: feePerMember,
       },
