@@ -12,11 +12,14 @@ dotenv.config();
 
 // Helper to get fresh Razorpay instance using environment variables
 const getRazorpayInstance = () => {
-  const key_id = process.env.RAZORPAY_KEY_ID || "rzp_live_TLFPAnyETVkt8L";
-  const key_secret = process.env.RAZORPAY_KEY_SECRET || "SPh1TEm6WFmqQGGZm3ETPaLC";
+  let key_id = process.env.RAZORPAY_KEY_ID;
+  let key_secret = process.env.RAZORPAY_KEY_SECRET;
 
-  if (!key_id || key_id.includes("your_key_id_here")) {
-    return { instance: null, key_id, key_secret };
+  if (!key_id || key_id.includes("your_key_id") || key_id.includes("rzp_test_amshackathon")) {
+    key_id = "rzp_live_TLFPAnyETVkt8L";
+  }
+  if (!key_secret || key_secret.includes("your_key_secret") || key_secret.includes("ams_hackathon_secret")) {
+    key_secret = "SPh1TEm6WFmqQGGZm3ETPaLC";
   }
 
   try {
