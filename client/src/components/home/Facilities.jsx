@@ -34,8 +34,8 @@ const facilities = [
   },
   {
     icon: FiCoffee,
-    title: "Complimentary Refreshments",
-    description: "Complimentary refreshments will be provided for all participants during the hackathon.",
+    title: "Refreshments (Tea & Snacks)",
+    description: "Refreshments (tea and snacks) will be provided for all participants during the hackathon.",
     gradient: "from-emerald-400 to-teal-600",
     border: "border-emerald-500/30",
   },
@@ -99,7 +99,7 @@ function Facilities() {
             transition={{ delay: 0.2 }}
             className="text-gray-400 text-base sm:text-lg font-light"
           >
-            Essential guidelines: In-campus accommodation provided, complimentary refreshments provided. Bring your own extension boxes!
+            Essential guidelines: In-campus accommodation provided, refreshments (tea and snacks) provided. Bring your own extension boxes!
           </motion.p>
         </div>
 

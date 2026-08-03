@@ -41,7 +41,7 @@ const faqData = [
   {
     category: "Logistics",
     question: "Will refreshments be provided?",
-    answer: "Yes. Complimentary refreshments will be provided to all registered participants at scheduled intervals throughout the 24-hour hackathon.",
+    answer: "Yes. Refreshments (tea and snacks) will be provided to all registered participants at scheduled intervals throughout the 24-hour hackathon.",
   },
   {
     category: "Logistics",
