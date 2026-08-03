@@ -1,4 +1,4 @@
-﻿import express from "express";
+import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
@@ -12,9 +12,6 @@ import announcementRoutes from "./routes/announcementRoutes.js";
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 
 dotenv.config();
-
-// Initialize MongoDB Connection
-connectDB();
 
 const app = express();
 
@@ -46,6 +43,17 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 AMS HACKATHON 2026 Server running on http://localhost:${PORT}`);
-});
+// Ensure MongoDB Atlas connects BEFORE the Express server starts
+const startServer = async () => {
+  try {
+    await connectDB();
+  } catch (error) {
+    console.warn("MongoDB Atlas connection error during startup:", error.message);
+  }
+  
+  app.listen(PORT, () => {
+    console.log(`🚀 AMS HACKATHON 2026 Server running on http://localhost:${PORT}`);
+  });
+};
+
+startServer();

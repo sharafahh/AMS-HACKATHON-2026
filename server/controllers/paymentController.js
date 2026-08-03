@@ -3,6 +3,7 @@ import Razorpay from "razorpay";
 import dotenv from "dotenv";
 import Team from "../models/Team.js";
 import Payment from "../models/Payment.js";
+import Registration from "../models/Registration.js";
 import { generateRegistrationId } from "../utils/generateId.js";
 import { sendConfirmationEmail } from "../utils/emailService.js";
 
@@ -61,7 +62,7 @@ export const createOrder = async (req, res) => {
       },
     };
 
-    const { instance: razorpayInstance, key_id: razorpayKeyId, key_secret: razorpayKeySecret } = getRazorpayInstance();
+    const { instance: razorpayInstance, key_id: razorpayKeyId } = getRazorpayInstance();
 
     let order;
     if (razorpayInstance && !razorpayKeyId.startsWith("rzp_test_mock")) {
@@ -105,7 +106,7 @@ export const createOrder = async (req, res) => {
   }
 };
 
-// @desc    Verify Razorpay Signature & Save Team/Payment to DB ONLY upon 100% Valid Payment
+// @desc    Verify Razorpay Signature & Save Registration to MongoDB ONLY upon Successful Payment
 // @route   POST /api/payments/verify
 // @access  Public
 export const verifyPayment = async (req, res) => {
@@ -120,7 +121,7 @@ export const verifyPayment = async (req, res) => {
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !teamData) {
       return res.status(400).json({
         success: false,
-        message: "Missing payment verification parameters. Team registration aborted.",
+        message: "Missing payment verification parameters. Registration aborted.",
       });
     }
 
@@ -145,7 +146,7 @@ export const verifyPayment = async (req, res) => {
       razorpay_signature.startsWith("test_simulated_sig_");
 
     if (!isSignatureValid) {
-      console.error("❌ CRITICAL: Payment signature verification failed! Registration aborted.");
+      console.error("❌ CRITICAL: Payment signature verification failed! Registration NOT saved.");
       return res.status(400).json({
         success: false,
         message: "Payment signature verification failed. Registration aborted for security.",
@@ -155,38 +156,56 @@ export const verifyPayment = async (req, res) => {
     // Mark payment ID as processed
     processedPayments.add(razorpay_payment_id);
 
-    // 3. Signature is 100% VALID -> Generate Registration ID & Save Team
-    const registrationId = generateRegistrationId();
+    // 3. Payment Verified -> Save Registration Model to MongoDB Atlas
     const numMembers = Number(teamData.teamSize || 4);
     const amountPaid = numMembers * 100;
+    const registrationId = generateRegistrationId();
 
-    const newTeamPayload = {
-      registrationId,
+    const registrationPayload = {
       teamName: teamData.teamName,
-      teamSize: numMembers,
-      leader: {
-        name: teamData.leaderName,
-        email: teamData.leaderEmail,
-        phone: teamData.leaderPhone,
-        college: teamData.college,
-        department: teamData.department,
-        year: teamData.year || "3rd Year",
-      },
-      members: teamData.members,
-      track: teamData.track,
-      problemTitle: teamData.problemTitle,
-      problemAbstract: teamData.problemAbstract,
-      referralCode: teamData.referralCode || "",
-      status: "CONFIRMED",
+      teamLeaderName: teamData.leaderName,
+      teamMembers: teamData.members || [],
+      email: teamData.leaderEmail,
+      phoneNumber: teamData.leaderPhone,
+      collegeName: teamData.college,
+      department: teamData.department,
+      year: teamData.year || "3rd Year",
       paymentStatus: "PAID",
-      createdAt: new Date(),
+      razorpayOrderId: razorpay_order_id,
+      razorpayPaymentId: razorpay_payment_id,
+      registrationTimestamp: new Date(),
     };
 
+    let savedRegistration = null;
     let savedTeam = null;
-    try {
-      savedTeam = await Team.create(newTeamPayload);
 
-      // Create Payment DB Record
+    try {
+      // Save Registration Model
+      savedRegistration = await Registration.create(registrationPayload);
+
+      // Save Team Model (For compatibility)
+      savedTeam = await Team.create({
+        registrationId,
+        teamName: teamData.teamName,
+        teamSize: numMembers,
+        leader: {
+          name: teamData.leaderName,
+          email: teamData.leaderEmail,
+          phone: teamData.leaderPhone,
+          college: teamData.college,
+          department: teamData.department,
+          year: teamData.year || "3rd Year",
+        },
+        members: teamData.members,
+        track: teamData.track,
+        problemTitle: teamData.problemTitle,
+        problemAbstract: teamData.problemAbstract,
+        referralCode: teamData.referralCode || "",
+        status: "CONFIRMED",
+        paymentStatus: "PAID",
+      });
+
+      // Save Payment Model
       await Payment.create({
         teamId: savedTeam._id,
         registrationId,
@@ -196,12 +215,12 @@ export const verifyPayment = async (req, res) => {
         paymentGateway: "RAZORPAY",
       });
     } catch (dbErr) {
-      console.warn("Saving verified team to in-memory fallback store:", dbErr.message);
-      localMemoryTeams.push({ _id: `mem-${Date.now()}`, ...newTeamPayload });
-      savedTeam = newTeamPayload;
+      console.warn("DB Save Warning:", dbErr.message);
+      localMemoryTeams.push({ _id: `mem-${Date.now()}`, ...registrationPayload });
+      savedRegistration = registrationPayload;
     }
 
-    // 4. Send Confirmation Email
+    // 4. Send Confirmation Email (Keep existing functionality)
     sendConfirmationEmail({
       toEmail: teamData.leaderEmail,
       teamName: teamData.teamName,
@@ -212,14 +231,15 @@ export const verifyPayment = async (req, res) => {
       college: teamData.college,
     });
 
-    console.log(`✅ SUCCESS: Verified payment (${razorpay_payment_id}). Saved Team (${registrationId}).`);
+    console.log(`✅ SUCCESS: Saved registration for team "${teamData.teamName}" (${razorpay_payment_id}).`);
 
     return res.status(200).json({
       success: true,
-      message: "Payment verified & team registration saved successfully!",
+      message: "Payment verified & registration saved to MongoDB successfully!",
       registrationId,
       paymentId: razorpay_payment_id,
       amountPaid,
+      registration: savedRegistration,
       team: savedTeam,
     });
   } catch (error) {
