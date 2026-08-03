@@ -1,2 +1,2 @@
-// Mandatory registration fee per participant constant
-export const REGISTRATION_FEE = 1;
+// Single source of truth for registration fee per participant
+export const REGISTRATION_FEE_PER_PERSON = 1;
