@@ -1,5 +1,6 @@
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { REGISTRATION_FEE } from "../constants/fee";
 import {
   FiCheckCircle,
   FiDownload,
@@ -26,7 +27,8 @@ function Success() {
   const registrationId = state.registrationId || "HV26-9A82F";
   const paymentId = state.paymentId || "pay_N928174A2";
   const teamName = state.teamName || "CyberKnights";
-  const amountPaid = state.amountPaid || 400;
+  const teamData = state.teamData || {};
+  const amountPaid = state.amountPaid || (teamData?.teamSize || 4) * REGISTRATION_FEE;
   const paymentDate = new Date().toLocaleDateString("en-IN", {
     day: "numeric",
     month: "long",
@@ -152,8 +154,8 @@ function Success() {
                 <tbody className="divide-y divide-white/5 text-gray-300 print:divide-gray-200 print:text-black">
                   <tr>
                     <td className="p-3 font-medium">AMS HACKATHON 2026 Registration Fee</td>
-                    <td className="p-3 text-center">{(teamData?.teamSize || Math.round(amountPaid / 1) || 4)} Members</td>
-                    <td className="p-3 text-right">₹1</td>
+                    <td className="p-3 text-center">{(teamData?.teamSize || Math.round(amountPaid / REGISTRATION_FEE) || 4)} Members</td>
+                    <td className="p-3 text-right">₹{REGISTRATION_FEE}</td>
                     <td className="p-3 text-right font-bold text-white print:text-black">₹{amountPaid}</td>
                   </tr>
                 </tbody>

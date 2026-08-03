@@ -9,6 +9,7 @@ import StepMemberDetails from "./StepMemberDetails";
 import StepProjectDetails from "./StepProjectDetails";
 import StepSummaryAgreement from "./StepSummaryAgreement";
 import { createPaymentOrderAPI, verifyPaymentSignatureAPI } from "../../services/api";
+import { REGISTRATION_FEE } from "../../constants/fee";
 
 const steps = [
   { id: 1, name: "Team & Leader", fields: ["teamName", "teamSize", "leaderName", "leaderEmail", "leaderPhone", "college", "department", "year"] },
@@ -219,8 +220,7 @@ function RegisterForm() {
   };
 
   const progressPercentage = (currentStep / steps.length) * 100;
-  // Temporary testing fee. Change back to 100 before production.
-  const currentTotalFee = watchTeamSize * 1;
+  const currentTotalFee = watchTeamSize * REGISTRATION_FEE;
 
   if (isDeadlinePassed) {
     return (

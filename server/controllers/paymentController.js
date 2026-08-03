@@ -6,6 +6,7 @@ import Payment from "../models/Payment.js";
 import Registration from "../models/Registration.js";
 import { generateRegistrationId } from "../utils/generateId.js";
 import { sendConfirmationEmail } from "../utils/emailService.js";
+import { REGISTRATION_FEE } from "../config/constants.js";
 
 dotenv.config();
 
@@ -31,26 +32,24 @@ const getRazorpayInstance = () => {
 const processedPayments = new Set();
 const localMemoryTeams = [];
 
-// Temporary testing fee. Change back to ₹100 per member before production.
-// @desc    Create Razorpay Order (Final payment: ₹3 total)
+// @desc    Create Razorpay Order (Uses REGISTRATION_FEE constant = ₹1 per member)
 // @route   POST /api/payments/create-order
 // @access  Public
 export const createOrder = async (req, res) => {
   try {
     const { teamSize } = req.body;
-    const numMembers = Number(teamSize);
+    const numMembers = Number(teamSize) || 1;
 
-    if (!numMembers || numMembers < 3 || numMembers > 6) {
+    if (!numMembers || numMembers < 1 || numMembers > 6) {
       return res.status(400).json({
         success: false,
-        message: "Invalid team size. Must be between 3 and 6 members.",
+        message: "Invalid team size. Must be between 1 and 6 members.",
       });
     }
 
-    // Temporary testing fee. Change back to ₹100 per member before production.
-    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR || 1); // ₹1 per member
-    const totalAmountINR = numMembers * feePerMember; // 3 INR for 3, 4 INR for 4, 5 INR for 5, 6 INR for 6
-    const amountInPaise = totalAmountINR * 100; // 300, 400, 500, 600 paise (Razorpay displays ₹3, ₹4, ₹5, ₹6)
+    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR) || REGISTRATION_FEE; // REGISTRATION_FEE = 1
+    const totalAmountINR = numMembers * feePerMember;
+    const amountInPaise = totalAmountINR * 100; // Razorpay uses paise (100 paise = ₹1)
 
     const receipt = `rcpt_${Date.now()}`;
     const options = {
@@ -160,7 +159,7 @@ export const verifyPayment = async (req, res) => {
 
     // 3. Payment Verified -> Save Registration Model to MongoDB Atlas
     const numMembers = Number(teamData.teamSize || 4);
-    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR || 1);
+    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR) || REGISTRATION_FEE;
     const amountPaid = numMembers * feePerMember;
     const registrationId = generateRegistrationId();
 

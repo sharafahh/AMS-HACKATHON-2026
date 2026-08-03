@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { REGISTRATION_FEE } from "../constants/fee";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiUsers,
@@ -254,7 +255,7 @@ function AdminDashboard() {
   // Calculate Metrics
   const totalTeamsCount = teams.length;
   const totalParticipantsCount = teams.reduce((sum, t) => sum + (t.teamSize || 4), 0);
-  const totalRevenueINR = teams.reduce((sum, t) => sum + (t.teamSize || 4) * 1, 0);
+  const totalRevenueINR = teams.reduce((sum, t) => sum + (t.teamSize || 4) * REGISTRATION_FEE, 0);
   const paidTeamsCount = teams.filter((t) => t.paymentStatus === "PAID" || t.paymentStatus === "UNPAID").length;
 
   return (
@@ -548,7 +549,7 @@ function AdminDashboard() {
                             </span>
                           </td>
                           <td className="p-4">{t.teamSize} Members</td>
-                          <td className="p-4 text-amber-400 font-bold">₹{t.teamSize * 1}</td>
+                          <td className="p-4 text-amber-400 font-bold">₹{t.teamSize * REGISTRATION_FEE}</td>
                           <td className="p-4 text-center">
                             <button
                               onClick={() => setSelectedTeamInspect(t)}
@@ -834,7 +835,7 @@ function AdminDashboard() {
                   Payment Revenue & Financial Statistics
                 </h2>
                 <p className="text-gray-400 text-xs font-light mt-1">
-                  Detailed revenue report based on ₹1 per member registration fees.
+                  Detailed revenue report based on ₹{REGISTRATION_FEE} per member registration fees.
                 </p>
               </div>
 
@@ -851,7 +852,8 @@ function AdminDashboard() {
 
                 <div className="glass-card p-6 rounded-3xl border border-cyan-500/30">
                   <span className="text-gray-400 text-xs uppercase font-bold">Fee Breakdown</span>
-                  <div className="text-xl font-bold text-cyan-400 mt-2 font-['Space_Grotesk']">₹1 / Member</div>
+                  <div className="text-xl font-bold text-cyan-400 mt-2 font-['Space_Grotesk']">₹{REGISTRATION_FEE} / Member</div>
+                </div>
                 </div>
               </div>
             </div>
@@ -886,7 +888,7 @@ function AdminDashboard() {
                 <p><strong className="text-gray-400">Phone:</strong> {selectedTeamInspect.leader?.phone}</p>
                 <p><strong className="text-gray-400">College:</strong> {selectedTeamInspect.leader?.college}</p>
                 <p><strong className="text-gray-400">Track:</strong> {selectedTeamInspect.track}</p>
-                <p><strong className="text-gray-400">Fee Paid:</strong> ₹{selectedTeamInspect.teamSize * 1}</p>
+                <p><strong className="text-gray-400">Fee Paid:</strong> ₹{selectedTeamInspect.teamSize * REGISTRATION_FEE}</p>
               </div>
 
               <div className="space-y-2 border-t border-white/10 pt-4">
