@@ -21,7 +21,7 @@ const faqData = [
   {
     category: "Registration",
     question: "Is there any registration fee?",
-    answer: "Yes, a mandatory registration fee of ₹100 per member (₹300 for 3 members, ₹400 for 4, ₹500 for 5, ₹600 for 6) is payable during registration.",
+    answer: "Yes, a mandatory registration fee of ₹1 per member (₹3 for 3 members, ₹4 for 4, ₹5 for 5, ₹6 for 6) is payable during registration.",
   },
   {
     category: "Tracks & Project",
