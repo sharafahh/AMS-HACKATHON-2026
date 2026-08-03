@@ -1,23 +1,30 @@
-﻿import crypto from "crypto";
+import crypto from "crypto";
 import Razorpay from "razorpay";
+import dotenv from "dotenv";
 import Team from "../models/Team.js";
 import Payment from "../models/Payment.js";
 import { generateRegistrationId } from "../utils/generateId.js";
 import { sendConfirmationEmail } from "../utils/emailService.js";
 
-// Initialize Razorpay instance if keys provided
-const razorpayKeyId = process.env.RAZORPAY_KEY_ID || "rzp_test_amshackathon2026";
-const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET || "ams_hackathon_secret_key_2026";
+dotenv.config();
 
-let razorpayInstance = null;
-try {
-  razorpayInstance = new Razorpay({
-    key_id: razorpayKeyId,
-    key_secret: razorpayKeySecret,
-  });
-} catch (e) {
-  console.warn("Razorpay instance initialized in test simulation mode.");
-}
+// Helper to get fresh Razorpay instance using environment variables
+const getRazorpayInstance = () => {
+  const key_id = process.env.RAZORPAY_KEY_ID || "rzp_test_amshackathon2026";
+  const key_secret = process.env.RAZORPAY_KEY_SECRET || "ams_hackathon_secret_key_2026";
+
+  if (!key_id || key_id.includes("your_key_id_here")) {
+    return { instance: null, key_id, key_secret };
+  }
+
+  try {
+    const instance = new Razorpay({ key_id, key_secret });
+    return { instance, key_id, key_secret };
+  } catch (e) {
+    console.warn("Razorpay instance initialization error:", e.message);
+    return { instance: null, key_id, key_secret };
+  }
+};
 
 // In-memory fallback stores
 const processedPayments = new Set();
@@ -54,12 +61,14 @@ export const createOrder = async (req, res) => {
       },
     };
 
+    const { instance: razorpayInstance, key_id: razorpayKeyId, key_secret: razorpayKeySecret } = getRazorpayInstance();
+
     let order;
     if (razorpayInstance && !razorpayKeyId.startsWith("rzp_test_mock")) {
       try {
         order = await razorpayInstance.orders.create(options);
       } catch (rzpErr) {
-        console.warn("Razorpay live API order creation fallback to test simulation:", rzpErr.message);
+        console.warn("Razorpay API order creation fallback to simulation:", rzpErr.message);
         order = {
           id: `order_${crypto.randomBytes(8).toString("hex")}`,
           amount: amountInPaise,
@@ -122,6 +131,8 @@ export const verifyPayment = async (req, res) => {
         message: "Duplicate payment detected. Transaction already processed.",
       });
     }
+
+    const { key_secret: razorpayKeySecret } = getRazorpayInstance();
 
     // 2. Perform HMAC SHA256 Signature Verification
     const expectedSignature = crypto
