@@ -9,32 +9,97 @@ export const sendConfirmationEmail = async ({
   amount,
   numMembers,
   college,
+  eventDate = "22 August 2026 (9:00 AM)",
+  venue = "Aalim Muhammed Salegh College of Engineering, Avadi, Chennai",
 }) => {
   try {
-    const subject = "AMS Hackathon 2026 Registration Confirmed";
+    if (!toEmail) {
+      console.warn("⚠️ Email notice: No leader recipient email address provided.");
+      return false;
+    }
+
+    const subject = "AMS Hackathon 2026 | Registration Confirmed 🎉";
+    const whatsappUrl = "https://chat.whatsapp.com/IdPOeoehQUrIVXt00cZibU";
+
     const textBody = `Dear ${leaderName || "Team Leader"},
 
-Your registration for AMS Hackathon 2026 has been successfully completed.
+Congratulations! Your registration for AMS Hackathon 2026 has been successfully confirmed.
 
-Registration Details
+============================================================
+REGISTRATION DETAILS
+============================================================
+Team Leader Name       : ${leaderName || "N/A"}
+Registration ID        : ${registrationId || "N/A"}
+Team Name              : ${teamName || "N/A"}
+College Name           : ${college || "N/A"}
+Number of Participants : ${numMembers || 4}
+Amount Paid            : ₹${amount || 400} INR
+Transaction ID         : ${paymentId || "N/A"}
+Event Date             : ${eventDate}
+Venue                  : ${venue}
 
-Team Name: ${teamName || "N/A"}
-Team Leader: ${leaderName || "N/A"}
-College: ${college || "N/A"}
-Number of Participants: ${numMembers || 4}
-Amount Paid: ₹${amount || 400} INR
-Transaction ID: ${paymentId || "N/A"}
-Registration ID: ${registrationId || "N/A"}
+============================================================
+JOIN OUR OFFICIAL WHATSAPP COMMUNITY
+============================================================
+${whatsappUrl}
 
-Thank you for registering.
+All important announcements, schedules, rules, venue updates, and support will be shared through this community.
 
-Please keep this email for future reference.
+Thank you for registering. Please keep this email for future reference. We look forward to seeing you at AMS Hackathon 2026!
 
-We look forward to seeing you at AMS Hackathon 2026.
+Regards,
+AMS Hackathon 2026 Organizing Team
+Aalim Muhammed Salegh College of Engineering`;
 
-Regards
+    const htmlBody = `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0b0f19; color: #e2e8f0; padding: 30px; border-radius: 16px; border: 1px solid #1e293b;">
+        <div style="text-align: center; padding-bottom: 20px; border-b: 1px solid #1e293b;">
+          <h1 style="color: #06b6d4; font-size: 24px; margin: 0;">AMS HACKATHON 2026</h1>
+          <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">Official Registration Confirmation</p>
+        </div>
 
-AMS Hackathon Organizing Team`;
+        <div style="margin-top: 24px;">
+          <p style="font-size: 16px;">Dear <strong>${leaderName || "Team Leader"}</strong>,</p>
+          <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6;">
+            Your registration for <strong>AMS Hackathon 2026</strong> has been successfully verified and completed.
+          </p>
+
+          <div style="background-color: #151d30; padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid #334155;">
+            <h3 style="color: #f59e0b; margin-top: 0; font-size: 16px; border-bottom: 1px solid #334155; padding-bottom: 8px;">Registration Details</h3>
+            <table style="width: 100%; font-size: 14px; color: #e2e8f0; border-collapse: collapse;">
+              <tr><td style="padding: 6px 0; color: #94a3b8;">Team Leader Name:</td><td style="font-weight: bold;">${leaderName || "N/A"}</td></tr>
+              <tr><td style="padding: 6px 0; color: #94a3b8;">Registration ID:</td><td style="font-weight: bold; color: #06b6d4;">${registrationId || "N/A"}</td></tr>
+              <tr><td style="padding: 6px 0; color: #94a3b8;">Team Name:</td><td style="font-weight: bold;">${teamName || "N/A"}</td></tr>
+              <tr><td style="padding: 6px 0; color: #94a3b8;">College Name:</td><td>${college || "N/A"}</td></tr>
+              <tr><td style="padding: 6px 0; color: #94a3b8;">Participants:</td><td>${numMembers || 4} Members</td></tr>
+              <tr><td style="padding: 6px 0; color: #94a3b8;">Amount Paid:</td><td style="color: #10b981; font-weight: bold;">₹${amount || 400} INR</td></tr>
+              <tr><td style="padding: 6px 0; color: #94a3b8;">Transaction ID:</td><td style="font-family: monospace;">${paymentId || "N/A"}</td></tr>
+              <tr><td style="padding: 6px 0; color: #94a3b8;">Event Date:</td><td>${eventDate}</td></tr>
+              <tr><td style="padding: 6px 0; color: #94a3b8;">Venue:</td><td>${venue}</td></tr>
+            </table>
+          </div>
+
+          <div style="background-color: #064e3b; border: 1px solid #059669; padding: 20px; border-radius: 12px; text-align: center; margin: 24px 0;">
+            <h3 style="color: #34d399; margin-top: 0; font-size: 16px;">Join our Official WhatsApp Community</h3>
+            <p style="color: #a7f3d0; font-size: 13px; margin-bottom: 16px;">
+              All important announcements, schedules, rules, venue updates, and support will be shared through this community.
+            </p>
+            <a href="${whatsappUrl}" style="background-color: #10b981; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; font-size: 14px;">
+              👉 Join WhatsApp Community
+            </a>
+            <p style="color: #6ee7b7; font-size: 11px; margin-top: 12px; word-break: break-all;">${whatsappUrl}</p>
+          </div>
+
+          <p style="color: #94a3b8; font-size: 13px;">
+            Please keep this email for future reference. We look forward to seeing you at AMS Hackathon 2026!
+          </p>
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 16px; border-top: 1px solid #1e293b; text-align: center; color: #64748b; font-size: 12px;">
+          <p style="margin: 0;">Regards,<br><strong>AMS Hackathon 2026 Organizing Team</strong><br>Aalim Muhammed Salegh College of Engineering</p>
+        </div>
+      </div>
+    `;
 
     console.log(`
 ============================================================
@@ -59,16 +124,19 @@ ${textBody}
       });
 
       await transporter.sendMail({
-        from: `"AMS Hackathon Team" <${process.env.SMTP_USER}>`,
+        from: `"AMS Hackathon 2026" <${process.env.SMTP_USER}>`,
         to: toEmail,
         subject,
         text: textBody,
+        html: htmlBody,
       });
+      console.log(`✅ SMTP Confirmation email sent successfully to ${toEmail}`);
     }
 
     return true;
   } catch (error) {
-    console.error("Error sending confirmation email:", error.message);
+    // Non-blocking log catch
+    console.error("Non-blocking notice - Error sending confirmation email:", error.message);
     return false;
   }
 };
