@@ -47,9 +47,10 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    // Temporary testing fee. Final payment set to ₹3 total. Change back before production.
-    const totalAmountINR = Number(process.env.TEST_PAYMENT_AMOUNT_INR || 3); // ₹3 total
-    const amountInPaise = totalAmountINR * 100; // 300 paise (₹3)
+    // Temporary testing fee. Change back to ₹100 per member before production.
+    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR || 1); // ₹1 per member
+    const totalAmountINR = numMembers * feePerMember; // 3 INR for 3, 4 INR for 4, 5 INR for 5, 6 INR for 6
+    const amountInPaise = totalAmountINR * 100; // 300, 400, 500, 600 paise (Razorpay displays ₹3, ₹4, ₹5, ₹6)
 
     const receipt = `rcpt_${Date.now()}`;
     const options = {
@@ -59,7 +60,7 @@ export const createOrder = async (req, res) => {
       notes: {
         event: "AMS HACKATHON 2026",
         teamSize: numMembers,
-        feePerPerson: totalAmountINR,
+        feePerPerson: feePerMember,
       },
     };
 
@@ -159,7 +160,8 @@ export const verifyPayment = async (req, res) => {
 
     // 3. Payment Verified -> Save Registration Model to MongoDB Atlas
     const numMembers = Number(teamData.teamSize || 4);
-    const amountPaid = Number(process.env.TEST_PAYMENT_AMOUNT_INR || 3);
+    const feePerMember = Number(process.env.FEE_PER_MEMBER_INR || 1);
+    const amountPaid = numMembers * feePerMember;
     const registrationId = generateRegistrationId();
 
     const registrationPayload = {
