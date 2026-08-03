@@ -55,8 +55,8 @@ const perksList = [
     icon: FiAward,
   },
   {
-    title: "Complimentary Tea & Snacks",
-    desc: "Tea and light snacks will be provided to all participants at scheduled intervals throughout the 24-hour hackathon.",
+    title: "Complimentary Refreshments",
+    desc: "Complimentary refreshments will be provided to all participants at scheduled intervals throughout the 24-hour hackathon.",
     icon: FiCoffee,
   },
   {

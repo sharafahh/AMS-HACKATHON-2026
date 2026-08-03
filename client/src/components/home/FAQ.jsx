@@ -40,6 +40,11 @@ const faqData = [
   },
   {
     category: "Logistics",
+    question: "Will refreshments be provided?",
+    answer: "Yes. Complimentary refreshments will be provided to all registered participants at scheduled intervals throughout the 24-hour hackathon.",
+  },
+  {
+    category: "Logistics",
     question: "Do teams need to bring extension boxes?",
     answer: "Yes! While 100% generator power backup is provided, all participating teams must bring their own extension boxes / power strips for their laptops and hardware kits.",
   },
