@@ -15,6 +15,7 @@ import {
   FiBookOpen,
   FiCpu,
   FiPrinter,
+  FiUsers,
 } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
 import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
