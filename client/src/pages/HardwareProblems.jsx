@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -99,7 +99,7 @@ function HardwareProblems() {
           {/* Software Tracks Info */}
           <div className="glass-card p-6 rounded-3xl border border-cyan-500/30 space-y-3 relative overflow-hidden bg-cyan-500/5">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-cyan-500/10 text-cyan-400">
+              <div className="flex items-center justify-center p-3 rounded-2xl bg-cyan-500/10 text-cyan-400">
                 <FiCode size={24} />
               </div>
               <div>
@@ -119,7 +119,7 @@ function HardwareProblems() {
           {/* Hardware Track Info */}
           <div className="glass-card p-6 rounded-3xl border border-amber-500/30 space-y-3 relative overflow-hidden bg-amber-500/5">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400">
+              <div className="flex items-center justify-center p-3 rounded-2xl bg-amber-500/10 text-amber-400">
                 <FiCpu size={24} />
               </div>
               <div>
