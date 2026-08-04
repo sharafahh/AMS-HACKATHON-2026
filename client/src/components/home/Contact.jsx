@@ -112,10 +112,10 @@ function Contact() {
                       Official Email
                     </h4>
                     <a
-                      href="mailto:amstrust@yahoo.com"
+                      href="mailto:Amshackathon2026@gmail.com"
                       className="text-gray-300 hover:text-white text-xs sm:text-sm font-light transition-colors"
                     >
-                      amstrust@yahoo.com
+                      Amshackathon2026@gmail.com
                     </a>
                   </div>
                 </div>

@@ -41,8 +41,8 @@ const facilities = [
   },
   {
     icon: FiZap,
-    title: "Power Backup & Extension Box",
-    description: "100% generator power backup. Important: Teams must bring their own extension boxes / power strips for laptop setups.",
+    title: "Extension Box",
+    description: "Important: Teams must bring their own extension boxes / power strips for their laptop setups.",
     gradient: "from-rose-500 to-pink-600",
     border: "border-rose-500/30",
   },
