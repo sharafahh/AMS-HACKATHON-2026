@@ -90,7 +90,7 @@ function Contact() {
 
               <div className="space-y-4 pt-2">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-2xl bg-cyan-500/10 text-cyan-400 flex-shrink-0">
+                  <div className="flex items-center justify-center p-3 rounded-2xl bg-cyan-500/10 text-cyan-400 flex-shrink-0">
                     <FiMapPin size={20} />
                   </div>
                   <div>
@@ -104,7 +104,7 @@ function Contact() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-2xl bg-purple-500/10 text-purple-400 flex-shrink-0">
+                  <div className="flex items-center justify-center p-3 rounded-2xl bg-purple-500/10 text-purple-400 flex-shrink-0">
                     <FiMail size={20} />
                   </div>
                   <div>
@@ -121,21 +121,26 @@ function Contact() {
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 flex-shrink-0">
+                  <div className="flex items-center justify-center p-3 rounded-2xl bg-amber-500/10 text-amber-400 flex-shrink-0">
                     <FiPhone size={20} />
                   </div>
                   <div>
                     <h4 className="text-white text-xs uppercase font-extrabold tracking-wider text-amber-400 mb-1">
                       Faculty Coordinators
                     </h4>
-                    <p className="text-gray-300 text-xs sm:text-sm font-light">
-                      +91 86106 84529 &nbsp;|&nbsp; +91 98841 01997
-                    </p>
+                    <div className="text-gray-300 text-xs sm:text-sm font-light space-y-1">
+                      <p>
+                        <span className="font-medium text-white">Assistant Prof. A. Shakila</span> (+91 86106 84529)
+                      </p>
+                      <p>
+                        <span className="font-medium text-white">Prof. A. Mohamed Mydeen</span> (+91 98841 01997)
+                      </p>
+                    </div>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-400 flex-shrink-0">
+                  <div className="flex items-center justify-center p-3 rounded-2xl bg-emerald-500/10 text-emerald-400 flex-shrink-0">
                     <FiClock size={20} />
                   </div>
                   <div>
