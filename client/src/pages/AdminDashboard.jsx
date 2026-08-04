@@ -361,7 +361,7 @@ function AdminDashboard() {
               {/* Stat Cards Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="glass-card p-6 rounded-3xl border border-cyan-500/30 space-y-2 relative overflow-hidden">
-                  <div className="p-3 rounded-2xl bg-cyan-500/10 text-cyan-400 w-fit">
+                  <div className="flex items-center justify-center p-3 rounded-2xl bg-cyan-500/10 text-cyan-400 w-fit">
                     <FiUsers size={24} />
                   </div>
                   <span className="text-gray-400 text-xs font-medium">Total Registered Teams</span>
@@ -369,7 +369,7 @@ function AdminDashboard() {
                 </div>
 
                 <div className="glass-card p-6 rounded-3xl border border-purple-500/30 space-y-2 relative overflow-hidden">
-                  <div className="p-3 rounded-2xl bg-purple-500/10 text-purple-400 w-fit">
+                  <div className="flex items-center justify-center p-3 rounded-2xl bg-purple-500/10 text-purple-400 w-fit">
                     <FiUser size={24} />
                   </div>
                   <span className="text-gray-400 text-xs font-medium">Total Participants</span>
@@ -377,7 +377,7 @@ function AdminDashboard() {
                 </div>
 
                 <div className="glass-card p-6 rounded-3xl border border-amber-500/30 space-y-2 relative overflow-hidden">
-                  <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-400 w-fit">
+                  <div className="flex items-center justify-center p-3 rounded-2xl bg-amber-500/10 text-amber-400 w-fit">
                     <FiDollarSign size={24} />
                   </div>
                   <span className="text-gray-400 text-xs font-medium">Total Revenue Collected</span>
@@ -385,7 +385,7 @@ function AdminDashboard() {
                 </div>
 
                 <div className="glass-card p-6 rounded-3xl border border-emerald-500/30 space-y-2 relative overflow-hidden">
-                  <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-400 w-fit">
+                  <div className="flex items-center justify-center p-3 rounded-2xl bg-emerald-500/10 text-emerald-400 w-fit">
                     <FiCheckCircle size={24} />
                   </div>
                   <span className="text-gray-400 text-xs font-medium">Payment Verified Ratio</span>
