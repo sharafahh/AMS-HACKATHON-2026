@@ -8,6 +8,7 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import certificateRoutes from "./routes/certificateRoutes.js";
 import announcementRoutes from "./routes/announcementRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 
@@ -36,6 +37,7 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/certificates", certificateRoutes);
 app.use("/api/announcements", announcementRoutes);
+app.use("/api/contact", contactRoutes);
 
 // Error Handling Middlewares
 app.use(notFound);

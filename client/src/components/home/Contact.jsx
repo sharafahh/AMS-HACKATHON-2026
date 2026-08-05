@@ -7,8 +7,13 @@ import {
   FiSend,
   FiCheckCircle,
   FiClock,
+  FiAlertCircle,
 } from "react-icons/fi";
 import collegeLogo from "../../assets/logos/college-logo.png";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -17,18 +22,52 @@ function Contact() {
     subject: "",
     message: "",
   });
+  const [emailError, setEmailError] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleEmailChange = (e) => {
+    const val = e.target.value;
+    setFormData({ ...formData, email: val });
+    if (val && !EMAIL_REGEX.test(val)) {
+      setEmailError("Please enter a valid email address");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setServerError("");
 
-    setTimeout(() => {
+    // Validate email before submitting
+    if (!EMAIL_REGEX.test(formData.email)) {
+      setEmailError("Please enter a valid email address");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setSubmitted(true);
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        setServerError(data.message || "Failed to send message. Please try again.");
+      }
+    } catch (err) {
+      console.error("Contact form submit error:", err);
+      setServerError("Network error. Please check your connection and try again.");
+    } finally {
       setLoading(false);
-      setSubmitted(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    }, 1000);
+    }
   };
 
   return (
@@ -224,9 +263,19 @@ function Contact() {
                         required
                         placeholder="john@example.com"
                         value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-500 transition-colors"
+                        onChange={handleEmailChange}
+                        className={`w-full px-4 py-3 rounded-xl bg-white/5 border text-white placeholder-gray-500 text-sm focus:outline-none transition-colors ${
+                          emailError
+                            ? "border-red-500 focus:border-red-400"
+                            : "border-white/10 focus:border-cyan-500"
+                        }`}
                       />
+                      {emailError && (
+                        <p className="text-red-400 text-xs flex items-center gap-1 mt-1">
+                          <FiAlertCircle size={12} />
+                          {emailError}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -258,10 +307,18 @@ function Contact() {
                     />
                   </div>
 
+                  {/* Server error message */}
+                  {serverError && (
+                    <div className="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
+                      <FiAlertCircle className="flex-shrink-0 mt-0.5" size={16} />
+                      <span>{serverError}</span>
+                    </div>
+                  )}
+
                   <button
                     type="submit"
-                    disabled={loading}
-                    className="w-full py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white font-bold font-['Space_Grotesk'] text-sm tracking-wider shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-2"
+                    disabled={loading || !!emailError}
+                    className="w-full py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white font-bold font-['Space_Grotesk'] text-sm tracking-wider shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
                     {loading ? (
                       <span>Sending Message...</span>
