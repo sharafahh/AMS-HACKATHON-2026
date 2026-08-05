@@ -111,7 +111,6 @@ ${textBody}
 ============================================================
     `);
 
-    // If SMTP credentials configured in env, attempt real email send
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
       const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
@@ -135,63 +134,37 @@ ${textBody}
 
     return true;
   } catch (error) {
-    // Non-blocking log catch
     console.error("Non-blocking notice - Error sending confirmation email:", error.message);
     return false;
   }
 };
 
-export const sendContactEmail = async ({ name, email, subject: msgSubject, message }) => {
+export const sendContactMessageEmail = async ({ name, email, subject, message }) => {
   try {
-    const toEmail = "Amshackathon2026@gmail.com";
-    const subject = `New Contact Form Message: ${msgSubject || "General Inquiry"}`;
-    
-    const textBody = `
-New message from AMS Hackathon 2026 Contact Form:
+    const organizerEmail = process.env.ORGANIZER_EMAIL || process.env.SMTP_USER || "amstrust@yahoo.com";
+    const mailSubject = `[AMS Hackathon Query] ${subject || "General Query"}`;
+
+    const textBody = `New Participant Inquiry Received:
 
 Name: ${name}
 Email: ${email}
-Subject: ${msgSubject || "General Inquiry"}
+Subject: ${subject}
+
 Message:
 ${message}
 `;
 
-    const htmlBody = `
-      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0b0f19; color: #e2e8f0; padding: 30px; border-radius: 16px; border: 1px solid #1e293b;">
-        <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #1e293b;">
-          <h1 style="color: #06b6d4; font-size: 24px; margin: 0;">AMS HACKATHON 2026</h1>
-          <p style="color: #94a3b8; font-size: 14px; margin-top: 4px;">New Contact Form Submission</p>
-        </div>
-
-        <div style="margin-top: 24px;">
-          <div style="background-color: #151d30; padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid #334155;">
-            <table style="width: 100%; font-size: 14px; color: #e2e8f0; border-collapse: collapse;">
-              <tr><td style="padding: 6px 0; color: #94a3b8; width: 120px;">Name:</td><td style="font-weight: bold;">${name}</td></tr>
-              <tr><td style="padding: 6px 0; color: #94a3b8;">Email:</td><td style="font-weight: bold; color: #06b6d4;">${email}</td></tr>
-              <tr><td style="padding: 6px 0; color: #94a3b8;">Subject:</td><td>${msgSubject || "N/A"}</td></tr>
-            </table>
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #334155; color: #e2e8f0; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">
-              <strong>Message:</strong><br/>
-              ${message}
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-
     console.log(`
 ============================================================
-📧 CONTACT FORM EMAIL DISPATCHED
-To: ${toEmail}
-Subject: ${subject}
-Sender Name: ${name}
-Sender Email: ${email}
+📩 CONTACT FORM INQUIRY RECEIVED
+From: ${name} <${email}>
+To: ${organizerEmail}
+Subject: ${mailSubject}
 ------------------------------------------------------------
-${textBody}
+${message}
 ============================================================
     `);
 
-    // If SMTP credentials configured in env, attempt real email send
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
       const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
@@ -204,19 +177,17 @@ ${textBody}
       });
 
       await transporter.sendMail({
-        from: `"AMS Hackathon 2026" <${process.env.SMTP_USER}>`,
-        to: toEmail,
+        from: `"AMS Hackathon Contact Form" <${process.env.SMTP_USER}>`,
+        to: organizerEmail,
         replyTo: email,
-        subject,
+        subject: mailSubject,
         text: textBody,
-        html: htmlBody,
       });
-      console.log(`✅ SMTP Contact email sent successfully to ${toEmail}`);
+      console.log(`✅ Contact inquiry email delivered to organizer: ${organizerEmail}`);
     }
-
     return true;
   } catch (error) {
-    console.error("Non-blocking notice - Error sending contact email:", error.message);
+    console.error("Non-blocking notice - Contact email error:", error.message);
     return false;
   }
 };

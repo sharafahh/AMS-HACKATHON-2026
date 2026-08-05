@@ -152,3 +152,22 @@ export const deleteAnnouncementAPI = async (id) => {
     throw error;
   }
 };
+
+export const sendContactMessageAPI = async (formData) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to send contact message");
+    }
+    return data;
+  } catch (error) {
+    console.error("API error submitting contact message:", error);
+    throw error;
+  }
+};
+
