@@ -23,11 +23,18 @@ function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [coordinators, setCoordinators] = useState([]);
+  const [coordinators, setCoordinators] = useState([
+    { _id: "coord-1", name: "Sharafah", department: "AIDS", phone: "+91 88700 37871" },
+    { _id: "coord-2", name: "Arif Basha", department: "AIDS", phone: "+91 63838 59800" },
+  ]);
 
   useEffect(() => {
     getCoordinatorsAPI()
-      .then((res) => { if (res.success) setCoordinators(res.coordinators || []); })
+      .then((res) => {
+        if (res.success && Array.isArray(res.coordinators) && res.coordinators.length > 0) {
+          setCoordinators(res.coordinators);
+        }
+      })
       .catch(() => {});
   }, []);
 
