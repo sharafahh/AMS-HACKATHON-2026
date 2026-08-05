@@ -60,7 +60,6 @@ function RegisterForm() {
       college: "",
       department: "",
       year: "3rd Year",
-      referralCode: "",
       members: [
         { name: "", email: "", phone: "", role: "Lead Developer" },
         { name: "", email: "", phone: "", role: "Frontend / UI/UX Developer" },

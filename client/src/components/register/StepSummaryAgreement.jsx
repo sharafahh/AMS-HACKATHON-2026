@@ -75,9 +75,6 @@ function StepSummaryAgreement({ register, errors, watch }) {
               <p><strong className="text-gray-400">Phone:</strong> {formValues.leaderPhone}</p>
               <p><strong className="text-gray-400">College:</strong> {formValues.college}</p>
               <p><strong className="text-gray-400">Dept & Year:</strong> {formValues.department} ({formValues.year})</p>
-              {formValues.referralCode && (
-                <p><strong className="text-amber-400">Referral Code:</strong> {formValues.referralCode}</p>
-              )}
             </div>
           </div>
 
