@@ -10,5 +10,12 @@ export default defineConfig({
   server: {
     host: true,
     allowedHosts: true, // Allows all tunnel hosts (Serveo, Localtunnel, Ngrok, Cloudflare)
+    proxy: {
+      "/api": {
+        target: "http://localhost:5000",
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 });
