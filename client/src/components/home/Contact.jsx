@@ -7,8 +7,10 @@ import {
   FiSend,
   FiCheckCircle,
   FiClock,
+  FiAlertCircle,
 } from "react-icons/fi";
 import collegeLogo from "../../assets/logos/college-logo.png";
+import { sendContactMessageAPI } from "../../services/api";
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -19,16 +21,22 @@ function Contact() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setErrorMessage("");
 
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await sendContactMessageAPI(formData);
       setSubmitted(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
-    }, 1000);
+    } catch (err) {
+      setErrorMessage(err.message || "Failed to send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -200,6 +208,12 @@ function Contact() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {errorMessage && (
+                    <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
+                      <FiAlertCircle className="flex-shrink-0" size={16} />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider">

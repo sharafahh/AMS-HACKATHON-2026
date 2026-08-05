@@ -111,7 +111,6 @@ ${textBody}
 ============================================================
     `);
 
-    // If SMTP credentials configured in env, attempt real email send
     if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
       const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
@@ -135,8 +134,60 @@ ${textBody}
 
     return true;
   } catch (error) {
-    // Non-blocking log catch
     console.error("Non-blocking notice - Error sending confirmation email:", error.message);
+    return false;
+  }
+};
+
+export const sendContactMessageEmail = async ({ name, email, subject, message }) => {
+  try {
+    const organizerEmail = process.env.ORGANIZER_EMAIL || process.env.SMTP_USER || "amstrust@yahoo.com";
+    const mailSubject = `[AMS Hackathon Query] ${subject || "General Query"}`;
+
+    const textBody = `New Participant Inquiry Received:
+
+Name: ${name}
+Email: ${email}
+Subject: ${subject}
+
+Message:
+${message}
+`;
+
+    console.log(`
+============================================================
+📩 CONTACT FORM INQUIRY RECEIVED
+From: ${name} <${email}>
+To: ${organizerEmail}
+Subject: ${mailSubject}
+------------------------------------------------------------
+${message}
+============================================================
+    `);
+
+    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT) || 587,
+        secure: process.env.SMTP_SECURE === "true",
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      });
+
+      await transporter.sendMail({
+        from: `"AMS Hackathon Contact Form" <${process.env.SMTP_USER}>`,
+        to: organizerEmail,
+        replyTo: email,
+        subject: mailSubject,
+        text: textBody,
+      });
+      console.log(`✅ Contact inquiry email delivered to organizer: ${organizerEmail}`);
+    }
+    return true;
+  } catch (error) {
+    console.error("Non-blocking notice - Contact email error:", error.message);
     return false;
   }
 };
