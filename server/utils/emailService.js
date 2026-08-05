@@ -141,7 +141,7 @@ ${textBody}
 
 export const sendContactMessageEmail = async ({ name, email, subject, message }) => {
   try {
-    const organizerEmail = process.env.ORGANIZER_EMAIL || process.env.SMTP_USER || "amstrust@yahoo.com";
+    const organizerEmail = process.env.ORGANIZER_EMAIL || process.env.SMTP_USER || "amshackathon2026@gmail.com";
     const mailSubject = `[AMS Hackathon Query] ${subject || "General Query"}`;
 
     const textBody = `New Participant Inquiry Received:
@@ -165,19 +165,24 @@ ${message}
 ============================================================
     `);
 
-    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
+    const smtpPort = Number(process.env.SMTP_PORT) || 587;
+    const smtpUser = process.env.SMTP_USER || "amshackathon2026@gmail.com";
+    const smtpPass = process.env.SMTP_PASS || "mqtq plaz bnoy oyzh";
+
+    if (smtpUser && smtpPass) {
       const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT) || 587,
-        secure: process.env.SMTP_SECURE === "true",
+        host: smtpHost,
+        port: smtpPort,
+        secure: false,
         auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
+          user: smtpUser,
+          pass: smtpPass,
         },
       });
 
       await transporter.sendMail({
-        from: `"AMS Hackathon Contact Form" <${process.env.SMTP_USER}>`,
+        from: `"AMS Hackathon Contact Form" <${smtpUser}>`,
         to: organizerEmail,
         replyTo: email,
         subject: mailSubject,
