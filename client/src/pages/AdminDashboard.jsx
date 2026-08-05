@@ -22,6 +22,8 @@ import {
   FiRefreshCw,
   FiEye,
   FiX,
+  FiUserPlus,
+  FiPhone,
 } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
 import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
@@ -33,6 +35,9 @@ import {
   generateCertificateAPI,
   deleteCertificateAPI,
   searchCertificatesAPI,
+  getCoordinatorsAPI,
+  createCoordinatorAPI,
+  deleteCoordinatorAPI,
 } from "../services/api";
 
 const initialTracks = [
@@ -79,6 +84,13 @@ function AdminDashboard() {
   const [certTrack, setCertTrack] = useState("AI & Machine Learning");
   const [certRole, setCertRole] = useState("Participant");
   const [certRegId, setCertRegId] = useState("");
+
+  // Coordinators
+  const [coordinators, setCoordinators] = useState([]);
+  const [coordName, setCoordName] = useState("");
+  const [coordDept, setCoordDept] = useState("");
+  const [coordPhone, setCoordPhone] = useState("");
+  const [coordLoading, setCoordLoading] = useState(false);
 
   // Check JWT Token
   useEffect(() => {
@@ -237,6 +249,47 @@ function AdminDashboard() {
     }
   };
 
+  // Fetch Coordinators
+  const fetchCoordinators = async () => {
+    try {
+      const res = await getCoordinatorsAPI();
+      if (res.success) setCoordinators(res.coordinators || []);
+    } catch (err) {
+      console.error("Error fetching coordinators:", err);
+    }
+  };
+
+  // Create Coordinator
+  const handleCreateCoordinator = async (e) => {
+    e.preventDefault();
+    if (!coordName || !coordDept || !coordPhone) return;
+    setCoordLoading(true);
+    try {
+      const res = await createCoordinatorAPI({ name: coordName, department: coordDept, phone: coordPhone });
+      if (res.success) {
+        setCoordinators([res.coordinator, ...coordinators]);
+        setCoordName("");
+        setCoordDept("");
+        setCoordPhone("");
+      }
+    } catch (err) {
+      alert(`Error adding coordinator: ${err.message}`);
+    } finally {
+      setCoordLoading(false);
+    }
+  };
+
+  // Delete Coordinator
+  const handleDeleteCoordinator = async (id) => {
+    if (!window.confirm("Remove this coordinator?")) return;
+    try {
+      await deleteCoordinatorAPI(id);
+      setCoordinators(coordinators.filter((c) => c._id !== id));
+    } catch (err) {
+      alert(`Error removing coordinator: ${err.message}`);
+    }
+  };
+
   // Filtered Teams List
   const filteredTeams = teams.filter((t) => {
     const matchesSearch =
@@ -309,13 +362,17 @@ function AdminDashboard() {
             { id: "announcements", name: "Announcements", icon: FiBell, badge: announcements.length },
             { id: "certificates", name: "Issue Certificates", icon: FiAward },
             { id: "payments", name: "Payment Revenue", icon: FiDollarSign },
+            { id: "coordinators", name: "Coordinators", icon: FiUserPlus, badge: coordinators.length || undefined },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  if (tab.id === "coordinators") fetchCoordinators();
+                }}
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-bold font-['Space_Grotesk'] tracking-wide transition-all ${
                   isActive
                     ? "bg-gradient-to-r from-cyan-500 to-purple-600 text-white shadow-lg shadow-cyan-500/20"
@@ -854,6 +911,112 @@ function AdminDashboard() {
                   <span className="text-gray-400 text-xs uppercase font-bold">Fee Breakdown</span>
                   <div className="text-xl font-bold text-cyan-400 mt-2 font-['Space_Grotesk']">₹{REGISTRATION_FEE_PER_PERSON} / Member</div>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 7: COORDINATORS */}
+          {activeTab === "coordinators" && (
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold font-['Space_Grotesk'] text-white">
+                  Coordinators Management
+                </h2>
+                <p className="text-gray-400 text-xs font-light mt-1">
+                  Add or remove event coordinators. Their details will be displayed on the public contact page.
+                </p>
+              </div>
+
+              {/* Add Coordinator Form */}
+              <div className="glass-card p-6 rounded-3xl border border-purple-500/30 space-y-5">
+                <h3 className="text-base font-bold font-['Space_Grotesk'] text-white flex items-center gap-2">
+                  <FiUserPlus className="text-purple-400" /> Add New Coordinator
+                </h3>
+                <form onSubmit={handleCreateCoordinator} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Name</label>
+                    <input
+                      type="text"
+                      value={coordName}
+                      onChange={(e) => setCoordName(e.target.value)}
+                      placeholder="Coordinator full name"
+                      required
+                      className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-purple-400 transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Department</label>
+                    <input
+                      type="text"
+                      value={coordDept}
+                      onChange={(e) => setCoordDept(e.target.value)}
+                      placeholder="e.g. AIDS Department"
+                      required
+                      className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-purple-400 transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Phone No</label>
+                    <input
+                      type="text"
+                      value={coordPhone}
+                      onChange={(e) => setCoordPhone(e.target.value)}
+                      placeholder="+91 XXXXX XXXXX"
+                      required
+                      className="w-full px-4 py-3 rounded-2xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-gray-600 focus:outline-none focus:border-purple-400 transition-colors"
+                    />
+                  </div>
+                  <div className="sm:col-span-3">
+                    <button
+                      type="submit"
+                      disabled={coordLoading}
+                      className="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-purple-500/25 hover:scale-105 transition-transform flex items-center gap-2 disabled:opacity-50"
+                    >
+                      <FiPlus /> {coordLoading ? "Adding..." : "Add Coordinator"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Coordinators List */}
+              <div className="space-y-3">
+                <h3 className="text-base font-bold font-['Space_Grotesk'] text-white">
+                  Current Coordinators ({coordinators.length})
+                </h3>
+
+                {coordinators.length === 0 ? (
+                  <div className="glass-card p-8 rounded-3xl border border-white/10 text-center text-gray-500 text-sm">
+                    No coordinators added yet. Use the form above to add one.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {coordinators.map((coord, i) => (
+                      <div
+                        key={coord._id || i}
+                        className="glass-card p-5 rounded-3xl border border-purple-500/20 flex items-start justify-between gap-4"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className="p-3 rounded-2xl bg-purple-500/10 text-purple-400 flex-shrink-0">
+                            <FiUser size={20} />
+                          </div>
+                          <div>
+                            <p className="font-bold text-white font-['Space_Grotesk'] text-sm">{coord.name}</p>
+                            <p className="text-xs text-purple-300 mt-0.5">{coord.department}</p>
+                            <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1">
+                              <FiPhone size={10} /> {coord.phone}
+                            </p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => handleDeleteCoordinator(coord._id)}
+                          className="px-3 py-2 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30 text-xs font-semibold flex items-center gap-1 flex-shrink-0 transition-colors"
+                        >
+                          <FiTrash2 size={14} /> Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}
