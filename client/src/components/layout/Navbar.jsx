@@ -1,9 +1,7 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX, FiChevronRight } from "react-icons/fi";
-import collegeLogo from "../../assets/logos/college-logo.png";
-import amsHackathonLogo from "../../assets/logos/ams-hackathon-logo.png";
 
 const navLinks = [
   { name: "Home", href: "#hero" },
@@ -55,39 +53,8 @@ function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Logos & Brand */}
-        <a href="#hero" className="flex items-center gap-3.5 group">
-          <div className="flex items-center gap-2.5 p-1.5 rounded-xl bg-white/5 border border-blue-500/20 group-hover:border-blue-500/50 transition-colors">
-            <img
-              src={collegeLogo}
-              alt="AMS College Logo"
-              className="h-9 w-auto object-contain filter drop-shadow-md"
-            />
-            <div className="h-6 w-[1px] bg-white/20" />
-            <img
-              src={amsHackathonLogo}
-              alt="AMS HACKATHON 2026 Logo"
-              className="h-9 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(59,130,246,0.5)] transform group-hover:scale-110 transition-transform"
-            />
-          </div>
-
-          <div className="hidden sm:block text-left">
-            <div className="flex items-center gap-2">
-              <span className="text-white font-extrabold font-['Space_Grotesk'] text-base tracking-wider">
-                AMS HACKATHON 2026
-              </span>
-              <span className="bg-blue-600 text-[10px] font-extrabold text-white px-2 py-0.5 rounded uppercase tracking-wider">
-                2026
-              </span>
-            </div>
-            <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-tight truncate max-w-[200px]">
-              Aalim Muhammed Salegh CoE
-            </p>
-          </div>
-        </a>
-
-        {/* Desktop Navigation Links */}
-        <nav className="hidden xl:flex items-center gap-1 bg-white/5 backdrop-blur-md px-4 py-1.5 rounded-full border border-blue-500/20 shadow-lg">
+        {/* Desktop Navigation Links - Extended to fill left space */}
+        <nav className="hidden lg:flex items-center gap-1.5 bg-white/5 backdrop-blur-md px-5 py-2 rounded-full border border-blue-500/20 shadow-lg">
           {navLinks.map((link) => {
             const sectionId = link.href.replace("#", "");
             const isActive = activeSection === sectionId;
@@ -95,7 +62,7 @@ function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                className={`relative px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 ${
+                className={`relative px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 ${
                   isActive
                     ? "text-white font-bold"
                     : "text-gray-300 hover:text-white hover:bg-white/10"
@@ -115,7 +82,7 @@ function Navbar() {
         </nav>
 
         {/* Action Buttons & Hamburger */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 ml-auto lg:ml-0">
           <Link
             to="/hardware-problems"
             className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full glass-card border border-amber-500/40 text-amber-300 hover:text-white hover:border-amber-500/80 text-xs font-bold font-['Space_Grotesk'] transition-all shadow-md"
@@ -137,7 +104,7 @@ function Navbar() {
           {/* Hamburger Toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="xl:hidden p-2.5 rounded-xl bg-white/5 border border-blue-500/20 text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none"
+            className="lg:hidden p-2.5 rounded-xl bg-white/5 border border-blue-500/20 text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none"
             aria-label="Toggle navigation menu"
           >
             {isOpen ? <FiX size={20} /> : <FiMenu size={20} />}
