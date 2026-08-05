@@ -205,6 +205,13 @@ function Hero() {
               <FiArrowRight className="group-hover:translate-x-1.5 transition-transform" />
             </Link>
 
+            <Link
+              to="/portal"
+              className="w-full sm:w-auto px-9 py-4.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold font-['Space_Grotesk'] text-base tracking-wider shadow-xl shadow-cyan-500/30 hover:shadow-cyan-400/50 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3"
+            >
+              Student Portal
+            </Link>
+
             <a
               href="#tracks"
               className="w-full sm:w-auto px-9 py-4.5 rounded-2xl glass-3d-card text-white font-bold font-['Space_Grotesk'] text-base tracking-wider border border-white/20 hover:border-blue-400/60 hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-3 shadow-xl"
