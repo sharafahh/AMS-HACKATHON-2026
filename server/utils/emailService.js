@@ -101,29 +101,24 @@ Aalim Muhammed Salegh College of Engineering`;
       </div>
     `;
 
-    console.log(`
-============================================================
-📧 EMAIL CONFIRMATION DISPATCHED
-To: ${toEmail}
-Subject: ${subject}
-------------------------------------------------------------
-${textBody}
-============================================================
-    `);
+    const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
+    const smtpPort = Number(process.env.SMTP_PORT) || 587;
+    const smtpUser = process.env.SMTP_USER || "amshackathon2026@gmail.com";
+    const smtpPass = process.env.SMTP_PASS || "[REDACTED_SMTP_PASS]";
 
-    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    if (smtpUser && smtpPass) {
       const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT) || 587,
-        secure: process.env.SMTP_SECURE === "true",
+        host: smtpHost,
+        port: smtpPort,
+        secure: false,
         auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
+          user: smtpUser,
+          pass: smtpPass,
         },
       });
 
       await transporter.sendMail({
-        from: `"AMS Hackathon 2026" <${process.env.SMTP_USER}>`,
+        from: `"AMS Hackathon 2026" <${smtpUser}>`,
         to: toEmail,
         subject,
         text: textBody,
@@ -142,17 +137,53 @@ ${textBody}
 export const sendContactMessageEmail = async ({ name, email, subject, message }) => {
   try {
     const organizerEmail = process.env.ORGANIZER_EMAIL || process.env.SMTP_USER || "amshackathon2026@gmail.com";
-    const mailSubject = `[AMS Hackathon Query] ${subject || "General Query"}`;
+    const mailSubject = `📩 NEW INQUIRY: ${subject || "General Query"} (From ${name})`;
 
     const textBody = `New Participant Inquiry Received:
 
-Name: ${name}
-Email: ${email}
-Subject: ${subject}
+Participant Name : ${name}
+Participant Email: ${email}
+Query Category   : ${subject}
 
 Message:
+------------------------------------------------------------
 ${message}
-`;
+------------------------------------------------------------
+
+Click 'Reply' in your email client to reply directly to ${email}.`;
+
+    const htmlBody = `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #050816; color: #e2e8f0; padding: 28px; border-radius: 16px; border: 1px solid #334155;">
+        <div style="border-bottom: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 20px;">
+          <span style="background-color: #06b6d4; color: #000; font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 6px; text-transform: uppercase;">Participant Query</span>
+          <h2 style="color: #ffffff; font-size: 20px; margin: 12px 0 4px 0;">${subject || "General Inquiry"}</h2>
+          <p style="color: #94a3b8; font-size: 13px; margin: 0;">Received via AMS Hackathon 2026 Contact Desk</p>
+        </div>
+
+        <div style="background-color: #0f172a; padding: 18px; border-radius: 12px; border: 1px solid #1e293b; margin-bottom: 20px; font-size: 14px;">
+          <table style="width: 100%; color: #e2e8f0; border-collapse: collapse;">
+            <tr><td style="padding: 4px 0; color: #94a3b8; width: 140px;">Participant Name:</td><td style="font-weight: bold; color: #38bdf8;">${name}</td></tr>
+            <tr><td style="padding: 4px 0; color: #94a3b8;">Email Address:</td><td><a href="mailto:${email}" style="color: #a7f3d0; text-decoration: underline;">${email}</a></td></tr>
+            <tr><td style="padding: 4px 0; color: #94a3b8;">Query Subject:</td><td>${subject}</td></tr>
+          </table>
+        </div>
+
+        <div style="background-color: #1e293b; padding: 20px; border-radius: 12px; border-left: 4px solid #06b6d4; margin-bottom: 24px;">
+          <h4 style="color: #94a3b8; font-size: 12px; text-transform: uppercase; margin: 0 0 8px 0;">Message Content</h4>
+          <p style="color: #f8fafc; font-size: 14px; line-height: 1.6; white-space: pre-wrap; margin: 0;">${message}</p>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 20px;">
+          <a href="mailto:${email}?subject=Re: ${encodeURIComponent(subject)}" style="background-color: #0284c7; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; font-size: 14px;">
+            ✉️ Reply to ${name}
+          </a>
+        </div>
+
+        <div style="border-top: 1px solid #1e293b; padding-top: 14px; text-align: center; color: #64748b; font-size: 12px;">
+          AMS Hackathon 2026 Organizing Committee • Aalim Muhammed Salegh College of Engineering
+        </div>
+      </div>
+    `;
 
     console.log(`
 ============================================================
@@ -182,11 +213,12 @@ ${message}
       });
 
       await transporter.sendMail({
-        from: `"AMS Hackathon Contact Form" <${smtpUser}>`,
+        from: `"AMS Hackathon Contact Desk" <${smtpUser}>`,
         to: organizerEmail,
         replyTo: email,
         subject: mailSubject,
         text: textBody,
+        html: htmlBody,
       });
       console.log(`✅ Contact inquiry email delivered to organizer: ${organizerEmail}`);
     }
