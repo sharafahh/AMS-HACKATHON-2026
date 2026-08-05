@@ -16,10 +16,10 @@ const getRazorpayInstance = () => {
   let key_secret = process.env.RAZORPAY_KEY_SECRET;
 
   if (!key_id || key_id.includes("your_key_id") || key_id.includes("rzp_test_amshackathon")) {
-    key_id = "rzp_live_TLFPAnyETVkt8L";
+    key_id = "rzp_live_TM9d2ENy9OAJVX";
   }
   if (!key_secret || key_secret.includes("your_key_secret") || key_secret.includes("ams_hackathon_secret")) {
-    key_secret = "SPh1TEm6WFmqQGGZm3ETPaLC";
+    key_secret = "PaR7lKtgLR6GmvnQfEfQ0QTg";
   }
 
   try {
