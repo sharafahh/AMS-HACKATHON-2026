@@ -153,6 +153,51 @@ export const deleteAnnouncementAPI = async (id) => {
   }
 };
 
+// Coordinators Management APIs
+export const getCoordinatorsAPI = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/coordinators`);
+    return await response.json();
+  } catch (error) {
+    console.error('API error fetching coordinators:', error);
+    throw error;
+  }
+};
+
+export const createCoordinatorAPI = async (payload) => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/coordinators`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(payload),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('API error creating coordinator:', error);
+    throw error;
+  }
+};
+
+export const deleteCoordinatorAPI = async (id) => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/coordinators/${id}`, {
+      method: 'DELETE',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('API error deleting coordinator:', error);
+    throw error;
+  }
+};
+
 export const sendContactMessageAPI = async (formData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/contact`, {

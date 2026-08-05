@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FiMapPin,
@@ -8,9 +8,10 @@ import {
   FiCheckCircle,
   FiClock,
   FiAlertCircle,
+  FiUser,
 } from "react-icons/fi";
 import collegeLogo from "../../assets/logos/college-logo.png";
-import { sendContactMessageAPI } from "../../services/api";
+import { sendContactMessageAPI, getCoordinatorsAPI } from "../../services/api";
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -22,6 +23,13 @@ function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [coordinators, setCoordinators] = useState([]);
+
+  useEffect(() => {
+    getCoordinatorsAPI()
+      .then((res) => { if (res.success) setCoordinators(res.coordinators || []); })
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -146,6 +154,24 @@ function Contact() {
                     </div>
                   </div>
                 </div>
+                {coordinators.length > 0 && (
+                  <div className="flex items-start gap-4">
+                    <div className="flex items-center justify-center p-3 rounded-2xl bg-indigo-500/10 text-indigo-400 flex-shrink-0">
+                      <FiUser size={20} />
+                    </div>
+                    <div>
+                      <h4 className="text-white text-xs uppercase font-extrabold tracking-wider text-indigo-400 mb-2">Coordinators</h4>
+                      <div className="space-y-2">
+                        {coordinators.map((coord, i) => (
+                          <div key={coord._id || i} className="text-gray-300 text-xs sm:text-sm font-light">
+                            <p><span className="font-medium text-white">{coord.name}</span> &mdash; <span className="text-indigo-300">{coord.department}</span></p>
+                            <p className="text-gray-400">{coord.phone}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex items-start gap-4">
                   <div className="flex items-center justify-center p-3 rounded-2xl bg-emerald-500/10 text-emerald-400 flex-shrink-0">

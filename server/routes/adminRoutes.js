@@ -6,6 +6,11 @@ import {
   exportRegistrationsCSV,
 } from "../controllers/adminController.js";
 import { protectAdmin } from "../middlewares/authMiddleware.js";
+import {
+  getCoordinators,
+  createCoordinator,
+  deleteCoordinator,
+} from "../controllers/coordinatorController.js";
 
 const router = express.Router();
 
@@ -17,5 +22,10 @@ router.get("/me", protectAdmin, getAdminProfile);
 router.get("/registrations", getRegistrations);
 router.get("/registrations/export-csv", exportRegistrationsCSV);
 router.get("/export-csv", exportRegistrationsCSV);
+
+// Coordinator Management APIs
+router.get("/coordinators", getCoordinators);
+router.post("/coordinators", createCoordinator);
+router.delete("/coordinators/:id", deleteCoordinator);
 
 export default router;
