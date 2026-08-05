@@ -134,11 +134,8 @@ function Hero() {
               </span>
             </div>
 
-            {/* AMS HACKS Bold Typography + Main Title */}
+            {/* Main Title */}
             <div className="flex flex-col items-center lg:items-start gap-3">
-              <span className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight font-['Space_Grotesk'] text-white uppercase">
-                AMS HACKS
-              </span>
               <h1 className="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight font-['Space_Grotesk'] text-white">
                 AMS HACKATHON <span className="text-gradient-tech-blue">2026</span>
               </h1>
