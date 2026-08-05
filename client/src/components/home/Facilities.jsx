@@ -90,7 +90,7 @@ function Facilities() {
             transition={{ delay: 0.1 }}
             className="text-3xl sm:text-5xl font-extrabold font-['Space_Grotesk'] text-white"
           >
-            World-Class <span className="text-gradient-cyan-purple">Hackathon Facilities</span>
+            OUR <span className="text-gradient-cyan-purple">Hackathon Facilities</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
