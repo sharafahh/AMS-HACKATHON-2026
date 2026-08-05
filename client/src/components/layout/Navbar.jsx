@@ -52,9 +52,16 @@ function Navbar() {
           : "bg-gradient-to-b from-[#030712]/95 to-transparent py-5"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Desktop Navigation Links - Extended to fill left space */}
-        <nav className="hidden lg:flex items-center gap-1.5 bg-white/5 backdrop-blur-md px-5 py-2 rounded-full border border-blue-500/20 shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        {/* Sleek Electric Tech AMS HACKS Branding on Left */}
+        <a href="#hero" className="flex items-center gap-2 group flex-shrink-0">
+          <span className="text-xl sm:text-2xl font-black font-['Space_Grotesk'] tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-300 drop-shadow-[0_0_18px_rgba(6,182,212,0.45)] group-hover:scale-105 transition-transform duration-300">
+            AMS HACKS
+          </span>
+        </a>
+
+        {/* Desktop Navigation Links */}
+        <nav className="hidden lg:flex items-center gap-1 bg-white/5 backdrop-blur-md px-4 py-1.5 rounded-full border border-blue-500/20 shadow-lg">
           {navLinks.map((link) => {
             const sectionId = link.href.replace("#", "");
             const isActive = activeSection === sectionId;
@@ -62,7 +69,7 @@ function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                className={`relative px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 ${
+                className={`relative px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 ${
                   isActive
                     ? "text-white font-bold"
                     : "text-gray-300 hover:text-white hover:bg-white/10"
@@ -82,7 +89,7 @@ function Navbar() {
         </nav>
 
         {/* Action Buttons & Hamburger */}
-        <div className="flex items-center gap-2 sm:gap-3 ml-auto lg:ml-0">
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
           <Link
             to="/hardware-problems"
             className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full glass-card border border-amber-500/40 text-amber-300 hover:text-white hover:border-amber-500/80 text-xs font-bold font-['Space_Grotesk'] transition-all shadow-md"
