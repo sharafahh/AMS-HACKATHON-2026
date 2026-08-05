@@ -1,4 +1,4 @@
-import { FiUsers, FiUser, FiMail, FiPhone, FiBookOpen, FiAward, FiTag } from "react-icons/fi";
+import { FiUsers, FiUser, FiMail, FiPhone, FiBookOpen, FiAward } from "react-icons/fi";
 
 const academicYears = ["1st Year", "2nd Year", "3rd Year", "4th Year"];
 const teamSizeOptions = [3, 4, 5, 6];
@@ -204,19 +204,6 @@ function StepTeamDetails({ register, errors, watch, setValue }) {
               </option>
             ))}
           </select>
-        </div>
-
-        {/* Referral Code */}
-        <div className="space-y-1.5 sm:col-span-1">
-          <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1">
-            <FiTag className="text-amber-400" /> Referral Code (Optional)
-          </label>
-          <input
-            type="text"
-            placeholder="e.g. AMSCE2026"
-            {...register("referralCode")}
-            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-500 transition-colors uppercase"
-          />
         </div>
       </div>
     </div>
