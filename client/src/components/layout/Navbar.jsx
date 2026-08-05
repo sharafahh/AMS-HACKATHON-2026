@@ -61,7 +61,7 @@ function Navbar() {
         </a>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-1 bg-white/5 backdrop-blur-md px-4 py-1.5 rounded-full border border-blue-500/20 shadow-lg">
+        <nav className="hidden lg:flex items-center gap-1.5 bg-white/5 backdrop-blur-md px-5 py-2 rounded-full border border-blue-500/20 shadow-lg">
           {navLinks.map((link) => {
             const sectionId = link.href.replace("#", "");
             const isActive = activeSection === sectionId;
@@ -69,10 +69,10 @@ function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                className={`relative px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 ${
+                className={`group relative px-4 py-2 text-sm font-semibold tracking-wide rounded-full transform-gpu transition-all duration-300 ${
                   isActive
-                    ? "text-white font-bold"
-                    : "text-gray-300 hover:text-white hover:bg-white/10"
+                    ? "text-white font-extrabold"
+                    : "text-gray-300 hover:text-white hover:bg-white/10 hover:scale-105 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/20"
                 }`}
               >
                 {isActive && (
@@ -82,7 +82,9 @@ function Navbar() {
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
-                <span className="relative z-10">{link.name}</span>
+                <span className="relative z-10 transition-all duration-300 group-hover:tracking-wider">
+                  {link.name}
+                </span>
               </a>
             );
           })}

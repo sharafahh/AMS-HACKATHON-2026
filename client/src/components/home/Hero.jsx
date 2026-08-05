@@ -12,7 +12,7 @@ import {
   FiZap,
 } from "react-icons/fi";
 import collegeLogo from "../../assets/logos/college-logo.png";
-import heroCampus from "../../assets/images/hero-campus.jpg";
+import heroCampus from "../../assets/images/hero-campus.jpg.jpg";
 
 function Hero() {
   // Target date set for AMS HACKATHON 2026 launch (22 August 2026 9:00 AM IST)
@@ -89,14 +89,14 @@ function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen pt-32 pb-24 overflow-hidden flex flex-col justify-center bg-[#030712]"
+      className="lightning-border relative min-h-screen pt-32 pb-24 overflow-hidden flex flex-col justify-center bg-[#030712]"
     >
       {/* Full Cinematic Campus Background Image Layer */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
           src={heroCampus}
           alt="AMS Campus Background"
-          className="w-full h-full object-cover object-center filter brightness-[0.25] contrast-[1.2] scale-105"
+          className="w-full h-full object-cover object-center filter brightness-[0.75] contrast-[1.2] scale-105"
         />
         {/* Deep Dual Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#030712]/90 via-[#030712]/80 to-[#030712]" />
