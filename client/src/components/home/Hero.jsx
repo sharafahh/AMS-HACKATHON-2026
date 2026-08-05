@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -12,7 +12,6 @@ import {
   FiZap,
 } from "react-icons/fi";
 import collegeLogo from "../../assets/logos/college-logo.png";
-import amsHackathonLogo from "../../assets/logos/ams-hackathon-logo.png";
 import heroCampus from "../../assets/images/hero-campus.jpg";
 
 function Hero() {
@@ -105,11 +104,6 @@ function Hero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8 text-center"
         >
           <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass-card border border-blue-500/30 shadow-xl">
-            <img
-              src={collegeLogo}
-              alt="Aalim Muhammed Salegh College of Engineering"
-              className="h-8 sm:h-9 w-auto object-contain filter drop-shadow-md"
-            />
             <span className="text-white text-xs sm:text-sm font-bold tracking-wider font-['Space_Grotesk'] uppercase">
               Aalim Muhammed Salegh College of Engineering
             </span>
@@ -140,18 +134,14 @@ function Hero() {
               </span>
             </div>
 
-            {/* BIGGER AMS HACKATHON 2026 Logo + Title */}
-            <div className="flex flex-col items-center lg:items-start gap-4">
-              <div className="flex flex-col sm:flex-row items-center gap-4">
-                <img
-                  src={amsHackathonLogo}
-                  alt="AMS HACKATHON 2026 Logo"
-                  className="h-28 sm:h-36 lg:h-40 w-auto object-contain filter drop-shadow-[0_0_35px_rgba(59,130,246,0.6)] transform hover:scale-105 transition-transform duration-300"
-                />
-                <h1 className="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight font-['Space_Grotesk'] text-white">
-                  AMS HACKATHON <span className="text-gradient-tech-blue">2026</span>
-                </h1>
-              </div>
+            {/* AMS HACKS Bold Typography + Main Title */}
+            <div className="flex flex-col items-center lg:items-start gap-3">
+              <span className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight font-['Space_Grotesk'] text-white uppercase">
+                AMS HACKS
+              </span>
+              <h1 className="text-4xl sm:text-6xl xl:text-7xl font-black tracking-tight font-['Space_Grotesk'] text-white">
+                AMS HACKATHON <span className="text-gradient-tech-blue">2026</span>
+              </h1>
 
               {/* Tagline */}
               <p className="text-2xl sm:text-3xl font-extrabold tracking-wide font-['Space_Grotesk'] text-white">
