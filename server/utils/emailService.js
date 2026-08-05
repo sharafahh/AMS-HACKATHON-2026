@@ -111,20 +111,24 @@ Aalim Muhammed Salegh College of Engineering`;
         host: smtpHost,
         port: smtpPort,
         secure: false,
+        requireTLS: true,
         auth: {
           user: smtpUser,
           pass: smtpPass,
         },
+        tls: {
+          rejectUnauthorized: false,
+        },
       });
 
-      await transporter.sendMail({
+      const info = await transporter.sendMail({
         from: `"AMS Hackathon 2026" <${smtpUser}>`,
         to: toEmail,
         subject,
         text: textBody,
         html: htmlBody,
       });
-      console.log(`✅ SMTP Confirmation email sent successfully to ${toEmail}`);
+      console.log(`✅ SMTP Confirmation email sent successfully to ${toEmail}. Response: ${info.response}`);
     }
 
     return true;
@@ -206,13 +210,17 @@ ${message}
         host: smtpHost,
         port: smtpPort,
         secure: false,
+        requireTLS: true,
         auth: {
           user: smtpUser,
           pass: smtpPass,
         },
+        tls: {
+          rejectUnauthorized: false,
+        },
       });
 
-      await transporter.sendMail({
+      const info = await transporter.sendMail({
         from: `"AMS Hackathon Contact Desk" <${smtpUser}>`,
         to: organizerEmail,
         replyTo: email,
@@ -220,7 +228,7 @@ ${message}
         text: textBody,
         html: htmlBody,
       });
-      console.log(`✅ Contact inquiry email delivered to organizer: ${organizerEmail}`);
+      console.log(`✅ Contact inquiry email delivered to organizer: ${organizerEmail}. Response: ${info.response}`);
     }
     return true;
   } catch (error) {
