@@ -41,6 +41,7 @@ import {
   deleteCoordinatorAPI,
   getContactMessagesAPI,
   deleteContactMessageAPI,
+  createManualRegistrationAPI,
 } from "../services/api";
 
 const initialTracks = [
@@ -97,6 +98,53 @@ function AdminDashboard() {
 
   // Contact Inquiries
   const [contactMessages, setContactMessages] = useState([]);
+
+  // Manual Cash Registration State
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [manualLoading, setManualLoading] = useState(false);
+  const [manualForm, setManualForm] = useState({
+    teamName: "",
+    teamSize: 4,
+    leaderName: "",
+    leaderEmail: "",
+    leaderPhone: "",
+    college: "",
+    department: "",
+    year: "3rd Year",
+    track: "AI & Machine Learning",
+    problemTitle: "",
+    notes: "",
+  });
+
+  const handleManualRegistrationSubmit = async (e) => {
+    e.preventDefault();
+    setManualLoading(true);
+    try {
+      const res = await createManualRegistrationAPI(manualForm);
+      if (res.success) {
+        alert(`✅ Cash Registration Created Successfully!\nRegistration ID: ${res.registrationId}`);
+        setShowManualModal(false);
+        setManualForm({
+          teamName: "",
+          teamSize: 4,
+          leaderName: "",
+          leaderEmail: "",
+          leaderPhone: "",
+          college: "",
+          department: "",
+          year: "3rd Year",
+          track: "AI & Machine Learning",
+          problemTitle: "",
+          notes: "",
+        });
+        fetchDashboardData();
+      }
+    } catch (err) {
+      alert(`Error creating manual registration: ${err.message}`);
+    } finally {
+      setManualLoading(false);
+    }
+  };
 
   // Check JWT Token
   useEffect(() => {
@@ -559,12 +607,21 @@ function AdminDashboard() {
                   </p>
                 </div>
 
-                <button
-                  onClick={handleExportCSV}
-                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/25 hover:scale-105 transition-transform flex items-center gap-2"
-                >
-                  <FiDownload /> Export Excel / CSV
-                </button>
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    onClick={() => setShowManualModal(true)}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-bold text-xs uppercase tracking-wider shadow-lg shadow-amber-500/25 hover:scale-105 transition-transform flex items-center gap-2"
+                  >
+                    <FiPlus /> Add Cash Registration
+                  </button>
+
+                  <button
+                    onClick={handleExportCSV}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-black font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/25 hover:scale-105 transition-transform flex items-center gap-2"
+                  >
+                    <FiDownload /> Export Excel / CSV
+                  </button>
+                </div>
               </div>
 
               {/* Search & Filter Controls */}
@@ -1156,6 +1213,189 @@ function AdminDashboard() {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Manual Cash Registration Modal */}
+      <AnimatePresence>
+        {showManualModal && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 overflow-y-auto">
+            <div className="glass-card max-w-2xl w-full p-8 rounded-3xl border border-amber-500/40 relative space-y-6 my-8 max-h-[90vh] overflow-y-auto">
+              <button
+                onClick={() => setShowManualModal(false)}
+                className="absolute top-6 right-6 p-2 rounded-full bg-white/10 text-gray-300 hover:text-white"
+              >
+                <FiX size={20} />
+              </button>
+
+              <div className="border-b border-white/10 pb-4">
+                <span className="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2">
+                  <FiDollarSign /> Counter Cash Payment Entry
+                </span>
+                <h3 className="text-2xl font-bold font-['Space_Grotesk'] text-white mt-1">
+                  Add Manual Registration (Cash Paid)
+                </h3>
+              </div>
+
+              <form onSubmit={handleManualRegistrationSubmit} className="space-y-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-gray-400 font-semibold uppercase tracking-wider block mb-1">Team Name *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Cyber Innovators"
+                      value={manualForm.teamName}
+                      onChange={(e) => setManualForm({ ...manualForm, teamName: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-gray-400 font-semibold uppercase tracking-wider block mb-1">Team Size (1-6) *</label>
+                    <select
+                      value={manualForm.teamSize}
+                      onChange={(e) => setManualForm({ ...manualForm, teamSize: Number(e.target.value) })}
+                      className="w-full px-4 py-3 rounded-xl bg-[#0b1329] border border-white/10 text-white focus:outline-none focus:border-amber-400"
+                    >
+                      {[1, 2, 3, 4, 5, 6].map((num) => (
+                        <option key={num} value={num}>
+                          {num} Members (₹{num * REGISTRATION_FEE_PER_PERSON} INR Cash)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-gray-400 font-semibold uppercase tracking-wider block mb-1">Leader Full Name *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Team Leader Name"
+                      value={manualForm.leaderName}
+                      onChange={(e) => setManualForm({ ...manualForm, leaderName: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-gray-400 font-semibold uppercase tracking-wider block mb-1">Leader Email *</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="leader@example.com"
+                      value={manualForm.leaderEmail}
+                      onChange={(e) => setManualForm({ ...manualForm, leaderEmail: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="text-gray-400 font-semibold uppercase tracking-wider block mb-1">Leader Phone *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="+91 9876543210"
+                      value={manualForm.leaderPhone}
+                      onChange={(e) => setManualForm({ ...manualForm, leaderPhone: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-gray-400 font-semibold uppercase tracking-wider block mb-1">College *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="College / Institution"
+                      value={manualForm.college}
+                      onChange={(e) => setManualForm({ ...manualForm, college: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-gray-400 font-semibold uppercase tracking-wider block mb-1">Department *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. CSE / AIDS"
+                      value={manualForm.department}
+                      onChange={(e) => setManualForm({ ...manualForm, department: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-gray-400 font-semibold uppercase tracking-wider block mb-1">Innovation Track *</label>
+                    <select
+                      value={manualForm.track}
+                      onChange={(e) => setManualForm({ ...manualForm, track: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-[#0b1329] border border-white/10 text-white focus:outline-none focus:border-amber-400"
+                    >
+                      {initialTracks.map((t) => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-gray-400 font-semibold uppercase tracking-wider block mb-1">Year of Study</label>
+                    <select
+                      value={manualForm.year}
+                      onChange={(e) => setManualForm({ ...manualForm, year: e.target.value })}
+                      className="w-full px-4 py-3 rounded-xl bg-[#0b1329] border border-white/10 text-white focus:outline-none focus:border-amber-400"
+                    >
+                      <option value="1st Year">1st Year</option>
+                      <option value="2nd Year">2nd Year</option>
+                      <option value="3rd Year">3rd Year</option>
+                      <option value="4th Year">4th Year</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-gray-400 font-semibold uppercase tracking-wider block mb-1">Problem Title (Optional)</label>
+                  <input
+                    type="text"
+                    placeholder="Project / Idea Title"
+                    value={manualForm.problemTitle}
+                    onChange={(e) => setManualForm({ ...manualForm, problemTitle: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-amber-400"
+                  />
+                </div>
+
+                <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between text-amber-300 font-bold">
+                  <span>Cash Amount Collected at Desk:</span>
+                  <span className="text-base text-gradient-gold">₹{manualForm.teamSize * REGISTRATION_FEE_PER_PERSON} INR</span>
+                </div>
+
+                <div className="pt-2 flex items-center justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowManualModal(false)}
+                    className="px-5 py-3 rounded-xl bg-white/10 text-gray-300 hover:text-white font-bold text-xs uppercase"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={manualLoading}
+                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-extrabold font-['Space_Grotesk'] text-xs uppercase tracking-wider shadow-lg shadow-amber-500/25 flex items-center gap-2"
+                  >
+                    {manualLoading ? "Processing..." : "Save Cash Registration"}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}

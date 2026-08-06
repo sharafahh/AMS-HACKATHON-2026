@@ -44,7 +44,7 @@ const registrationSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["UNPAID", "PAID", "SUCCESS", "FAILED"],
+      enum: ["UNPAID", "PAID", "SUCCESS", "FAILED", "CASH_PAID"],
       default: "PAID",
     },
     razorpayOrderId: {

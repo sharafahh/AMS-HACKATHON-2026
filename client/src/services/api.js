@@ -247,3 +247,25 @@ export const deleteContactMessageAPI = async (id) => {
   }
 };
 
+export const createManualRegistrationAPI = async (formData) => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/registrations/manual`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to create manual registration");
+    }
+    return data;
+  } catch (error) {
+    console.error("API error creating manual cash registration:", error);
+    throw error;
+  }
+};
+

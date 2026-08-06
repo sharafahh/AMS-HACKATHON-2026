@@ -6,6 +6,7 @@ import {
   exportRegistrationsCSV,
   getContactMessages,
   deleteContactMessage,
+  createManualRegistration,
 } from "../controllers/adminController.js";
 import { protectAdmin } from "../middlewares/authMiddleware.js";
 import {
@@ -22,6 +23,7 @@ router.get("/me", protectAdmin, getAdminProfile);
 
 // Admin Registrations Management APIs
 router.get("/registrations", getRegistrations);
+router.post("/registrations/manual", createManualRegistration);
 router.get("/registrations/export-csv", exportRegistrationsCSV);
 router.get("/export-csv", exportRegistrationsCSV);
 

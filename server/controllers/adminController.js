@@ -1,6 +1,11 @@
 import Admin from "../models/Admin.js";
 import Registration from "../models/Registration.js";
 import ContactMessage from "../models/ContactMessage.js";
+import Team from "../models/Team.js";
+import Payment from "../models/Payment.js";
+import { generateRegistrationId } from "../utils/generateId.js";
+import { sendConfirmationEmail } from "../utils/emailService.js";
+import { REGISTRATION_FEE_PER_PERSON } from "../config/constants.js";
 import jwt from "jsonwebtoken";
 
 const generateToken = (id) => {
@@ -181,5 +186,123 @@ export const deleteContactMessage = async (req, res) => {
   } catch (error) {
     console.error("Error deleting contact message:", error);
     return res.status(500).json({ success: false, message: "Failed to delete contact message" });
+  }
+};
+
+// @desc    Create Manual Cash Registration by Admin
+// @route   POST /api/admin/registrations/manual
+// @access  Public / Admin
+export const createManualRegistration = async (req, res) => {
+  try {
+    const {
+      teamName,
+      leaderName,
+      leaderEmail,
+      leaderPhone,
+      college,
+      department,
+      year,
+      track,
+      problemTitle,
+      problemAbstract,
+      teamSize,
+      members,
+      notes,
+    } = req.body;
+
+    if (!teamName || !leaderName || !leaderEmail || !leaderPhone || !college || !department || !track) {
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all required team and leader fields.",
+      });
+    }
+
+    const numMembers = Number(teamSize) || (Array.isArray(members) && members.length > 0 ? members.length : 1);
+    const registrationId = generateRegistrationId();
+    const amountPaid = numMembers * REGISTRATION_FEE_PER_PERSON;
+    const cashTransactionId = `CASH-${Date.now()}`;
+
+    // 1. Create Registration Document
+    const registration = await Registration.create({
+      teamName,
+      teamLeaderName: leaderName,
+      teamMembers: members || [],
+      email: leaderEmail,
+      phoneNumber: leaderPhone,
+      collegeName: college,
+      department,
+      year: year || "3rd Year",
+      paymentStatus: "CASH_PAID",
+      razorpayOrderId: "ADMIN_CASH_ORDER",
+      razorpayPaymentId: cashTransactionId,
+      registrationTimestamp: new Date(),
+    });
+
+    // 2. Create Team Document
+    const defaultMembers = Array.isArray(members) && members.length >= 3
+      ? members
+      : [
+          { name: leaderName, email: leaderEmail, phone: leaderPhone, role: "Team Lead" },
+          { name: "Member 2", email: `m2_${Date.now()}@example.com`, phone: leaderPhone, role: "Developer" },
+          { name: "Member 3", email: `m3_${Date.now()}@example.com`, phone: leaderPhone, role: "Designer" },
+        ];
+
+    const team = await Team.create({
+      registrationId,
+      teamName,
+      teamSize: numMembers < 3 ? 3 : numMembers,
+      leader: {
+        name: leaderName,
+        email: leaderEmail,
+        phone: leaderPhone,
+        college,
+        department,
+        year: year || "3rd Year",
+      },
+      members: defaultMembers,
+      track: track || "Open Innovation",
+      problemTitle: problemTitle || "Cash Registered Innovation",
+      problemAbstract: problemAbstract || notes || "Manual cash payment registered at counter by organizer.",
+      paymentStatus: "CASH_PAID",
+      status: "CONFIRMED",
+    });
+
+    // 3. Record Payment
+    await Payment.create({
+      teamId: team._id,
+      registrationId,
+      orderId: "ADMIN_CASH_ORDER",
+      paymentId: cashTransactionId,
+      amount: amountPaid,
+      currency: "INR",
+      status: "SUCCESS",
+      paymentMethod: "CASH",
+    }).catch(() => {});
+
+    // 4. Send Confirmation Email (non-blocking)
+    sendConfirmationEmail({
+      toEmail: leaderEmail,
+      leaderName,
+      teamName,
+      registrationId,
+      paymentId: cashTransactionId,
+      amount: amountPaid,
+      numMembers,
+      college,
+    }).catch(() => {});
+
+    return res.status(201).json({
+      success: true,
+      message: "Manual cash registration created successfully!",
+      registrationId,
+      team,
+      registration,
+    });
+  } catch (error) {
+    console.error("Error creating manual cash registration:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Failed to create manual registration",
+    });
   }
 };

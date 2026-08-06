@@ -72,7 +72,7 @@ const teamSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["UNPAID", "PAID", "WAIVED"],
+      enum: ["UNPAID", "PAID", "WAIVED", "CASH_PAID"],
       default: "UNPAID",
     },
   },
