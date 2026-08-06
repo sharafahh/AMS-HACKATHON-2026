@@ -19,6 +19,26 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const [scrolled, setScrolled] = useState(false);
+  const mobileVisibleLinks = navLinks.slice(0, 5);
+
+  const handleNavLinkClick = (event, href) => {
+    event.preventDefault();
+    const sectionId = href.replace("#", "");
+    const targetSection = document.getElementById(sectionId);
+
+    if (!targetSection) {
+      setIsOpen(false);
+      return;
+    }
+
+    const topOffset = window.innerWidth < 640 ? 90 : 110;
+    const top =
+      targetSection.getBoundingClientRect().top + window.scrollY - topOffset;
+
+    window.scrollTo({ top: Math.max(top, 0), behavior: "smooth" });
+    setActiveSection(sectionId);
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,7 +74,11 @@ function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
         {/* Sleek Electric Tech AMS HACKS Branding on Left */}
-        <a href="#hero" className="flex items-center gap-2 group flex-shrink-0">
+        <a
+          href="#hero"
+          onClick={(event) => handleNavLinkClick(event, "#hero")}
+          className="flex items-center gap-2 group flex-shrink-0"
+        >
           <span className="text-xl sm:text-2xl font-black font-['Space_Grotesk'] tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-300 drop-shadow-[0_0_18px_rgba(6,182,212,0.45)] group-hover:scale-105 transition-transform duration-300">
             AMS HACKS
           </span>
@@ -69,6 +93,7 @@ function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
+                onClick={(event) => handleNavLinkClick(event, link.href)}
                 className={`group relative px-4 py-2 text-sm font-semibold tracking-wide rounded-full transform-gpu transition-all duration-300 ${
                   isActive
                     ? "text-white font-extrabold"
@@ -113,7 +138,7 @@ function Navbar() {
           {/* Hamburger Toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2.5 rounded-xl bg-white/5 border border-blue-500/20 text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none"
+            className="hidden sm:block lg:hidden p-2.5 rounded-xl bg-white/5 border border-blue-500/20 text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none"
             aria-label="Toggle navigation menu"
           >
             {isOpen ? <FiX size={20} /> : <FiMenu size={20} />}
@@ -135,7 +160,7 @@ function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={() => setIsOpen(false)}
+                  onClick={(event) => handleNavLinkClick(event, link.href)}
                   className="block px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-200 hover:text-white hover:bg-blue-600/20 transition-colors"
                 >
                   {link.name}
@@ -161,6 +186,33 @@ function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <nav
+        className="sm:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav border-t border-blue-500/20"
+        style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.5rem)" }}
+      >
+        <ul className="grid grid-cols-5 gap-1 px-2 pt-2">
+          {mobileVisibleLinks.map((link) => {
+            const sectionId = link.href.replace("#", "");
+            const isActive = activeSection === sectionId;
+            return (
+              <li key={link.name}>
+                <a
+                  href={link.href}
+                  onClick={(event) => handleNavLinkClick(event, link.href)}
+                  className={`block w-full text-center py-2 rounded-xl text-[11px] font-bold tracking-wide transition-colors ${
+                    isActive
+                      ? "bg-blue-600/30 text-white"
+                      : "text-gray-300 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  {link.name}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </header>
   );
 }
