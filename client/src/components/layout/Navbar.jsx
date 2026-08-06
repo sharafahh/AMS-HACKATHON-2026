@@ -19,7 +19,6 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const [scrolled, setScrolled] = useState(false);
-  const mobileVisibleLinks = navLinks.slice(0, 5);
 
   const handleNavLinkClick = (event, href) => {
     event.preventDefault();
@@ -119,7 +118,7 @@ function Navbar() {
         <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
           <Link
             to="/hardware-problems"
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full glass-card border border-amber-500/40 text-amber-300 hover:text-white hover:border-amber-500/80 text-xs font-bold font-['Space_Grotesk'] transition-all shadow-md"
+            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full glass-card border border-amber-500/40 text-amber-300 hover:text-white hover:border-amber-500/80 text-[11px] sm:text-xs font-bold font-['Space_Grotesk'] transition-all shadow-md whitespace-nowrap"
           >
             Hardware PS
           </Link>
@@ -129,9 +128,9 @@ function Navbar() {
             className="relative group overflow-hidden rounded-full p-[1px] focus:outline-none"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-amber-500 rounded-full animate-pulse-glow" />
-            <span className="relative inline-flex items-center gap-2 px-5.5 py-2 rounded-full bg-[#030712] text-white text-xs font-bold font-['Space_Grotesk'] tracking-wider group-hover:bg-transparent group-hover:text-white transition-all duration-300 shadow-xl">
+            <span className="relative inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5.5 py-2 rounded-full bg-[#030712] text-white text-[11px] sm:text-xs font-bold font-['Space_Grotesk'] tracking-wider group-hover:bg-transparent group-hover:text-white transition-all duration-300 shadow-xl whitespace-nowrap">
               Register Now
-              <FiChevronRight className="text-blue-400 group-hover:translate-x-1 transition-transform" />
+              <FiChevronRight className="hidden sm:block text-blue-400 group-hover:translate-x-1 transition-transform" />
             </span>
           </Link>
 
@@ -191,16 +190,16 @@ function Navbar() {
         className="sm:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav border-t border-blue-500/20"
         style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.5rem)" }}
       >
-        <ul className="grid grid-cols-5 gap-1 px-2 pt-2">
-          {mobileVisibleLinks.map((link) => {
+        <ul className="flex gap-2 px-2 pt-2 pb-1 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          {navLinks.map((link) => {
             const sectionId = link.href.replace("#", "");
             const isActive = activeSection === sectionId;
             return (
-              <li key={link.name}>
+              <li key={link.name} className="flex-shrink-0">
                 <a
                   href={link.href}
                   onClick={(event) => handleNavLinkClick(event, link.href)}
-                  className={`block w-full text-center py-2 rounded-xl text-[11px] font-bold tracking-wide transition-colors ${
+                  className={`block min-w-[88px] text-center py-2 px-3 rounded-xl text-[11px] font-bold tracking-wide transition-colors ${
                     isActive
                       ? "bg-blue-600/30 text-white"
                       : "text-gray-300 hover:text-white hover:bg-white/10"
