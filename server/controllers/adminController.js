@@ -1,5 +1,6 @@
 import Admin from "../models/Admin.js";
 import Registration from "../models/Registration.js";
+import ContactMessage from "../models/ContactMessage.js";
 import jwt from "jsonwebtoken";
 
 const generateToken = (id) => {
@@ -148,5 +149,34 @@ export const exportRegistrationsCSV = async (req, res) => {
       success: false,
       message: "Failed to export registrations CSV",
     });
+  }
+};
+
+// @desc    Get All Contact Messages
+// @route   GET /api/admin/contact-messages
+// @access  Public / Admin
+export const getContactMessages = async (req, res) => {
+  try {
+    const messages = await ContactMessage.find().sort({ createdAt: -1 });
+    return res.status(200).json({ success: true, count: messages.length, messages });
+  } catch (error) {
+    console.error("Error fetching contact messages:", error);
+    return res.status(500).json({ success: false, message: "Failed to fetch contact messages" });
+  }
+};
+
+// @desc    Delete Contact Message
+// @route   DELETE /api/admin/contact-messages/:id
+// @access  Public / Admin
+export const deleteContactMessage = async (req, res) => {
+  try {
+    const message = await ContactMessage.findByIdAndDelete(req.params.id);
+    if (!message) {
+      return res.status(404).json({ success: false, message: "Contact message not found" });
+    }
+    return res.status(200).json({ success: true, message: "Message deleted" });
+  } catch (error) {
+    console.error("Error deleting contact message:", error);
+    return res.status(500).json({ success: false, message: "Failed to delete contact message" });
   }
 };
