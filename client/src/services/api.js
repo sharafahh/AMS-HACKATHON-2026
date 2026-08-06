@@ -216,3 +216,34 @@ export const sendContactMessageAPI = async (formData) => {
   }
 };
 
+export const getContactMessagesAPI = async () => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/contact-messages`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("API error fetching contact messages:", error);
+    throw error;
+  }
+};
+
+export const deleteContactMessageAPI = async (id) => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/contact-messages/${id}`, {
+      method: "DELETE",
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("API error deleting contact message:", error);
+    throw error;
+  }
+};
+

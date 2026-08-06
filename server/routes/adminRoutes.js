@@ -4,6 +4,8 @@ import {
   getAdminProfile,
   getRegistrations,
   exportRegistrationsCSV,
+  getContactMessages,
+  deleteContactMessage,
 } from "../controllers/adminController.js";
 import { protectAdmin } from "../middlewares/authMiddleware.js";
 import {
@@ -22,6 +24,10 @@ router.get("/me", protectAdmin, getAdminProfile);
 router.get("/registrations", getRegistrations);
 router.get("/registrations/export-csv", exportRegistrationsCSV);
 router.get("/export-csv", exportRegistrationsCSV);
+
+// Contact Desk Inquiries Management APIs
+router.get("/contact-messages", getContactMessages);
+router.delete("/contact-messages/:id", deleteContactMessage);
 
 // Coordinator Management APIs
 router.get("/coordinators", getCoordinators);
