@@ -20,15 +20,18 @@ export const adminLogin = async (req, res) => {
       return res.status(400).json({ success: false, message: "Please enter username and password" });
     }
 
-    // Default admin fallback if DB empty
-    if (username === "admin" && password === "amshackathon2026") {
+    const envAdminUsername = process.env.ADMIN_USERNAME || "ams_admin_2026";
+    const envAdminPassword = process.env.ADMIN_PASSWORD || "AMS@Hackathon#2026!Secured";
+
+    // Dynamic Admin Authentication via Environment Variables
+    if (username === envAdminUsername && password === envAdminPassword) {
       const token = jwt.sign({ id: "admin-default" }, process.env.JWT_SECRET || "ams_hackathon_secret_key_2026", {
         expiresIn: "30d",
       });
       return res.status(200).json({
         success: true,
         message: "Admin authentication successful",
-        admin: { username: "admin", role: "SUPER_ADMIN" },
+        admin: { username: envAdminUsername, role: "SUPER_ADMIN" },
         token,
       });
     }

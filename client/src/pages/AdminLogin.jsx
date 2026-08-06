@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiLock, FiUser, FiArrowLeft, FiShield, FiAlertCircle } from "react-icons/fi";
@@ -90,7 +90,7 @@ function AdminLogin() {
               <input
                 type="text"
                 required
-                placeholder="admin"
+                placeholder="Enter admin username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-500 transition-colors"
@@ -104,7 +104,7 @@ function AdminLogin() {
               <input
                 type="password"
                 required
-                placeholder="••••••••"
+                placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-500 transition-colors"
@@ -121,10 +121,6 @@ function AdminLogin() {
               </button>
             </div>
           </form>
-
-          <div className="pt-4 border-t border-white/10 text-[11px] text-gray-400">
-            Demo Credentials: <strong className="text-cyan-400">admin</strong> / <strong className="text-cyan-400">amshackathon2026</strong>
-          </div>
         </motion.div>
       </div>
     </div>
