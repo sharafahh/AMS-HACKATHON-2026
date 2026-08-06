@@ -18,7 +18,7 @@ function Home() {
       <Navbar />
 
       {/* Main Landing Page Sections */}
-      <main>
+      <main className="pb-24 sm:pb-0">
         {/* 1. Hero Section */}
         <Hero />
 
