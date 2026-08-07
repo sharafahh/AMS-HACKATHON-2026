@@ -110,6 +110,7 @@ function StepSummaryAgreement({ register, errors, watch }) {
                     <span className="text-[10px] text-cyan-400 font-medium">{m.role || "Member"}</span>
                   </div>
                   <p className="text-gray-200 font-semibold truncate">{m.name || "N/A"}</p>
+                  {m.department && <p className="text-purple-300 font-medium text-[10px] truncate">Dept: {m.department}</p>}
                   {isLeader && <p className="text-gray-400 truncate">{m.email}</p>}
                 </div>
               );

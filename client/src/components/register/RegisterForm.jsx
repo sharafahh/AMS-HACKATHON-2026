@@ -77,13 +77,15 @@ function RegisterForm() {
   const watchLeaderName = watch("leaderName");
   const watchLeaderEmail = watch("leaderEmail");
   const watchLeaderPhone = watch("leaderPhone");
+  const watchLeaderDept = watch("department");
 
   // Keep Member 1 synced with Leader details
   useEffect(() => {
     if (watchLeaderName) setValue("members.0.name", watchLeaderName);
     if (watchLeaderEmail) setValue("members.0.email", watchLeaderEmail);
     if (watchLeaderPhone) setValue("members.0.phone", watchLeaderPhone);
-  }, [watchLeaderName, watchLeaderEmail, watchLeaderPhone, setValue]);
+    if (watchLeaderDept) setValue("members.0.department", watchLeaderDept);
+  }, [watchLeaderName, watchLeaderEmail, watchLeaderPhone, watchLeaderDept, setValue]);
 
   // Handle Next step transition with validation check
   const handleNext = async () => {

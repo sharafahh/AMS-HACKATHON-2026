@@ -1,4 +1,4 @@
-import { FiUsers, FiUser, FiMail, FiPhone, FiCpu } from "react-icons/fi";
+import { FiUsers, FiUser, FiMail, FiPhone, FiCpu, FiLayers } from "react-icons/fi";
 
 const rolesList = [
   "Lead Developer",
@@ -25,7 +25,7 @@ function StepMemberDetails({ register, errors, watch }) {
             Step 2: Team Member Details ({teamSize} Members Selected)
           </h2>
           <p className="text-gray-400 text-xs font-light mt-1">
-            Provide member names. Full contact details are collected for the Team Leader (Member 1).
+            Provide member names and departments. Full contact details are collected for the Team Leader (Member 1).
           </p>
         </div>
 
@@ -70,7 +70,7 @@ function StepMemberDetails({ register, errors, watch }) {
                 </div>
 
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-300">
-                  {isLeader ? "Full Leader Info" : "Name Only"}
+                  {isLeader ? "Full Leader Info" : "Name & Dept"}
                 </span>
               </div>
 
@@ -94,6 +94,28 @@ function StepMemberDetails({ register, errors, watch }) {
                   {errors.members?.[idx]?.name && (
                     <p className="text-rose-400 text-[11px] font-medium mt-0.5">
                       {errors.members[idx].name.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Member Department (Dept) */}
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1">
+                    <FiLayers className="text-cyan-400" /> Department (Dept) *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. CSE, AIDS, ECE, IT, MECH"
+                    {...register(`members.${idx}.department`, {
+                      required: `Member ${memberNum} department is required`,
+                    })}
+                    className={`w-full px-4 py-2.5 rounded-xl bg-white/5 border text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none transition-colors ${
+                      errors.members?.[idx]?.department ? "border-rose-500/80 bg-rose-500/5" : "border-white/10 focus:border-cyan-500"
+                    }`}
+                  />
+                  {errors.members?.[idx]?.department && (
+                    <p className="text-rose-400 text-[11px] font-medium mt-0.5">
+                      {errors.members[idx].department.message}
                     </p>
                   )}
                 </div>
