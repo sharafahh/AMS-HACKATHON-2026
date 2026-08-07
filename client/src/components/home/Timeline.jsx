@@ -17,8 +17,7 @@ const timelineEvents = [
     icon: FiCalendar,
     gradient: "from-cyan-500 to-blue-600",
     border: "border-cyan-500/30 hover:border-cyan-400",
-    status: "Active",
-    description: "Online team registration begins. Submit team details, select innovation track, and reserve your slot.",
+    description: "Online team registration begins. Submit team details, select track, and reserve slot.",
   },
   {
     phase: "Phase 02",
@@ -28,8 +27,7 @@ const timelineEvents = [
     icon: FiUserCheck,
     gradient: "from-purple-500 to-indigo-600",
     border: "border-purple-500/30 hover:border-purple-400",
-    status: "Upcoming",
-    description: "Strict deadline for online registration and payment completion.",
+    description: "Strict deadline for online registration and fee payment completion.",
   },
   {
     phase: "Phase 03",
@@ -39,8 +37,7 @@ const timelineEvents = [
     icon: FiPlay,
     gradient: "from-emerald-400 to-teal-600",
     border: "border-emerald-500/30 hover:border-emerald-400",
-    status: "Highlight",
-    description: "Opening Ceremony at Aalim Muhammed Salegh CoE campus. 24-hour non-stop countdown clock starts!",
+    description: "Opening Ceremony at campus. 24-hour non-stop countdown clock starts!",
   },
   {
     phase: "Phase 04",
@@ -50,8 +47,7 @@ const timelineEvents = [
     icon: FiUsers,
     gradient: "from-amber-400 to-yellow-600",
     border: "border-amber-500/30 hover:border-amber-400",
-    status: "Upcoming",
-    description: "Industry experts and professors review prototype progress, provide architectural feedback, and refine pitches.",
+    description: "Industry experts and professors review prototypes and refine pitches.",
   },
   {
     phase: "Phase 05",
@@ -61,8 +57,7 @@ const timelineEvents = [
     icon: FiCheckSquare,
     gradient: "from-rose-500 to-pink-600",
     border: "border-rose-500/30 hover:border-rose-400",
-    status: "Upcoming",
-    description: "24-hour coding sprint ends. Teams present live hardware/software demonstrations to jury panels.",
+    description: "24-hour sprint ends. Teams present live software/hardware demos to jury.",
   },
   {
     phase: "Phase 06",
@@ -72,8 +67,7 @@ const timelineEvents = [
     icon: FiAward,
     gradient: "from-yellow-400 to-amber-500",
     border: "border-yellow-500/30 hover:border-yellow-400",
-    status: "Upcoming",
-    description: "Grand Valedictory Ceremony. Distribution of ₹25,500 prize money, trophies, and participation certificates.",
+    description: "Grand Valedictory Ceremony. Distribution of ₹25,500 prizes & trophies.",
   },
 ];
 
@@ -81,8 +75,8 @@ function Timeline() {
   return (
     <section id="timeline" className="py-24 relative bg-[#050816] overflow-hidden">
       {/* Background Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
@@ -115,74 +109,72 @@ function Timeline() {
           </motion.p>
         </div>
 
-        {/* Compact Vertical Connected Timeline (max-w-2xl) */}
-        <div className="relative max-w-2xl mx-auto">
-          {/* Central Glowing Line */}
-          <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500 via-purple-500 to-amber-500 -translate-x-1/2 shadow-[0_0_12px_rgba(6,182,212,0.5)]" />
+        {/* Horizontal Timeline Container */}
+        <div className="relative pt-6">
+          {/* Horizontal Glowing Connection Bar (Desktop) */}
+          <div className="hidden xl:block absolute top-[2.2rem] left-12 right-12 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 via-emerald-500 via-amber-500 to-yellow-500 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.6)] z-0" />
 
-          <div className="space-y-10 relative">
+          {/* 6-Column Grid for Desktop / Flex for Mobile */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 relative z-10">
             {timelineEvents.map((event, index) => {
               const Icon = event.icon;
-              const isEven = index % 2 === 0;
 
               return (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 40 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ y: -8, scale: 1.03 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                  className={`flex flex-col sm:flex-row items-start ${
-                    isEven ? "sm:flex-row-reverse" : ""
-                  } gap-6 relative group`}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  className={`glass-card p-5 rounded-3xl border ${event.border} flex flex-col justify-between relative group overflow-hidden transition-all duration-300 shadow-xl hover:shadow-2xl cursor-pointer`}
                 >
-                  {/* Timeline Dot */}
-                  <div className="absolute left-4 sm:left-1/2 -translate-x-1/2 top-0 z-20 flex items-center justify-center">
-                    <div
-                      className={`w-10 h-10 rounded-full bg-gradient-to-br ${event.gradient} text-white flex items-center justify-center shadow-lg border-4 border-[#050816] group-hover:scale-125 group-hover:rotate-6 transition-all duration-300`}
-                    >
-                      <Icon size={18} />
-                    </div>
-                  </div>
+                  {/* Dynamic Ambient Hover Glow behind card */}
+                  <div
+                    className={`absolute -inset-1 bg-gradient-to-r ${event.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
+                  />
 
-                  {/* Compact Content Card */}
-                  <div className={`w-full sm:w-[calc(50%-2rem)] pl-12 sm:pl-0 ${isEven ? "sm:text-right" : "sm:text-left"}`}>
-                    <motion.div
-                      whileHover={{ y: -6, scale: 1.02 }}
-                      transition={{ duration: 0.2 }}
-                      className={`glass-card p-5 rounded-3xl border ${event.border} relative overflow-hidden space-y-2.5 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer`}
-                    >
-                      {/* Dynamic Ambient Hover Glow behind card */}
+                  {/* Top Glowing Accent Line */}
+                  <div
+                    className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${event.gradient} opacity-80 group-hover:h-1.5 group-hover:opacity-100 transition-all duration-300`}
+                  />
+
+                  <div className="space-y-4 relative z-10">
+                    {/* Header Node Icon */}
+                    <div className="flex items-center justify-between">
                       <div
-                        className={`absolute -inset-1 bg-gradient-to-r ${event.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
-                      />
-
-                      {/* Top Glowing Accent Line */}
-                      <div
-                        className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${event.gradient} opacity-80 group-hover:h-1.5 group-hover:opacity-100 transition-all duration-300`}
-                      />
-
-                      <div className={`flex items-center gap-2 ${isEven ? "sm:justify-end" : "sm:justify-start"}`}>
-                        <span className="text-[10px] font-extrabold tracking-widest text-cyan-400 uppercase px-2.5 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 group-hover:border-cyan-400 transition-colors">
-                          {event.phase}
-                        </span>
-                        <span className="text-xs font-semibold text-amber-400 flex items-center gap-1">
-                          {event.time}
-                        </span>
+                        className={`p-3 rounded-2xl bg-gradient-to-br ${event.gradient} text-white shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}
+                      >
+                        <Icon size={20} />
                       </div>
+                      <span className="text-[10px] font-extrabold tracking-widest text-cyan-400 uppercase px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 group-hover:border-cyan-400 transition-colors">
+                        {event.phase}
+                      </span>
+                    </div>
 
-                      <h3 className="text-lg font-bold font-['Space_Grotesk'] text-white group-hover:text-cyan-300 transition-colors">
+                    {/* Time & Title */}
+                    <div>
+                      <span className="text-[11px] font-bold text-amber-400 block mb-1">
+                        ⏱️ {event.time}
+                      </span>
+                      <h3 className="text-base font-bold font-['Space_Grotesk'] text-white group-hover:text-cyan-300 transition-colors">
                         {event.title}
                       </h3>
-
-                      <p className="text-xs text-gray-400 font-medium group-hover:text-gray-300 transition-colors">
+                      <p className="text-xs text-gray-400 font-medium mt-1 group-hover:text-gray-300 transition-colors">
                         📅 {event.date}
                       </p>
+                    </div>
 
-                      <p className="text-gray-300 text-xs font-light leading-relaxed group-hover:text-white transition-colors">
-                        {event.description}
-                      </p>
-                    </motion.div>
+                    {/* Description */}
+                    <p className="text-gray-300 text-xs font-light leading-relaxed group-hover:text-white transition-colors">
+                      {event.description}
+                    </p>
+                  </div>
+
+                  {/* Step Connector Indicator */}
+                  <div className="pt-4 mt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-semibold text-gray-400 group-hover:text-cyan-300 transition-colors relative z-10">
+                    <span>Step 0{index + 1} of 06</span>
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:scale-125 animate-pulse transition-transform" />
                   </div>
                 </motion.div>
               );
