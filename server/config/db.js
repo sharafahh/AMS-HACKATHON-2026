@@ -1,12 +1,14 @@
 import mongoose from "mongoose";
 import dns from "dns";
 
-// Configure DNS resolution fallback if needed
-try {
-  dns.setServers(["8.8.8.8", "8.8.4.4"]);
-  dns.setDefaultResultOrder("ipv4first");
-} catch (e) {
-  // Ignore DNS override errors
+// Configure DNS resolution fallback for local development only (not inside Vercel serverless containers)
+if (!process.env.VERCEL) {
+  try {
+    dns.setServers(["8.8.8.8", "8.8.4.4"]);
+    dns.setDefaultResultOrder("ipv4first");
+  } catch (e) {
+    // Ignore DNS override errors
+  }
 }
 
 // Global connection state tracker for serverless environments (Vercel)
@@ -35,10 +37,10 @@ mongoose.connection.on("reconnected", () => {
 
 /**
  * Connect to MongoDB Atlas with automated retry logic and optimized connection pooling.
- * @param {number} maxRetries - Maximum number of connection retry attempts (default 5).
- * @param {number} retryDelayMs - Initial delay between retries in ms (default 2000ms).
+ * @param {number} maxRetries - Maximum number of connection retry attempts (default 2 in serverless).
+ * @param {number} retryDelayMs - Initial delay between retries in ms (default 1000ms).
  */
-const connectDB = async (maxRetries = 5, retryDelayMs = 2000) => {
+const connectDB = async (maxRetries = process.env.VERCEL ? 1 : 3, retryDelayMs = 1000) => {
   // Reuse existing connection if healthy
   if (isConnected && mongoose.connection.readyState === 1) {
     return mongoose.connection;
@@ -55,11 +57,11 @@ const connectDB = async (maxRetries = 5, retryDelayMs = 2000) => {
   const cleanUri = rawUri.replace(/<([^>]+)>/g, "$1");
 
   const mongooseOptions = {
-    serverSelectionTimeoutMS: 5000, // Keep trying to send operations for 5s
+    serverSelectionTimeoutMS: 4000, // 4s server selection timeout for quick fail-over
     socketTimeoutMS: 45000,          // Close sockets after 45s of inactivity
     maxPoolSize: 10,                 // Maintain up to 10 socket connections
-    minPoolSize: 2,                  // Keep at least 2 socket connections open
-    autoIndex: process.env.NODE_ENV !== "production", // Build indexes in dev mode only
+    minPoolSize: 1,                  // Minimum pool size
+    autoIndex: false,                // Disable autoIndex in runtime for fast startup
   };
 
   let attempt = 0;
@@ -77,9 +79,7 @@ const connectDB = async (maxRetries = 5, retryDelayMs = 2000) => {
         console.error(`[${new Date().toISOString()}] ❌ Max retries (${maxRetries}) reached. Could not connect to MongoDB.`);
         return null;
       }
-      const backoffDelay = retryDelayMs * Math.pow(1.5, attempt - 1);
-      console.log(`Waiting ${Math.round(backoffDelay)}ms before retrying...`);
-      await new Promise((resolve) => setTimeout(resolve, backoffDelay));
+      await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
     }
   }
 

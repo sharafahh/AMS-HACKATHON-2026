@@ -1,5 +1,31 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 
+/**
+ * Safely parse JSON API response and catch HTML error pages (e.g. 500 Vercel error pages)
+ */
+const parseJSONResponse = async (response, defaultErrorMessage = "Request failed") => {
+  const text = await response.text();
+  let data = null;
+
+  try {
+    data = JSON.parse(text);
+  } catch (parseError) {
+    if (!response.ok) {
+      if (response.status >= 500) {
+        throw new Error(`Server error (HTTP ${response.status}). Please verify environment variables (MONGODB_URI) in Vercel.`);
+      }
+      throw new Error(`HTTP Error ${response.status}: Unable to process request.`);
+    }
+    throw new Error("Invalid response received from server.");
+  }
+
+  if (!response.ok) {
+    throw new Error(data.message || defaultErrorMessage);
+  }
+
+  return data;
+};
+
 export const adminLoginAPI = async (username, password) => {
   try {
     const response = await fetch(`${API_BASE_URL}/admin/login`, {
@@ -7,12 +33,7 @@ export const adminLoginAPI = async (username, password) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Admin login failed");
-    }
-    return data;
+    return await parseJSONResponse(response, "Admin login failed");
   } catch (error) {
     console.error("API error during admin login:", error);
     throw error;
@@ -26,12 +47,7 @@ export const createPaymentOrderAPI = async (teamSize) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ teamSize }),
     });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to create payment order");
-    }
-    return data;
+    return await parseJSONResponse(response, "Failed to create payment order");
   } catch (error) {
     console.error("API error creating Razorpay order:", error);
     throw error;
@@ -45,12 +61,7 @@ export const verifyPaymentSignatureAPI = async (payload) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Payment signature verification failed");
-    }
-    return data;
+    return await parseJSONResponse(response, "Payment signature verification failed");
   } catch (error) {
     console.error("API error verifying signature:", error);
     throw error;
@@ -60,11 +71,7 @@ export const verifyPaymentSignatureAPI = async (payload) => {
 export const searchCertificatesAPI = async (query) => {
   try {
     const response = await fetch(`${API_BASE_URL}/certificates/search?query=${encodeURIComponent(query)}`);
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Certificate search failed");
-    }
-    return data;
+    return await parseJSONResponse(response, "Certificate search failed");
   } catch (error) {
     console.error("API error searching certificates:", error);
     throw error;
@@ -74,7 +81,7 @@ export const searchCertificatesAPI = async (query) => {
 export const verifyCertificateAPI = async (code) => {
   try {
     const response = await fetch(`${API_BASE_URL}/certificates/verify/${encodeURIComponent(code)}`);
-    return await response.json();
+    return await parseJSONResponse(response, "Certificate verification failed");
   } catch (error) {
     console.error("API error verifying certificate code:", error);
     throw error;
@@ -88,7 +95,7 @@ export const generateCertificateAPI = async (payload) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to generate certificate");
   } catch (error) {
     console.error("API error generating certificate:", error);
     throw error;
@@ -100,7 +107,7 @@ export const deleteCertificateAPI = async (id) => {
     const response = await fetch(`${API_BASE_URL}/certificates/${id}`, {
       method: "DELETE",
     });
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to delete certificate");
   } catch (error) {
     console.error("API error deleting certificate:", error);
     throw error;
@@ -110,7 +117,7 @@ export const deleteCertificateAPI = async (id) => {
 export const getTeamsAPI = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/teams`);
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to fetch teams");
   } catch (error) {
     console.error("API error fetching teams:", error);
     throw error;
@@ -120,7 +127,7 @@ export const getTeamsAPI = async () => {
 export const getAnnouncementsAPI = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/announcements`);
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to fetch announcements");
   } catch (error) {
     console.error("API error fetching announcements:", error);
     throw error;
@@ -134,7 +141,7 @@ export const createAnnouncementAPI = async (payload) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to create announcement");
   } catch (error) {
     console.error("API error creating announcement:", error);
     throw error;
@@ -146,7 +153,7 @@ export const deleteAnnouncementAPI = async (id) => {
     const response = await fetch(`${API_BASE_URL}/announcements/${id}`, {
       method: "DELETE",
     });
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to delete announcement");
   } catch (error) {
     console.error("API error deleting announcement:", error);
     throw error;
@@ -157,7 +164,7 @@ export const deleteAnnouncementAPI = async (id) => {
 export const getCoordinatorsAPI = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/admin/coordinators`);
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to fetch coordinators");
   } catch (error) {
     console.error('API error fetching coordinators:', error);
     throw error;
@@ -175,7 +182,7 @@ export const createCoordinatorAPI = async (payload) => {
       },
       body: JSON.stringify(payload),
     });
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to create coordinator");
   } catch (error) {
     console.error('API error creating coordinator:', error);
     throw error;
@@ -191,7 +198,7 @@ export const deleteCoordinatorAPI = async (id) => {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to delete coordinator");
   } catch (error) {
     console.error('API error deleting coordinator:', error);
     throw error;
@@ -205,11 +212,7 @@ export const sendContactMessageAPI = async (formData) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to send contact message");
-    }
-    return data;
+    return await parseJSONResponse(response, "Failed to send contact message");
   } catch (error) {
     console.error("API error submitting contact message:", error);
     throw error;
@@ -224,7 +227,7 @@ export const getContactMessagesAPI = async () => {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to fetch contact messages");
   } catch (error) {
     console.error("API error fetching contact messages:", error);
     throw error;
@@ -240,7 +243,7 @@ export const deleteContactMessageAPI = async (id) => {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
-    return await response.json();
+    return await parseJSONResponse(response, "Failed to delete contact message");
   } catch (error) {
     console.error("API error deleting contact message:", error);
     throw error;
@@ -258,18 +261,14 @@ export const createManualRegistrationAPI = async (formData) => {
       },
       body: JSON.stringify(formData),
     });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to create manual registration");
-    }
-    return data;
+    return await parseJSONResponse(response, "Failed to create manual registration");
   } catch (error) {
     console.error("API error creating manual cash registration:", error);
     throw error;
   }
 };
 
-// ─── Database Backup System APIs ───
+// Database Backup System APIs
 export const getBackupHistoryAPI = async () => {
   const token = localStorage.getItem("ams_hackathon_2026_admin_token");
   try {
@@ -278,11 +277,7 @@ export const getBackupHistoryAPI = async () => {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to fetch backup history");
-    }
-    return data;
+    return await parseJSONResponse(response, "Failed to fetch backup history");
   } catch (error) {
     console.error("API error fetching backup history:", error);
     throw error;
@@ -299,11 +294,7 @@ export const createManualBackupAPI = async () => {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to trigger manual backup");
-    }
-    return data;
+    return await parseJSONResponse(response, "Failed to trigger manual backup");
   } catch (error) {
     console.error("API error creating manual backup:", error);
     throw error;
