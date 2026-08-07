@@ -15,6 +15,7 @@ import {
   FiFolderPlus,
   FiX,
   FiCheckCircle,
+  FiArrowRight,
 } from "react-icons/fi";
 
 const tracksData = [
@@ -23,7 +24,7 @@ const tracksData = [
     title: "AI & Machine Learning",
     icon: FiCpu,
     gradient: "from-cyan-500 to-blue-600",
-    border: "border-cyan-500/30",
+    border: "border-cyan-500/30 hover:border-cyan-400",
     description: "Build deep learning, NLP, computer vision models, or autonomous AI agents solving high-impact problems.",
     details: "Focus on LLM applications, predictive analytics, intelligent visual inspection, multi-modal synthesis, and edge AI deployment.",
   },
@@ -32,7 +33,7 @@ const tracksData = [
     title: "Cyber Security",
     icon: FiShield,
     gradient: "from-purple-500 to-indigo-600",
-    border: "border-purple-500/30",
+    border: "border-purple-500/30 hover:border-purple-400",
     description: "Architect zero-trust solutions, threat intelligence systems, blockchain security, and cryptographic safeguards.",
     details: "Build automated penetration testing tools, malware analysis engines, decentralized identity protocols, and secure enclave systems.",
   },
@@ -41,7 +42,7 @@ const tracksData = [
     title: "Healthcare",
     icon: FiActivity,
     gradient: "from-rose-500 to-pink-600",
-    border: "border-rose-500/30",
+    border: "border-rose-500/30 hover:border-rose-400",
     description: "Develop smart diagnostics, telemedicine platforms, medical IoT devices, and patient care monitoring systems.",
     details: "Innovate in early disease detection, genomic data processing, remote patient telemetry, and hospital workflow automation.",
   },
@@ -50,7 +51,7 @@ const tracksData = [
     title: "Agriculture",
     icon: FiSun,
     gradient: "from-emerald-400 to-green-600",
-    border: "border-emerald-500/30",
+    border: "border-emerald-500/30 hover:border-emerald-400",
     description: "Design precision farming tools, crop health analytics, automated irrigation, and farm-to-table supply chains.",
     details: "Create IoT soil sensors, drone-based imagery analysis, yield forecasting algorithms, and direct farmer marketplace platforms.",
   },
@@ -59,7 +60,7 @@ const tracksData = [
     title: "Smart Education",
     icon: FiBookOpen,
     gradient: "from-amber-400 to-yellow-600",
-    border: "border-amber-500/30",
+    border: "border-amber-500/30 hover:border-amber-400",
     description: "Revolutionize learning with adaptive AI tutors, gamified STEM platforms, and inclusive accessibility tech.",
     details: "Build personalized learning pathways, automated grading systems, VR/AR lab simulators, and multilingual learning tools.",
   },
@@ -68,7 +69,7 @@ const tracksData = [
     title: "Smart Mobility",
     icon: FiTruck,
     gradient: "from-blue-500 to-teal-500",
-    border: "border-blue-500/30",
+    border: "border-blue-500/30 hover:border-blue-400",
     description: "Pioneer EV battery telemetry, intelligent traffic management, autonomous logistics, and transit routing.",
     details: "Target urban congestion algorithms, smart parking networks, fleet tracking dashboards, and EV charging station aggregators.",
   },
@@ -77,7 +78,7 @@ const tracksData = [
     title: "Smart Automation",
     icon: FiSettings,
     gradient: "from-violet-500 to-purple-600",
-    border: "border-violet-500/30",
+    border: "border-violet-500/30 hover:border-violet-400",
     description: "Create industrial robotics controls, smart home IoT hubs, micro-controller firmware, and automated workflows.",
     details: "Combine hardware sensor arrays with real-time SCADA dashboards, predictive maintenance, and robotic process automation.",
   },
@@ -86,7 +87,7 @@ const tracksData = [
     title: "FinTech",
     icon: FiDollarSign,
     gradient: "from-yellow-400 to-amber-600",
-    border: "border-yellow-500/30",
+    border: "border-yellow-500/30 hover:border-yellow-400",
     description: "Build micro-finance platforms, fraud detection neural networks, decentralized finance, and smart billing.",
     details: "Innovate in algorithmic credit scoring, cross-border payment gateways, automated bookkeeping for SMEs, and anti-money laundering tools.",
   },
@@ -95,7 +96,7 @@ const tracksData = [
     title: "Sustainability",
     icon: FiGlobe,
     gradient: "from-teal-400 to-emerald-600",
-    border: "border-teal-500/30",
+    border: "border-teal-500/30 hover:border-teal-400",
     description: "Innovate carbon footprint tracking, renewable energy grid optimization, and smart waste management systems.",
     details: "Focus on circular economy platforms, plastic recycling tracking, smart water conservation networks, and green building telemetry.",
   },
@@ -104,7 +105,7 @@ const tracksData = [
     title: "Disaster Management",
     icon: FiAlertTriangle,
     gradient: "from-red-500 to-amber-600",
-    border: "border-red-500/30",
+    border: "border-red-500/30 hover:border-red-400",
     description: "Develop early warning systems, emergency response mesh networks, and flood/fire evacuation mapping tools.",
     details: "Build satellite imagery damage assessors, offline emergency mesh communication nodes, and community relief coordination apps.",
   },
@@ -113,7 +114,7 @@ const tracksData = [
     title: "Space Technology",
     icon: FiNavigation,
     gradient: "from-indigo-500 to-cyan-500",
-    border: "border-indigo-500/30",
+    border: "border-indigo-500/30 hover:border-indigo-400",
     description: "Explore satellite data processing, CubeSat telemetry simulators, space debris tracking, and astrophysics tools.",
     details: "Create orbit determination models, atmospheric payload sensors, ground station control software, and astronomical data visualization.",
   },
@@ -122,7 +123,7 @@ const tracksData = [
     title: "Open Innovation",
     icon: FiFolderPlus,
     gradient: "from-fuchsia-500 to-purple-600",
-    border: "border-fuchsia-500/30",
+    border: "border-fuchsia-500/30 hover:border-fuchsia-400",
     description: "Unleash wild, unconventional ideas combining software and hardware that don't fit traditional boundaries.",
     details: "Anything groundbreaking! Web3, Quantum computing simulators, metaverse tools, creative arts tech, or multi-disciplinary inventions.",
   },
@@ -177,24 +178,30 @@ function Tracks() {
                 key={track.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -8, scale: 1.02 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
+                transition={{ duration: 0.3, delay: index * 0.03 }}
                 onClick={() => setSelectedTrack(track)}
-                className={`glass-card glass-card-hover p-6 rounded-3xl border ${track.border} flex flex-col justify-between cursor-pointer relative overflow-hidden group shadow-xl`}
+                className={`glass-card p-6 rounded-3xl border ${track.border} flex flex-col justify-between cursor-pointer relative group transition-all duration-300 shadow-xl hover:shadow-2xl`}
               >
-                {/* Glow bar at top */}
+                {/* Dynamic Ambient Hover Glow behind card */}
                 <div
-                  className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${track.gradient} opacity-80 group-hover:h-1.5 transition-all duration-300`}
+                  className={`absolute -inset-1 bg-gradient-to-r ${track.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
                 />
 
-                <div className="space-y-4">
+                {/* Top Glowing Accent Line */}
+                <div
+                  className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${track.gradient} opacity-80 group-hover:h-1.5 group-hover:opacity-100 transition-all duration-300`}
+                />
+
+                <div className="space-y-4 relative z-10">
                   <div className="flex items-center justify-between">
                     <div
-                      className={`p-3.5 rounded-2xl bg-gradient-to-br ${track.gradient} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                      className={`p-3.5 rounded-2xl bg-gradient-to-br ${track.gradient} text-white shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}
                     >
                       <Icon size={24} />
                     </div>
-                    <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase px-2.5 py-1 rounded-full bg-white/5 border border-white/10">
+                    <span className="text-[10px] font-bold text-gray-400 group-hover:text-cyan-300 tracking-widest uppercase px-2.5 py-1 rounded-full bg-white/5 border border-white/10 group-hover:border-cyan-500/40 transition-colors">
                       Track #{track.id}
                     </span>
                   </div>
@@ -203,14 +210,14 @@ function Tracks() {
                     {track.title}
                   </h3>
 
-                  <p className="text-gray-300 text-xs sm:text-sm leading-relaxed font-light line-clamp-3">
+                  <p className="text-gray-300 text-xs sm:text-sm leading-relaxed font-light line-clamp-3 group-hover:text-gray-200 transition-colors">
                     {track.description}
                   </p>
                 </div>
 
-                <div className="pt-6 flex items-center justify-between text-xs font-semibold text-cyan-400 group-hover:text-white transition-colors">
+                <div className="pt-6 flex items-center justify-between text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors relative z-10">
                   <span>View Details & Specs</span>
-                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                  <FiArrowRight className="text-cyan-400 group-hover:translate-x-2 group-hover:text-white transition-all duration-300 text-sm" />
                 </div>
               </motion.div>
             );
@@ -281,7 +288,7 @@ function Tracks() {
                 <div className="pt-2 flex justify-end">
                   <button
                     onClick={() => setSelectedTrack(null)}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-semibold text-xs uppercase tracking-wider"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-semibold text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition-transform"
                   >
                     Close Track Spec
                   </button>
