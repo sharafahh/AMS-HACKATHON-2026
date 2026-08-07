@@ -9,6 +9,7 @@ import {
   createManualRegistration,
 } from "../controllers/adminController.js";
 import { protectAdmin } from "../middlewares/authMiddleware.js";
+import { loginRateLimiter } from "../middlewares/rateLimiter.js";
 import {
   getCoordinators,
   createCoordinator,
@@ -17,23 +18,23 @@ import {
 
 const router = express.Router();
 
-// Admin Authentication
-router.post("/login", adminLogin);
+// Admin Authentication (public, rate-limited)
+router.post("/login", loginRateLimiter, adminLogin);
 router.get("/me", protectAdmin, getAdminProfile);
 
-// Admin Registrations Management APIs
-router.get("/registrations", getRegistrations);
-router.post("/registrations/manual", createManualRegistration);
-router.get("/registrations/export-csv", exportRegistrationsCSV);
-router.get("/export-csv", exportRegistrationsCSV);
+// Admin Registrations Management APIs (ALL PROTECTED)
+router.get("/registrations", protectAdmin, getRegistrations);
+router.post("/registrations/manual", protectAdmin, createManualRegistration);
+router.get("/registrations/export-csv", protectAdmin, exportRegistrationsCSV);
+router.get("/export-csv", protectAdmin, exportRegistrationsCSV);
 
-// Contact Desk Inquiries Management APIs
-router.get("/contact-messages", getContactMessages);
-router.delete("/contact-messages/:id", deleteContactMessage);
+// Contact Desk Inquiries Management APIs (ALL PROTECTED)
+router.get("/contact-messages", protectAdmin, getContactMessages);
+router.delete("/contact-messages/:id", protectAdmin, deleteContactMessage);
 
-// Coordinator Management APIs
+// Coordinator Management APIs (GET is public for frontend display, mutations are protected)
 router.get("/coordinators", getCoordinators);
-router.post("/coordinators", createCoordinator);
-router.delete("/coordinators/:id", deleteCoordinator);
+router.post("/coordinators", protectAdmin, createCoordinator);
+router.delete("/coordinators/:id", protectAdmin, deleteCoordinator);
 
 export default router;

@@ -13,6 +13,9 @@ client/build/
 server/.env
 *.local
 
+# Database Backups
+server/backups/
+
 # Logs
 *.log
 npm-debug.log*

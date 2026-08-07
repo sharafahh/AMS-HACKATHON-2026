@@ -1,14 +1,22 @@
 export const notFound = (req, res, next) => {
-  const error = new Error(`Not Found - ${req.originalUrl}`);
-  res.status(404);
-  next(error);
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.originalUrl}`,
+  });
 };
 
 export const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+
+  // Log full error details server-side for debugging
+  console.error(`[${new Date().toISOString()}] Error ${statusCode}: ${err.message}`);
+  if (process.env.NODE_ENV !== "production") {
+    console.error(err.stack);
+  }
+
+  // Never expose internal error details to client
   res.status(statusCode).json({
     success: false,
-    message: err.message || "Internal Server Error",
-    stack: process.env.NODE_ENV === "production" ? null : err.stack,
+    message: statusCode === 500 ? "Internal server error" : (err.message || "An error occurred"),
   });
 };

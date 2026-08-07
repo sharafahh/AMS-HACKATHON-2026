@@ -269,3 +269,47 @@ export const createManualRegistrationAPI = async (formData) => {
   }
 };
 
+// ─── Database Backup System APIs ───
+export const getBackupHistoryAPI = async () => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/backups`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to fetch backup history");
+    }
+    return data;
+  } catch (error) {
+    console.error("API error fetching backup history:", error);
+    throw error;
+  }
+};
+
+export const createManualBackupAPI = async () => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/backups`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to trigger manual backup");
+    }
+    return data;
+  } catch (error) {
+    console.error("API error creating manual backup:", error);
+    throw error;
+  }
+};
+
+export const getBackupDownloadUrl = (filename) => {
+  return `${API_BASE_URL}/admin/backups/download/${encodeURIComponent(filename)}`;
+};

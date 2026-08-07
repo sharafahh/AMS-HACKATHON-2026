@@ -2,9 +2,18 @@ import Team from "../models/Team.js";
 import Payment from "../models/Payment.js";
 import Registration from "../models/Registration.js";
 import { generateRegistrationId } from "../utils/generateId.js";
+import {
+  isValidEmail,
+  isValidPhone,
+  sanitizeString,
+  validateTeamName,
+  validatePersonName,
+  validateMembers,
+  checkDuplicateMemberEmails,
+} from "../utils/validators.js";
 
-// In-memory fallback store if local MongoDB is disconnected
-const localMemoryTeams = [];
+// Escape special regex characters to prevent ReDoS / injection
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 // @desc    Register a new team
 // @route   POST /api/teams/register
@@ -27,22 +36,57 @@ export const registerTeam = async (req, res) => {
       referralCode,
     } = req.body;
 
-    // Basic Input Validations
-    if (!teamName || !leaderName || !leaderEmail || !leaderPhone || !college || !department || !track || !problemTitle || !problemAbstract) {
+    // ─── 1. Required Field Validation ───
+    const requiredFields = { teamName, leaderName, leaderEmail, leaderPhone, college, department, track, problemTitle, problemAbstract };
+    const missingFields = Object.entries(requiredFields)
+      .filter(([, val]) => !val || !String(val).trim())
+      .map(([key]) => key);
+
+    if (missingFields.length > 0) {
       return res.status(400).json({
         success: false,
-        message: "Please fill in all required fields",
+        message: `Missing required fields: ${missingFields.join(", ")}`,
       });
     }
 
+    // ─── 2. Team Name Validation ───
+    const teamNameCheck = validateTeamName(teamName);
+    if (!teamNameCheck.valid) {
+      return res.status(400).json({ success: false, message: teamNameCheck.message });
+    }
+
+    // ─── 3. Leader Name Validation ───
+    const leaderNameCheck = validatePersonName(leaderName, "Leader name");
+    if (!leaderNameCheck.valid) {
+      return res.status(400).json({ success: false, message: leaderNameCheck.message });
+    }
+
+    // ─── 4. Email Format Validation ───
+    if (!isValidEmail(leaderEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid leader email address: "${leaderEmail}"`,
+      });
+    }
+
+    // ─── 5. Phone Number Validation ───
+    if (!isValidPhone(leaderPhone)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid leader phone number: "${leaderPhone}". Must contain 7-15 digits.`,
+      });
+    }
+
+    // ─── 6. Team Size Validation ───
     const numTeamSize = Number(teamSize);
-    if (numTeamSize < 3 || numTeamSize > 6) {
+    if (!Number.isInteger(numTeamSize) || numTeamSize < 3 || numTeamSize > 6) {
       return res.status(400).json({
         success: false,
-        message: "Team size must be between 3 and 6 members",
+        message: "Team size must be an integer between 3 and 6",
       });
     }
 
+    // ─── 7. Members Array Validation ───
     if (!members || !Array.isArray(members) || members.length < 3 || members.length > 6) {
       return res.status(400).json({
         success: false,
@@ -50,32 +94,129 @@ export const registerTeam = async (req, res) => {
       });
     }
 
-    const registrationId = generateRegistrationId();
+    if (members.length !== numTeamSize) {
+      return res.status(400).json({
+        success: false,
+        message: `Team size (${numTeamSize}) does not match number of members provided (${members.length})`,
+      });
+    }
 
+    // ─── 8. Individual Member Validation ───
+    const membersCheck = validateMembers(members);
+    if (!membersCheck.valid) {
+      return res.status(400).json({ success: false, message: membersCheck.message });
+    }
+
+    // ─── 9. Duplicate Email Check Within Members ───
+    const dupEmailCheck = checkDuplicateMemberEmails(members);
+    if (!dupEmailCheck.valid) {
+      return res.status(400).json({ success: false, message: dupEmailCheck.message });
+    }
+
+    // ─── 10. Sanitize String Fields ───
+    const cleanTeamName = sanitizeString(teamName, 100);
+    const cleanLeaderName = sanitizeString(leaderName, 100);
+    const cleanLeaderEmail = leaderEmail.trim().toLowerCase();
+    const cleanLeaderPhone = leaderPhone.trim();
+    const cleanCollege = sanitizeString(college, 200);
+    const cleanDepartment = sanitizeString(department, 100);
+    const cleanYear = sanitizeString(year || "3rd Year", 20);
+    const cleanTrack = sanitizeString(track, 100);
+    const cleanProblemTitle = sanitizeString(problemTitle, 200);
+    const cleanProblemAbstract = sanitizeString(problemAbstract, 2000);
+
+    // ─── 11. Duplicate Team Name Check (case-insensitive) ───
+    const existingTeam = await Team.findOne({
+      teamName: { $regex: new RegExp(`^${escapeRegex(cleanTeamName)}$`, "i") },
+    });
+    if (existingTeam) {
+      return res.status(409).json({
+        success: false,
+        message: `A team with the name "${cleanTeamName}" is already registered`,
+      });
+    }
+
+    // Also check Registration collection for duplicate team name
+    const existingReg = await Registration.findOne({
+      teamName: { $regex: new RegExp(`^${escapeRegex(cleanTeamName)}$`, "i") },
+    });
+    if (existingReg) {
+      return res.status(409).json({
+        success: false,
+        message: `A team with the name "${cleanTeamName}" is already registered`,
+      });
+    }
+
+    // ─── 12. Duplicate Leader Email Check ───
+    const existingLeaderTeam = await Team.findOne({ "leader.email": cleanLeaderEmail });
+    if (existingLeaderTeam) {
+      return res.status(409).json({
+        success: false,
+        message: `The email "${cleanLeaderEmail}" is already registered as a team leader`,
+      });
+    }
+
+    const existingLeaderReg = await Registration.findOne({
+      email: cleanLeaderEmail,
+      paymentStatus: { $in: ["PAID", "SUCCESS", "CASH_PAID"] },
+    });
+    if (existingLeaderReg) {
+      return res.status(409).json({
+        success: false,
+        message: `The email "${cleanLeaderEmail}" is already associated with a paid registration`,
+      });
+    }
+
+    // ─── 13. Generate Unique Registration ID (with retry) ───
+    let registrationId;
+    let idAttempts = 0;
+    do {
+      registrationId = generateRegistrationId();
+      idAttempts++;
+      const existingId = await Team.findOne({ registrationId });
+      if (!existingId) break;
+      registrationId = null;
+    } while (idAttempts < 5);
+
+    if (!registrationId) {
+      console.error("Failed to generate unique registration ID after 5 attempts");
+      return res.status(500).json({
+        success: false,
+        message: "Failed to generate registration ID. Please try again.",
+      });
+    }
+
+    // ─── 14. Sanitize Member Data ───
+    const cleanMembers = members.map((m) => ({
+      name: sanitizeString(m.name, 100),
+      email: String(m.email).trim().toLowerCase(),
+      phone: String(m.phone).trim(),
+      role: sanitizeString(m.role, 50) || "Developer",
+    }));
+
+    // ─── 15. Save to Database ───
     const teamData = {
       registrationId,
-      teamName,
+      teamName: cleanTeamName,
       teamSize: numTeamSize,
       leader: {
-        name: leaderName,
-        email: leaderEmail,
-        phone: leaderPhone,
-        college,
-        department,
-        year: year || "3rd Year",
+        name: cleanLeaderName,
+        email: cleanLeaderEmail,
+        phone: cleanLeaderPhone,
+        college: cleanCollege,
+        department: cleanDepartment,
+        year: cleanYear,
       },
-      members,
-      track,
-      problemTitle,
-      problemAbstract,
-      referralCode: referralCode || "",
+      members: cleanMembers,
+      track: cleanTrack,
+      problemTitle: cleanProblemTitle,
+      problemAbstract: cleanProblemAbstract,
+      referralCode: sanitizeString(referralCode, 20) || "",
       status: "CONFIRMED",
       paymentStatus: "UNPAID",
-      createdAt: new Date(),
     };
 
-    let createdTeam = null;
-
+    let createdTeam;
     try {
       createdTeam = await Team.create(teamData);
 
@@ -87,9 +228,31 @@ export const registerTeam = async (req, res) => {
         status: "UNPAID",
       });
     } catch (dbError) {
-      console.warn("Saving team to in-memory store fallback:", dbError.message);
-      localMemoryTeams.push({ _id: `mem-${Date.now()}`, ...teamData });
-      createdTeam = teamData;
+      // Handle Mongoose duplicate key errors gracefully
+      if (dbError.code === 11000) {
+        const field = Object.keys(dbError.keyPattern || {})[0] || "field";
+        console.error(`Duplicate key error on ${field}:`, dbError.message);
+        return res.status(409).json({
+          success: false,
+          message: `A registration with this ${field} already exists`,
+        });
+      }
+
+      // Handle Mongoose validation errors
+      if (dbError.name === "ValidationError") {
+        const firstError = Object.values(dbError.errors)[0];
+        console.error("Validation error:", firstError.message);
+        return res.status(400).json({
+          success: false,
+          message: firstError.message,
+        });
+      }
+
+      console.error("Failed to save team to database:", dbError.message);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to save registration. Please try again.",
+      });
     }
 
     return res.status(201).json({
@@ -99,10 +262,10 @@ export const registerTeam = async (req, res) => {
       team: createdTeam,
     });
   } catch (error) {
-    console.error("Error in registerTeam:", error);
+    console.error("Error in registerTeam:", error.message);
     return res.status(500).json({
       success: false,
-      message: error.message || "Failed to register team",
+      message: "Failed to register team",
     });
   }
 };
@@ -114,15 +277,16 @@ export const getTeams = async (req, res) => {
   try {
     let teams = [];
     try {
-      teams = await Team.find().sort({ createdAt: -1 });
+      teams = await Team.find({ isDeleted: { $ne: true } }).sort({ createdAt: -1 });
     } catch (err) {
-      teams = [...localMemoryTeams];
+      console.error("Error querying Team collection:", err.message);
+      teams = [];
     }
 
     // Fetch registrations from Registration collection
     let registrations = [];
     try {
-      registrations = await Registration.find().sort({ registrationTimestamp: -1, createdAt: -1 });
+      registrations = await Registration.find({ isDeleted: { $ne: true } }).sort({ registrationTimestamp: -1, createdAt: -1 });
     } catch (regErr) {
       console.warn("Could not query Registration collection:", regErr.message);
     }
@@ -165,7 +329,7 @@ export const getTeams = async (req, res) => {
       teams,
     });
   } catch (error) {
-    console.error("Error fetching teams:", error);
+    console.error("Error fetching teams:", error.message);
     return res.status(500).json({
       success: false,
       message: "Error fetching teams",
@@ -179,19 +343,21 @@ export const getTeams = async (req, res) => {
 export const getTeamById = async (req, res) => {
   try {
     const { id } = req.params;
-    const queryStr = decodeURIComponent(id).trim();
-    if (!queryStr) {
-      return res.status(400).json({ success: false, message: "Please provide a valid search query" });
+    const queryStr = sanitizeString(decodeURIComponent(id), 200);
+    if (!queryStr || queryStr.length < 2) {
+      return res.status(400).json({ success: false, message: "Please provide a valid search query (at least 2 characters)" });
     }
 
-    const regexQuery = new RegExp(`^${queryStr}$`, "i");
-    const containsQuery = new RegExp(queryStr, "i");
+    const escaped = escapeRegex(queryStr);
+    const regexQuery = new RegExp(`^${escaped}$`, "i");
+    const containsQuery = new RegExp(escaped, "i");
 
     let team = null;
 
     // 1. Search Team collection
     try {
       team = await Team.findOne({
+        isDeleted: { $ne: true },
         $or: [
           { registrationId: regexQuery },
           { registrationId: queryStr.toUpperCase() },
@@ -203,18 +369,14 @@ export const getTeamById = async (req, res) => {
         ],
       });
     } catch (err) {
-      team = localMemoryTeams.find(
-        (t) =>
-          t.registrationId === queryStr.toUpperCase() ||
-          t.leader?.email?.toLowerCase() === queryStr.toLowerCase() ||
-          t._id === queryStr
-      );
+      console.error("Error querying Team collection in getTeamById:", err.message);
     }
 
     // 2. If not found in Team collection, search Registration collection
     if (!team) {
       try {
         const reg = await Registration.findOne({
+          isDeleted: { $ne: true },
           $or: [
             { razorpayOrderId: queryStr },
             { razorpayPaymentId: queryStr },
@@ -267,7 +429,7 @@ export const getTeamById = async (req, res) => {
       team,
     });
   } catch (error) {
-    console.error("Error in getTeamById:", error);
+    console.error("Error in getTeamById:", error.message);
     return res.status(500).json({
       success: false,
       message: "Error retrieving team details",

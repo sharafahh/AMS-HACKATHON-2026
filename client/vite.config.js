@@ -18,4 +18,25 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules/xlsx")) {
+            return "excel";
+          }
+          if (id.includes("node_modules/jspdf") || id.includes("node_modules/jspdf-autotable")) {
+            return "pdf";
+          }
+          if (id.includes("node_modules/framer-motion")) {
+            return "motion";
+          }
+          if (id.includes("node_modules/react-icons")) {
+            return "icons";
+          }
+        },
+      },
+    },
+  },
 });
