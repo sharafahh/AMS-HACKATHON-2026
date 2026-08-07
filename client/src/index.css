@@ -96,12 +96,12 @@
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
 }
 
-/* Technical Cyber Grid Pattern Background */
+/* Technical Linear Cyber Grid Background (High-Tech Hackathon Grid) */
 .bg-cyber-grid {
-  background-image: radial-gradient(rgba(59, 130, 246, 0.18) 1.2px, transparent 1.2px),
-                    radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-  background-size: 36px 36px;
-  background-position: 0 0, 18px 18px;
+  background-image: 
+    linear-gradient(to right, rgba(59, 130, 246, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59, 130, 246, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
 /* Keyframe Animations */
