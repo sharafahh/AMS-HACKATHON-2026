@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   FiGithub,
   FiLinkedin,
@@ -84,11 +84,6 @@ function Footer() {
               <li>
                 <a href="#hero" className="hover:text-cyan-400 transition-colors">
                   Home
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="hover:text-cyan-400 transition-colors">
-                  About AMS HACKATHON 2026
                 </a>
               </li>
               <li>

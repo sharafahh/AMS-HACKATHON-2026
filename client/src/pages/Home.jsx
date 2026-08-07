@@ -1,6 +1,5 @@
 import Navbar from "../components/layout/Navbar";
 import Hero from "../components/home/Hero";
-import About from "../components/home/About";
 import Stats from "../components/home/Stats";
 import Tracks from "../components/home/Tracks";
 import PrizePool from "../components/home/PrizePool";
@@ -24,12 +23,7 @@ function Home() {
 
         <SectionDivider />
 
-        {/* 2. About AMS HACKATHON 2026 */}
-        <About />
-
-        <SectionDivider />
-
-        {/* 3. Hackathon Statistics */}
+        {/* 2. Hackathon Statistics */}
         <Stats />
 
         <SectionDivider />

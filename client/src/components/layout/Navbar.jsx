@@ -5,7 +5,6 @@ import { FiMenu, FiX, FiChevronRight } from "react-icons/fi";
 
 const navLinks = [
   { name: "Home", href: "#hero" },
-  { name: "About", href: "#about" },
   { name: "Stats", href: "#stats" },
   { name: "Tracks", href: "#tracks" },
   { name: "Prizes", href: "#prizes" },
