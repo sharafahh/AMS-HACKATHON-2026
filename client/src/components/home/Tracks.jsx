@@ -23,7 +23,8 @@ const tracksData = [
     id: 1,
     title: "AI & Machine Learning",
     icon: FiCpu,
-    accent: "text-blue-400 bg-blue-500/10 border-blue-500/30",
+    gradient: "from-cyan-500 to-blue-600",
+    border: "border-cyan-500/30 hover:border-cyan-400",
     description: "Build deep learning, NLP, computer vision models, or autonomous AI agents solving high-impact problems.",
     details: "Focus on LLM applications, predictive analytics, intelligent visual inspection, multi-modal synthesis, and edge AI deployment.",
   },
@@ -31,7 +32,8 @@ const tracksData = [
     id: 2,
     title: "Cyber Security",
     icon: FiShield,
-    accent: "text-indigo-400 bg-indigo-500/10 border-indigo-500/30",
+    gradient: "from-purple-500 to-indigo-600",
+    border: "border-purple-500/30 hover:border-purple-400",
     description: "Architect zero-trust solutions, threat intelligence systems, blockchain security, and cryptographic safeguards.",
     details: "Build automated penetration testing tools, malware analysis engines, decentralized identity protocols, and secure enclave systems.",
   },
@@ -39,7 +41,8 @@ const tracksData = [
     id: 3,
     title: "Healthcare",
     icon: FiActivity,
-    accent: "text-rose-400 bg-rose-500/10 border-rose-500/30",
+    gradient: "from-rose-500 to-pink-600",
+    border: "border-rose-500/30 hover:border-rose-400",
     description: "Develop smart diagnostics, telemedicine platforms, medical IoT devices, and patient care monitoring systems.",
     details: "Innovate in early disease detection, genomic data processing, remote patient telemetry, and hospital workflow automation.",
   },
@@ -47,7 +50,8 @@ const tracksData = [
     id: 4,
     title: "Agriculture",
     icon: FiSun,
-    accent: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
+    gradient: "from-emerald-400 to-green-600",
+    border: "border-emerald-500/30 hover:border-emerald-400",
     description: "Design precision farming tools, crop health analytics, automated irrigation, and farm-to-table supply chains.",
     details: "Create IoT soil sensors, drone-based imagery analysis, yield forecasting algorithms, and direct farmer marketplace platforms.",
   },
@@ -55,7 +59,8 @@ const tracksData = [
     id: 5,
     title: "Smart Education",
     icon: FiBookOpen,
-    accent: "text-amber-400 bg-amber-500/10 border-amber-500/30",
+    gradient: "from-amber-400 to-yellow-600",
+    border: "border-amber-500/30 hover:border-amber-400",
     description: "Revolutionize learning with adaptive AI tutors, gamified STEM platforms, and inclusive accessibility tech.",
     details: "Build personalized learning pathways, automated grading systems, VR/AR lab simulators, and multilingual learning tools.",
   },
@@ -63,7 +68,8 @@ const tracksData = [
     id: 6,
     title: "Smart Mobility",
     icon: FiTruck,
-    accent: "text-teal-400 bg-teal-500/10 border-teal-500/30",
+    gradient: "from-blue-500 to-teal-500",
+    border: "border-blue-500/30 hover:border-blue-400",
     description: "Pioneer EV battery telemetry, intelligent traffic management, autonomous logistics, and transit routing.",
     details: "Target urban congestion algorithms, smart parking networks, fleet tracking dashboards, and EV charging station aggregators.",
   },
@@ -71,7 +77,8 @@ const tracksData = [
     id: 7,
     title: "Smart Automation",
     icon: FiSettings,
-    accent: "text-purple-400 bg-purple-500/10 border-purple-500/30",
+    gradient: "from-violet-500 to-purple-600",
+    border: "border-violet-500/30 hover:border-violet-400",
     description: "Create industrial robotics controls, smart home IoT hubs, micro-controller firmware, and automated workflows.",
     details: "Combine hardware sensor arrays with real-time SCADA dashboards, predictive maintenance, and robotic process automation.",
   },
@@ -79,7 +86,8 @@ const tracksData = [
     id: 8,
     title: "FinTech",
     icon: FiDollarSign,
-    accent: "text-yellow-400 bg-yellow-500/10 border-yellow-500/30",
+    gradient: "from-yellow-400 to-amber-600",
+    border: "border-yellow-500/30 hover:border-yellow-400",
     description: "Build micro-finance platforms, fraud detection neural networks, decentralized finance, and smart billing.",
     details: "Innovate in algorithmic credit scoring, cross-border payment gateways, automated bookkeeping for SMEs, and anti-money laundering tools.",
   },
@@ -87,7 +95,8 @@ const tracksData = [
     id: 9,
     title: "Sustainability",
     icon: FiGlobe,
-    accent: "text-teal-400 bg-teal-500/10 border-teal-500/30",
+    gradient: "from-teal-400 to-emerald-600",
+    border: "border-teal-500/30 hover:border-teal-400",
     description: "Innovate carbon footprint tracking, renewable energy grid optimization, and smart waste management systems.",
     details: "Focus on circular economy platforms, plastic recycling tracking, smart water conservation networks, and green building telemetry.",
   },
@@ -95,7 +104,8 @@ const tracksData = [
     id: 10,
     title: "Disaster Management",
     icon: FiAlertTriangle,
-    accent: "text-orange-400 bg-orange-500/10 border-orange-500/30",
+    gradient: "from-red-500 to-amber-600",
+    border: "border-red-500/30 hover:border-red-400",
     description: "Develop early warning systems, emergency response mesh networks, and flood/fire evacuation mapping tools.",
     details: "Build satellite imagery damage assessors, offline emergency mesh communication nodes, and community relief coordination apps.",
   },
@@ -103,7 +113,8 @@ const tracksData = [
     id: 11,
     title: "Space Technology",
     icon: FiNavigation,
-    accent: "text-sky-400 bg-sky-500/10 border-sky-500/30",
+    gradient: "from-indigo-500 to-cyan-500",
+    border: "border-indigo-500/30 hover:border-indigo-400",
     description: "Explore satellite data processing, CubeSat telemetry simulators, space debris tracking, and astrophysics tools.",
     details: "Create orbit determination models, atmospheric payload sensors, ground station control software, and astronomical data visualization.",
   },
@@ -111,7 +122,8 @@ const tracksData = [
     id: 12,
     title: "Open Innovation",
     icon: FiFolderPlus,
-    accent: "text-fuchsia-400 bg-fuchsia-500/10 border-fuchsia-500/30",
+    gradient: "from-fuchsia-500 to-purple-600",
+    border: "border-fuchsia-500/30 hover:border-fuchsia-400",
     description: "Unleash wild, unconventional ideas combining software and hardware that don't fit traditional boundaries.",
     details: "Anything groundbreaking! Web3, Quantum computing simulators, metaverse tools, creative arts tech, or multi-disciplinary inventions.",
   },
@@ -121,10 +133,10 @@ function Tracks() {
   const [selectedTrack, setSelectedTrack] = useState(null);
 
   return (
-    <section id="tracks" className="py-24 relative bg-[#07121F] bg-lab-mesh overflow-hidden">
-      {/* Background Soft Ambient Light */}
-      <div className="absolute top-1/3 right-0 w-[550px] h-[550px] bg-blue-600/10 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-10 left-0 w-[550px] h-[550px] bg-teal-500/10 rounded-full blur-[160px] pointer-events-none" />
+    <section id="tracks" className="py-24 relative bg-[#050816] overflow-hidden">
+      {/* Background Orbs */}
+      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-10 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
@@ -133,7 +145,7 @@ function Tracks() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold uppercase tracking-wider font-['Space_Grotesk']"
+            className="px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider font-['Space_Grotesk']"
           >
             12 Innovation Domains
           </motion.span>
@@ -144,14 +156,14 @@ function Tracks() {
             transition={{ delay: 0.1 }}
             className="text-3xl sm:text-5xl font-extrabold font-['Space_Grotesk'] text-white"
           >
-            Choose Your <span className="text-gradient-tech-blue">Battleground</span>
+            Choose Your <span className="text-gradient-cyan-purple">Battleground</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-slate-400 text-base sm:text-lg font-light"
+            className="text-gray-400 text-base sm:text-lg font-light"
           >
             Inspired by Smart India Hackathon problem statements. Select a track that aligns with your passion and build revolutionary solutions.
           </motion.p>
@@ -164,36 +176,48 @@ function Tracks() {
             return (
               <motion.div
                 key={track.id}
-                initial={{ opacity: 0, y: 25 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: index * 0.03 }}
                 onClick={() => setSelectedTrack(track)}
-                className="p-6 rounded-2xl bg-[#13273F]/90 border border-white/10 flex flex-col justify-between cursor-pointer relative group transition-all duration-300 shadow-lg hover:shadow-xl hover:border-blue-500/40"
+                className={`glass-card p-6 rounded-3xl border ${track.border} flex flex-col justify-between cursor-pointer relative group transition-all duration-300 shadow-xl hover:shadow-2xl`}
               >
-                <div className="space-y-4">
+                {/* Dynamic Ambient Hover Glow behind card */}
+                <div
+                  className={`absolute -inset-1 bg-gradient-to-r ${track.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
+                />
+
+                {/* Top Glowing Accent Line */}
+                <div
+                  className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${track.gradient} opacity-80 group-hover:h-1.5 group-hover:opacity-100 transition-all duration-300`}
+                />
+
+                <div className="space-y-4 relative z-10">
                   <div className="flex items-center justify-between">
-                    <div className={`p-3 rounded-xl border ${track.accent} group-hover:scale-105 transition-transform duration-300`}>
-                      <Icon size={22} />
+                    <div
+                      className={`p-3.5 rounded-2xl bg-gradient-to-br ${track.gradient} text-white shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}
+                    >
+                      <Icon size={24} />
                     </div>
-                    <span className="text-[10px] font-bold text-slate-400 tracking-widest uppercase px-2.5 py-1 rounded-full bg-white/5 border border-white/10">
+                    <span className="text-[10px] font-bold text-gray-400 group-hover:text-cyan-300 tracking-widest uppercase px-2.5 py-1 rounded-full bg-white/5 border border-white/10 group-hover:border-cyan-500/40 transition-colors">
                       Track #{track.id}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold font-['Space_Grotesk'] text-white group-hover:text-blue-400 transition-colors">
+                  <h3 className="text-xl font-bold font-['Space_Grotesk'] text-white group-hover:text-cyan-300 transition-colors">
                     {track.title}
                   </h3>
 
-                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed font-light line-clamp-3">
+                  <p className="text-gray-300 text-xs sm:text-sm leading-relaxed font-light line-clamp-3 group-hover:text-gray-200 transition-colors">
                     {track.description}
                   </p>
                 </div>
 
-                <div className="pt-6 flex items-center justify-between text-xs font-semibold text-blue-400 group-hover:text-teal-400 transition-colors">
-                  <span>View Specs</span>
-                  <FiArrowRight className="group-hover:translate-x-1.5 transition-transform text-sm" />
+                <div className="pt-6 flex items-center justify-between text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors relative z-10">
+                  <span>View Details & Specs</span>
+                  <FiArrowRight className="text-cyan-400 group-hover:translate-x-2 group-hover:text-white transition-all duration-300 text-sm" />
                 </div>
               </motion.div>
             );
@@ -208,28 +232,30 @@ function Tracks() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedTrack(null)}
-              className="fixed inset-0 z-50 bg-[#07121F]/80 backdrop-blur-md flex items-center justify-center p-4"
+              className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4"
             >
               <motion.div
-                initial={{ scale: 0.95, y: 15 }}
+                initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.95, y: 15 }}
+                exit={{ scale: 0.9, y: 20 }}
                 onClick={(e) => e.stopPropagation()}
-                className="max-w-xl w-full p-8 rounded-2xl bg-[#10263B] border border-white/10 relative overflow-hidden shadow-2xl space-y-6"
+                className={`glass-card max-w-xl w-full p-8 rounded-3xl border ${selectedTrack.border} relative overflow-hidden shadow-2xl space-y-6`}
               >
                 <button
                   onClick={() => setSelectedTrack(null)}
-                  className="absolute top-6 right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+                  className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors"
                 >
                   <FiX size={20} />
                 </button>
 
                 <div className="flex items-center gap-4">
-                  <div className={`p-3.5 rounded-xl border ${selectedTrack.accent}`}>
-                    {<selectedTrack.icon size={28} />}
+                  <div
+                    className={`p-4 rounded-2xl bg-gradient-to-br ${selectedTrack.gradient} text-white shadow-xl`}
+                  >
+                    {<selectedTrack.icon size={32} />}
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-blue-400 tracking-wider uppercase font-['Space_Grotesk']">
+                    <span className="text-xs font-bold text-cyan-400 tracking-wider uppercase">
                       Track #{selectedTrack.id}
                     </span>
                     <h3 className="text-2xl font-bold font-['Space_Grotesk'] text-white">
@@ -239,32 +265,32 @@ function Tracks() {
                 </div>
 
                 <div className="space-y-4 border-t border-white/10 pt-4">
-                  <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider font-['Space_Grotesk']">
+                  <h4 className="text-sm font-semibold text-gray-200 uppercase tracking-wider">
                     Overview
                   </h4>
-                  <p className="text-slate-300 text-sm leading-relaxed font-light">
+                  <p className="text-gray-300 text-sm leading-relaxed">
                     {selectedTrack.description}
                   </p>
 
-                  <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider font-['Space_Grotesk'] pt-2">
+                  <h4 className="text-sm font-semibold text-gray-200 uppercase tracking-wider pt-2">
                     Key Focus Areas & Hardware/Software Scope
                   </h4>
-                  <p className="text-slate-300 text-sm leading-relaxed font-light">
+                  <p className="text-gray-300 text-sm leading-relaxed">
                     {selectedTrack.details}
                   </p>
 
-                  <div className="bg-white/5 p-4 rounded-xl border border-white/10 flex items-center gap-3 text-xs text-slate-300">
-                    <FiCheckCircle className="text-teal-400 text-lg flex-shrink-0" />
-                    <span>Eligible for Software & Hardware submissions. Winners qualify for trophies + cash rewards.</span>
+                  <div className="bg-white/5 p-4 rounded-2xl border border-white/10 flex items-center gap-3 text-xs text-gray-300">
+                    <FiCheckCircle className="text-cyan-400 text-lg flex-shrink-0" />
+                    <span>Eligible for Software & Hardware submissions. Winners in this track qualify for trophy + cash rewards.</span>
                   </div>
                 </div>
 
                 <div className="pt-2 flex justify-end">
                   <button
                     onClick={() => setSelectedTrack(null)}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-teal-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition-transform"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-semibold text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition-transform"
                   >
-                    Close Specs
+                    Close Track Spec
                   </button>
                 </div>
               </motion.div>

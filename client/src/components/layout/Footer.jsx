@@ -7,6 +7,7 @@ import {
   FiHeart,
   FiArrowUp,
   FiShield,
+  FiFileText,
 } from "react-icons/fi";
 import collegeLogo from "../../assets/logos/college-logo.png";
 import amsHackathonLogo from "../../assets/logos/ams-hackathon-logo.png";
@@ -17,9 +18,9 @@ function Footer() {
   };
 
   return (
-    <footer className="bg-[#050C16] border-t border-white/10 relative overflow-hidden text-slate-400 text-sm">
-      {/* Soft Ambient Light Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
+    <footer className="bg-[#03050d] border-t border-white/10 relative overflow-hidden text-gray-400 text-sm">
+      {/* Glow ambient background */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
@@ -31,26 +32,26 @@ function Footer() {
                 <img
                   src={collegeLogo}
                   alt="College Logo"
-                  className="h-7 w-auto object-contain"
+                  className="h-8 w-auto object-contain"
                 />
-                <div className="h-4 w-[1px] bg-white/20" />
+                <div className="h-5 w-[1px] bg-white/20" />
                 <img
                   src={amsHackathonLogo}
                   alt="AMS HACKATHON 2026 Logo"
-                  className="h-7 w-auto object-contain"
+                  className="h-8 w-auto object-contain"
                 />
               </div>
-              <span className="text-white font-bold tracking-wider text-base font-['Space_Grotesk']">
+              <span className="text-white font-bold tracking-wider text-lg font-['Space_Grotesk']">
                 AMS HACKATHON 2026
               </span>
             </div>
 
-            <p className="text-slate-400 text-xs sm:text-sm font-light leading-relaxed max-w-md">
+            <p className="text-gray-400 text-xs sm:text-sm font-light leading-relaxed max-w-md">
               Internal Level 24-Hour Hackathon organized by AALIM MUHAMMED SALEGH COLLEGE OF ENGINEERING. Empowering student coders and hardware creators to build the future.
             </p>
 
             {/* Social Icons */}
-            <div className="flex items-center gap-2.5 pt-2">
+            <div className="flex items-center gap-3 pt-2">
               {[
                 { icon: FiGithub, href: "https://github.com", label: "GitHub" },
                 { icon: FiLinkedin, href: "https://linkedin.com", label: "LinkedIn" },
@@ -65,9 +66,9 @@ function Footer() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={item.label}
-                    className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-blue-500/40 text-slate-300 hover:text-white transition-colors"
+                    className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/10 text-gray-300 hover:text-cyan-400 transition-all duration-300"
                   >
-                    <Icon size={16} />
+                    <Icon size={18} />
                   </a>
                 );
               })}
@@ -76,27 +77,27 @@ function Footer() {
 
           {/* Quick Links Column */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold text-xs font-['Space_Grotesk'] uppercase tracking-wider">
+            <h4 className="text-white font-bold text-sm font-['Space_Grotesk'] uppercase tracking-wider">
               Quick Links
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#hero" className="hover:text-blue-400 transition-colors">
+                <a href="#hero" className="hover:text-cyan-400 transition-colors">
                   Home
                 </a>
               </li>
               <li>
-                <a href="#stats" className="hover:text-blue-400 transition-colors">
+                <a href="#stats" className="hover:text-cyan-400 transition-colors">
                   Statistics
                 </a>
               </li>
               <li>
-                <a href="#tracks" className="hover:text-blue-400 transition-colors">
+                <a href="#tracks" className="hover:text-cyan-400 transition-colors">
                   Innovation Tracks
                 </a>
               </li>
               <li>
-                <a href="#prizes" className="hover:text-blue-400 transition-colors">
+                <a href="#prizes" className="hover:text-cyan-400 transition-colors">
                   Prize Pool
                 </a>
               </li>
@@ -105,51 +106,51 @@ function Footer() {
 
           {/* Event Details */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold text-xs font-['Space_Grotesk'] uppercase tracking-wider">
+            <h4 className="text-white font-bold text-sm font-['Space_Grotesk'] uppercase tracking-wider">
               Event Info
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#timeline" className="hover:text-blue-400 transition-colors">
+                <a href="#timeline" className="hover:text-cyan-400 transition-colors">
                   Event Timeline
                 </a>
               </li>
               <li>
-                <a href="#facilities" className="hover:text-blue-400 transition-colors">
+                <a href="#facilities" className="hover:text-cyan-400 transition-colors">
                   Campus Facilities
                 </a>
               </li>
               <li>
-                <a href="#faq" className="hover:text-blue-400 transition-colors">
+                <a href="#faq" className="hover:text-cyan-400 transition-colors">
                   FAQ & Guidelines
                 </a>
               </li>
               <li>
-                <a href="#contact" className="hover:text-blue-400 transition-colors">
-                  Contact Desk
+                <a href="#contact" className="hover:text-cyan-400 transition-colors">
+                  Contact Organizers
                 </a>
               </li>
               <li>
-                <Link to="/register" className="text-blue-400 font-semibold hover:underline">
+                <Link to="/register" className="text-cyan-400 font-semibold hover:underline">
                   Team Registration
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Institution */}
+          {/* Organizer Info */}
           <div className="space-y-3">
-            <h4 className="text-white font-bold text-xs font-['Space_Grotesk'] uppercase tracking-wider">
+            <h4 className="text-white font-bold text-sm font-['Space_Grotesk'] uppercase tracking-wider">
               Institution
             </h4>
-            <p className="text-xs text-slate-300 leading-relaxed font-light">
+            <p className="text-xs text-gray-300 leading-relaxed font-light">
               Aalim Muhammed Salegh College of Engineering
               <br />
               Avadi-IAF, Muthapudupet,
               <br />
               Chennai, Tamil Nadu 600055
             </p>
-            <p className="text-xs text-teal-400 font-medium">
+            <p className="text-xs text-cyan-400 font-medium">
               Affiliated to Anna University & Approved by AICTE
             </p>
           </div>
@@ -157,16 +158,17 @@ function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <div className="flex items-center gap-2 text-slate-400">
-            <span>Designed by</span>
-            <strong className="text-white font-semibold">Team AMS HACKATHON 2026</strong>
+          <div className="flex items-center gap-2 text-gray-400">
+            <span>Designed with</span>
+            <FiHeart className="text-rose-500 fill-rose-500 animate-pulse" />
+            <span>by <strong className="text-white">Team AMS HACKATHON 2026</strong></span>
           </div>
 
           <div className="flex items-center gap-6">
-            <span className="text-slate-400">
+            <span className="text-gray-400">
               © 2026 AMS HACKATHON 2026. All rights reserved.
             </span>
-            <a href="#faq" className="text-slate-400 hover:text-blue-400 transition-colors flex items-center gap-1">
+            <a href="#faq" className="text-gray-400 hover:text-cyan-400 transition-colors flex items-center gap-1">
               <FiShield size={12} /> Privacy & Terms
             </a>
           </div>
@@ -175,7 +177,7 @@ function Footer() {
           <button
             onClick={scrollToTop}
             aria-label="Scroll back to top"
-            className="p-2.5 rounded-full bg-white/5 border border-white/10 hover:border-blue-500/40 text-blue-400 transition-colors"
+            className="p-2.5 rounded-full bg-white/5 border border-white/10 hover:border-cyan-500/50 hover:bg-cyan-500/20 text-cyan-400 transition-all duration-300"
           >
             <FiArrowUp size={16} />
           </button>

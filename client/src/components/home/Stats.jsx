@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+﻿import { useEffect, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { FiClock, FiLayers, FiAward, FiUsers, FiFileText } from "react-icons/fi";
 
@@ -9,7 +9,8 @@ const statsData = [
     prefix: "",
     suffix: " Hours",
     label: "Non-Stop Hackathon",
-    accent: "text-blue-400 bg-blue-500/10 border-blue-500/20",
+    gradient: "from-cyan-400 to-blue-600",
+    glow: "shadow-cyan-500/20",
   },
   {
     icon: FiLayers,
@@ -17,7 +18,8 @@ const statsData = [
     prefix: "",
     suffix: " Tracks",
     label: "Innovation Domains",
-    accent: "text-teal-400 bg-teal-500/10 border-teal-500/20",
+    gradient: "from-purple-400 to-indigo-600",
+    glow: "shadow-purple-500/20",
   },
   {
     icon: FiAward,
@@ -25,7 +27,8 @@ const statsData = [
     prefix: "₹",
     suffix: "",
     label: "Total Prize Pool",
-    accent: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+    gradient: "from-amber-400 to-orange-500",
+    glow: "shadow-amber-500/20",
   },
   {
     icon: FiUsers,
@@ -33,7 +36,8 @@ const statsData = [
     prefix: "",
     suffix: " Podium",
     label: "Winning Teams",
-    accent: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+    gradient: "from-emerald-400 to-teal-600",
+    glow: "shadow-emerald-500/20",
   },
   {
     icon: FiFileText,
@@ -41,7 +45,8 @@ const statsData = [
     prefix: "",
     suffix: "%",
     label: "Participation Certificate",
-    accent: "text-sky-400 bg-sky-500/10 border-sky-500/20",
+    gradient: "from-pink-400 to-rose-600",
+    glow: "shadow-pink-500/20",
   },
 ];
 
@@ -54,7 +59,7 @@ function CounterItem({ stat }) {
     if (!isInView) return;
 
     let start = 0;
-    const duration = 1800; // ms
+    const duration = 2000; // ms
     const increment = Math.ceil(stat.target / (duration / 30));
     const timer = setInterval(() => {
       start += increment;
@@ -74,15 +79,19 @@ function CounterItem({ stat }) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 25 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
-      className="p-6 rounded-2xl bg-[#13273F]/90 border border-white/10 text-center relative overflow-hidden group shadow-lg hover:shadow-xl hover:border-blue-500/30 transition-all duration-300 cursor-pointer"
+      transition={{ duration: 0.5 }}
+      className={`glass-card glass-card-hover p-6 rounded-3xl border border-white/10 text-center relative overflow-hidden group shadow-xl ${stat.glow}`}
     >
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent group-hover:w-full transition-all duration-500" />
+      
       <div className="flex justify-center mb-4">
-        <div className={`p-3.5 rounded-xl border ${stat.accent} group-hover:scale-110 transition-transform duration-300`}>
-          <Icon size={24} />
+        <div
+          className={`p-4 rounded-2xl bg-gradient-to-br ${stat.gradient} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}
+        >
+          <Icon size={26} />
         </div>
       </div>
 
@@ -92,7 +101,7 @@ function CounterItem({ stat }) {
         {stat.suffix}
       </div>
 
-      <p className="text-slate-400 text-xs sm:text-sm font-medium tracking-wide">
+      <p className="text-gray-400 text-sm font-medium tracking-wide">
         {stat.label}
       </p>
     </motion.div>
@@ -101,14 +110,14 @@ function CounterItem({ stat }) {
 
 function Stats() {
   return (
-    <section id="stats" className="py-20 relative bg-[#07121F] border-y border-white/10">
+    <section id="stats" className="py-20 relative bg-[#050816] bg-cyber-grid border-y border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-semibold uppercase tracking-wider font-['Space_Grotesk']">
+          <span className="px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider font-['Space_Grotesk']">
             Hackathon Numbers
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold font-['Space_Grotesk'] text-white mt-3">
-            AMS HACKATHON 2026 By The <span className="text-gradient-tech-blue">Numbers</span>
+            AMS HACKATHON 2026 By The <span className="text-gradient-cyan-purple">Numbers</span>
           </h2>
         </div>
 

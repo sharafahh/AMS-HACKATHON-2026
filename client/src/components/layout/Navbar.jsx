@@ -29,7 +29,7 @@ function Navbar() {
       return;
     }
 
-    const topOffset = window.innerWidth < 640 ? 80 : 95;
+    const topOffset = window.innerWidth < 640 ? 90 : 110;
     const top =
       targetSection.getBoundingClientRect().top + window.scrollY - topOffset;
 
@@ -42,14 +42,18 @@ function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
 
-      const sectionIds = navLinks.map((link) => link.href.replace("#", ""));
-      const scrollPosition = window.scrollY + 150;
+      const sections = navLinks.map((l) => l.href.replace("#", ""));
+      const scrollPosition = window.scrollY + 200;
 
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const section = document.getElementById(sectionIds[i]);
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(sectionIds[i]);
-          break;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const sectionEl = document.getElementById(sections[i]);
+        if (sectionEl) {
+          const top = sectionEl.offsetTop;
+          const height = sectionEl.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(sections[i]);
+            break;
+          }
         }
       }
     };
@@ -60,128 +64,153 @@ function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-[#0A1929]/90 backdrop-blur-md border-b border-white/10 shadow-2xl py-3"
-          : "bg-transparent py-5"
+          ? "glass-nav py-3.5 shadow-2xl shadow-blue-950/30"
+          : "bg-gradient-to-b from-[#030712]/95 to-transparent py-5"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          {/* Brand Logo - Top Left */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        {/* Sleek Electric Tech AMS HACKS Branding on Left */}
+        <a
+          href="#hero"
+          onClick={(event) => handleNavLinkClick(event, "#hero")}
+          className="flex items-center gap-2 group flex-shrink-0"
+        >
+          <span className="text-xl sm:text-2xl font-black font-['Space_Grotesk'] tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-300 drop-shadow-[0_0_18px_rgba(6,182,212,0.45)] group-hover:scale-105 transition-transform duration-300">
+            AMS HACKS
+          </span>
+        </a>
+
+        {/* Desktop Navigation Links */}
+        <nav className="hidden lg:flex items-center gap-1.5 bg-white/5 backdrop-blur-md px-5 py-2 rounded-full border border-blue-500/20 shadow-lg">
+          {navLinks.map((link) => {
+            const sectionId = link.href.replace("#", "");
+            const isActive = activeSection === sectionId;
+            return (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(event) => handleNavLinkClick(event, link.href)}
+                className={`group relative px-4 py-2 text-sm font-semibold tracking-wide rounded-full transform-gpu transition-all duration-300 ${
+                  isActive
+                    ? "text-white font-extrabold"
+                    : "text-gray-300 hover:text-white hover:bg-white/10 hover:scale-105 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/20"
+                }`}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="navPill"
+                    className="absolute inset-0 bg-blue-600 border border-blue-400/60 rounded-full shadow-md shadow-blue-600/40"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10 transition-all duration-300 group-hover:tracking-wider">
+                  {link.name}
+                </span>
+              </a>
+            );
+          })}
+        </nav>
+
+        {/* Action Buttons & Hamburger */}
+        <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
           <Link
-            to="/"
-            className="flex items-center gap-3 group focus:outline-none"
+            to="/hardware-problems"
+            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full glass-card border border-amber-500/40 text-amber-300 hover:text-white hover:border-amber-500/80 text-[11px] sm:text-xs font-bold font-['Space_Grotesk'] transition-all shadow-md whitespace-nowrap"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-blue-500 to-teal-400 p-0.5 shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-              <div className="w-full h-full bg-[#07121F] rounded-[10px] flex items-center justify-center">
-                <span className="font-extrabold text-blue-400 text-sm tracking-tighter">⚡</span>
-              </div>
-            </div>
-            <span className="text-xl font-extrabold font-['Space_Grotesk'] tracking-tight text-white group-hover:text-blue-400 transition-colors">
-              AMS <span className="text-gradient-tech-blue">HACKS</span>
+            Hardware PS
+          </Link>
+
+          <Link
+            to="/register"
+            className="relative group overflow-hidden rounded-full p-[1px] focus:outline-none"
+          >
+            <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-amber-500 rounded-full animate-pulse-glow" />
+            <span className="relative inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5.5 py-2 rounded-full bg-[#030712] text-white text-[11px] sm:text-xs font-bold font-['Space_Grotesk'] tracking-wider group-hover:bg-transparent group-hover:text-white transition-all duration-300 shadow-xl whitespace-nowrap">
+              Register Now
+              <FiChevronRight className="hidden sm:block text-blue-400 group-hover:translate-x-1 transition-transform" />
             </span>
           </Link>
 
-          {/* Desktop Navigation Links Pill */}
-          <nav className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#10263B]/80 border border-white/10 backdrop-blur-md shadow-lg">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.href.replace("#", "");
-
-              return (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleNavLinkClick(e, link.href)}
-                  className={`relative px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 ${
-                    isActive
-                      ? "text-white"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeNavPill"
-                      className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500 rounded-full shadow-md shadow-blue-500/30"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span className="relative z-10">{link.name}</span>
-                </a>
-              );
-            })}
-          </nav>
-
-          {/* Right Action Buttons */}
-          <div className="hidden sm:flex items-center gap-3">
-            <Link
-              to="/portal"
-              className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:border-teal-400/40 text-xs font-bold text-slate-300 hover:text-white transition-all duration-200"
-            >
-              Student Portal
-            </Link>
-
-            <Link
-              to="/register"
-              className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-teal-500 text-white font-extrabold text-xs tracking-wider uppercase shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105 transition-all duration-200"
-            >
-              Register Team
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
+          {/* Hamburger Toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white focus:outline-none"
-            aria-label="Toggle Navigation"
+            className="hidden sm:block lg:hidden p-2.5 rounded-xl bg-white/5 border border-blue-500/20 text-gray-300 hover:text-white hover:bg-white/10 focus:outline-none"
+            aria-label="Toggle navigation menu"
           >
-            {isOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+            {isOpen ? <FiX size={20} /> : <FiMenu size={20} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-[#0A1929]/95 backdrop-blur-2xl border-b border-white/10 overflow-hidden"
+            className="xl:hidden glass-nav border-b border-blue-500/20 overflow-hidden"
           >
-            <div className="px-4 pt-4 pb-6 space-y-3">
+            <div className="px-4 pt-3 pb-6 space-y-2 max-w-7xl mx-auto">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={(e) => handleNavLinkClick(e, link.href)}
-                  className="flex items-center justify-between px-4 py-3 rounded-xl bg-white/5 border border-white/5 text-sm font-semibold text-slate-200 hover:text-white hover:border-blue-500/30 transition-all"
+                  onClick={(event) => handleNavLinkClick(event, link.href)}
+                  className="block px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-200 hover:text-white hover:bg-blue-600/20 transition-colors"
                 >
-                  <span>{link.name}</span>
-                  <FiChevronRight className="text-slate-500" />
+                  {link.name}
                 </a>
               ))}
-
-              <div className="pt-2 grid grid-cols-2 gap-3">
+              <div className="pt-2 flex flex-col gap-2">
                 <Link
-                  to="/portal"
+                  to="/hardware-problems"
                   onClick={() => setIsOpen(false)}
-                  className="py-3 text-center rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-slate-200"
+                  className="w-full text-center py-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold text-xs uppercase"
                 >
-                  Student Portal
+                  Hardware PS Portal
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setIsOpen(false)}
-                  className="py-3 text-center rounded-xl bg-gradient-to-r from-blue-600 to-teal-500 text-white text-xs font-extrabold uppercase"
+                  className="w-full text-center py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs uppercase"
                 >
-                  Register
+                  Register Now
                 </Link>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <nav
+        className="sm:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav border-t border-blue-500/20"
+        style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.5rem)" }}
+      >
+        <ul className="flex gap-2 px-2 pt-2 pb-1 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          {navLinks.map((link) => {
+            const sectionId = link.href.replace("#", "");
+            const isActive = activeSection === sectionId;
+            return (
+              <li key={link.name} className="flex-shrink-0">
+                <a
+                  href={link.href}
+                  onClick={(event) => handleNavLinkClick(event, link.href)}
+                  className={`block min-w-[88px] text-center py-2 px-3 rounded-xl text-[11px] font-bold tracking-wide transition-colors ${
+                    isActive
+                      ? "bg-blue-600/30 text-white"
+                      : "text-gray-300 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  {link.name}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </header>
   );
 }
