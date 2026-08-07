@@ -98,26 +98,17 @@ function StepMemberDetails({ register, errors, watch }) {
                   )}
                 </div>
 
-                {/* Member Department (Dept) */}
+                {/* Member Department (Dept) - Optional */}
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1">
-                    <FiLayers className="text-cyan-400" /> Department (Dept) *
+                    <FiLayers className="text-cyan-400" /> Department (Dept) <span className="text-gray-400 font-normal lowercase text-[10px]">(optional)</span>
                   </label>
                   <input
                     type="text"
                     placeholder="e.g. CSE, AIDS, ECE, IT, MECH"
-                    {...register(`members.${idx}.department`, {
-                      required: `Member ${memberNum} department is required`,
-                    })}
-                    className={`w-full px-4 py-2.5 rounded-xl bg-white/5 border text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none transition-colors ${
-                      errors.members?.[idx]?.department ? "border-rose-500/80 bg-rose-500/5" : "border-white/10 focus:border-cyan-500"
-                    }`}
+                    {...register(`members.${idx}.department`)}
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none focus:border-cyan-500 transition-colors"
                   />
-                  {errors.members?.[idx]?.department && (
-                    <p className="text-rose-400 text-[11px] font-medium mt-0.5">
-                      {errors.members[idx].department.message}
-                    </p>
-                  )}
                 </div>
 
                 {/* Member 1 (Leader) ONLY: Email */}
