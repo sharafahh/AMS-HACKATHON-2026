@@ -10,7 +10,8 @@ client/build/
 
 # Environment Variables & Secrets
 .env
-server/.env
+.env.*
+!.env.example
 *.local
 
 # Database Backups

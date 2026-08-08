@@ -86,11 +86,12 @@ npm install
 Create `.env` inside `server/`:
 ```env
 PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/ams_hackathon_2026
-JWT_SECRET=ams_hackathon_2026_super_secret_jwt_key_amsce_internal_hackathon
-RAZORPAY_KEY_ID=rzp_test_amshackathon2026
-RAZORPAY_KEY_SECRET=ams_hackathon_secret_key_2026
-FEE_PER_MEMBER_INR=1
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
+SMTP_USER=your_smtp_user
+SMTP_PASS=your_smtp_password
 NODE_ENV=development
 ```
 

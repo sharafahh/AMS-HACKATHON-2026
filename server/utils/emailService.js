@@ -10,8 +10,8 @@ const sentParticipantConfirmations = new Set();
 const getTransporter = () => {
   const smtpHost = process.env.SMTP_HOST || "smtp.gmail.com";
   const smtpPort = Number(process.env.SMTP_PORT) || 587;
-  const smtpUser = process.env.SMTP_USER || process.env.EMAIL_USER || "amshackathon2026@gmail.com";
-  const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASS || "[REDACTED_SMTP_PASS]";
+  const smtpUser = process.env.SMTP_USER || process.env.EMAIL_USER;
+  const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASS;
 
   if (!smtpUser || !smtpPass) {
     return null;
