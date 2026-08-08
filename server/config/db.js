@@ -63,6 +63,7 @@ const connectDB = async (maxRetries = process.env.VERCEL ? 1 : 3, retryDelayMs =
     minPoolSize: 1,                  // Minimum pool size
     autoIndex: false,                // Disable autoIndex in runtime for fast startup
     bufferCommands: false,           // Fail fast if database connection is not ready
+    family: 4,                       // Force IPv4 DNS resolution for Vercel serverless containers
   };
 
   let attempt = 0;
