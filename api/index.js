@@ -68,6 +68,32 @@ app.get("/api", (req, res) => {
   });
 });
 
+app.get("/api/db-status", async (req, res) => {
+  const hasEnv = Boolean(process.env.MONGODB_URI || process.env.MONGO_URI);
+  const states = ["disconnected", "connected", "connecting", "disconnecting"];
+  let dbError = null;
+
+  try {
+    const conn = await connectDB();
+    if (!conn) {
+      dbError = "connectDB() returned null. Check MONGODB_URI environment variable in Vercel Settings.";
+    }
+  } catch (err) {
+    dbError = err.message;
+  }
+
+  const isConnected = mongoose.connection.readyState === 1;
+
+  res.status(200).json({
+    success: isConnected,
+    hasMongoUriEnv: hasEnv,
+    dbState: states[mongoose.connection.readyState] || "unknown",
+    dbHost: mongoose.connection.host || null,
+    dbName: mongoose.connection.name || null,
+    connectionError: dbError,
+  });
+});
+
 app.use("/api/teams", teamRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/admin", adminRoutes);
