@@ -57,7 +57,7 @@ const connectDB = async (maxRetries = process.env.VERCEL ? 1 : 3, retryDelayMs =
   const cleanUri = rawUri.replace(/<([^>]+)>/g, "$1");
 
   const mongooseOptions = {
-    serverSelectionTimeoutMS: 4000, // 4s server selection timeout for quick fail-over
+    serverSelectionTimeoutMS: process.env.VERCEL ? 2500 : 4000, // 2.5s fast timeout on Vercel to prevent Gateway Timeouts
     socketTimeoutMS: 45000,          // Close sockets after 45s of inactivity
     maxPoolSize: 10,                 // Maintain up to 10 socket connections
     minPoolSize: 1,                  // Minimum pool size
