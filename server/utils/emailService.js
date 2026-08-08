@@ -358,6 +358,9 @@ export const sendOrganizerNotificationEmail = async ({
   department,
   year,
   theme,
+  problemTitle,
+  problemAbstract,
+  referralCode,
   teamMembers = [],
   amountPaid,
   paymentId,
@@ -409,8 +412,12 @@ export const sendOrganizerNotificationEmail = async ({
           <tr><td style="padding: 6px 0; color: #94a3b8;">Leader Email:</td><td>${email || "N/A"}</td></tr>
           <tr><td style="padding: 6px 0; color: #94a3b8;">Leader Phone:</td><td style="font-weight: bold; color: #facc15;">${phone || "N/A"}</td></tr>
           <tr><td style="padding: 6px 0; color: #94a3b8;">College:</td><td>${college || "N/A"}</td></tr>
-          <tr><td style="padding: 6px 0; color: #94a3b8;">Theme:</td><td>${theme || "Open Innovation"}</td></tr>
-          <tr><td style="padding: 6px 0; color: #94a3b8;">Amount Paid:</td><td style="color: #10b981; font-weight: bold;">₹${amountPaid || 0} INR</td></tr>
+          <tr><td style="padding: 6px 0; color: #94a3b8;">Department & Year:</td><td>${department || "N/A"} (${year || "3rd Year"})</td></tr>
+          <tr><td style="padding: 6px 0; color: #94a3b8;">Innovation Track:</td><td style="color: #c084fc; font-weight: bold;">${theme || "Open Innovation"}</td></tr>
+          <tr><td style="padding: 6px 0; color: #94a3b8;">Problem Title:</td><td style="color: #f8fafc;">${problemTitle || "AMS Hackathon Challenge"}</td></tr>
+          ${problemAbstract ? `<tr><td style="padding: 6px 0; color: #94a3b8;">Problem Abstract:</td><td style="color: #cbd5e1; font-size: 12px;">${problemAbstract}</td></tr>` : ""}
+          ${referralCode ? `<tr><td style="padding: 6px 0; color: #94a3b8;">Referral Code:</td><td style="color: #facc15; font-weight: bold;">${referralCode}</td></tr>` : ""}
+          <tr><td style="padding: 6px 0; color: #94a3b8;">Amount Paid:</td><td style="color: #10b981; font-weight: bold;">₹${amountPaid || 0} INR (PAID)</td></tr>
           <tr><td style="padding: 6px 0; color: #94a3b8;">Payment ID:</td><td style="font-family: monospace;">${paymentId || "N/A"}</td></tr>
           <tr><td style="padding: 6px 0; color: #94a3b8;">Order ID:</td><td style="font-family: monospace;">${orderId || "N/A"}</td></tr>
         </table>
