@@ -20,6 +20,13 @@ const parseJSONResponse = async (response, defaultErrorMessage = "Request failed
   }
 
   if (!response.ok) {
+    if (response.status === 401 && (data.message?.includes("token") || data.message?.includes("authorized") || data.message?.includes("Not authorized"))) {
+      localStorage.removeItem("ams_hackathon_2026_admin_token");
+      localStorage.removeItem("ams_hackathon_2026_admin_user");
+      if (typeof window !== "undefined" && window.location.pathname.startsWith("/admin") && !window.location.pathname.includes("/admin/login")) {
+        window.location.href = "/admin/login";
+      }
+    }
     throw new Error(data.message || defaultErrorMessage);
   }
 
