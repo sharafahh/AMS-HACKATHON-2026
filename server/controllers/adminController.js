@@ -95,24 +95,56 @@ export const getAdminProfile = async (req, res) => {
 // @access  Private / Admin
 export const getRegistrations = async (req, res) => {
   try {
-    const registrations = await Registration.find({ isDeleted: { $ne: true } })
-      .sort({ registrationTimestamp: -1, createdAt: -1 });
+    const [registrations, teams] = await Promise.all([
+      Registration.find({ isDeleted: { $ne: true } }).sort({ registrationTimestamp: -1, createdAt: -1 }).lean(),
+      Team.find({ isDeleted: { $ne: true } }).sort({ createdAt: -1 }).lean(),
+    ]);
 
-    const formattedRegistrations = registrations.map((reg) => ({
-      _id: reg._id,
-      teamName: reg.teamName,
-      teamLeader: reg.teamLeaderName,
-      college: reg.collegeName,
-      email: reg.email,
-      phone: reg.phoneNumber,
-      paymentStatus: reg.paymentStatus,
-      registrationDate: reg.registrationTimestamp || reg.createdAt,
-      department: reg.department,
-      year: reg.year,
-      razorpayOrderId: reg.razorpayOrderId,
-      razorpayPaymentId: reg.razorpayPaymentId,
-      teamMembers: reg.teamMembers,
-    }));
+    const regMap = new Map();
+
+    // Map Registration model documents
+    (registrations || []).forEach((reg) => {
+      const key = String(reg.razorpayOrderId || reg.razorpayPaymentId || reg._id);
+      regMap.set(key, {
+        _id: reg._id,
+        teamName: reg.teamName,
+        teamLeader: reg.teamLeaderName,
+        college: reg.collegeName,
+        email: reg.email,
+        phone: reg.phoneNumber,
+        paymentStatus: reg.paymentStatus || "PAID",
+        registrationDate: reg.registrationTimestamp || reg.createdAt,
+        department: reg.department,
+        year: reg.year,
+        razorpayOrderId: reg.razorpayOrderId,
+        razorpayPaymentId: reg.razorpayPaymentId,
+        teamMembers: reg.teamMembers || [],
+      });
+    });
+
+    // Merge Team model documents if not already in regMap
+    (teams || []).forEach((t) => {
+      const key = String(t.registrationId || t._id);
+      if (!regMap.has(key)) {
+        regMap.set(key, {
+          _id: t._id,
+          teamName: t.teamName,
+          teamLeader: t.leader?.name || "N/A",
+          college: t.leader?.college || "N/A",
+          email: t.leader?.email || "N/A",
+          phone: t.leader?.phone || "N/A",
+          paymentStatus: t.paymentStatus || "PAID",
+          registrationDate: t.createdAt,
+          department: t.leader?.department || "N/A",
+          year: t.leader?.year || "N/A",
+          razorpayOrderId: t.registrationId || "N/A",
+          razorpayPaymentId: t.registrationId || "N/A",
+          teamMembers: t.members || [],
+        });
+      }
+    });
+
+    const formattedRegistrations = Array.from(regMap.values());
 
     return res.status(200).json({
       success: true,
