@@ -62,6 +62,7 @@ const connectDB = async (maxRetries = process.env.VERCEL ? 1 : 3, retryDelayMs =
     maxPoolSize: 10,                 // Maintain up to 10 socket connections
     minPoolSize: 1,                  // Minimum pool size
     autoIndex: false,                // Disable autoIndex in runtime for fast startup
+    bufferCommands: false,           // Fail fast if database connection is not ready
   };
 
   let attempt = 0;
