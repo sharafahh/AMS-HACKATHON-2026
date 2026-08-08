@@ -1,7 +1,7 @@
 import ContactMessage from "../models/ContactMessage.js";
 import { sendContactMessageEmail } from "../utils/emailService.js";
 
-// @desc    Submit Contact Form Message & Send Email to amshackathon2026@gmail.com
+// @desc    Submit Contact Form Message & Send Email to Organizer
 // @route   POST /api/contact
 // @access  Public
 export const submitContactForm = async (req, res) => {
@@ -29,16 +29,18 @@ export const submitContactForm = async (req, res) => {
       console.warn("MongoDB ContactMessage save notice:", dbErr.message);
     }
 
-    // 2. Dispatch email to amshackathon2026@gmail.com
-    await sendContactMessageEmail({ name, email, subject, message });
+    // 2. Dispatch email to organizer (Non-blocking execution)
+    sendContactMessageEmail({ name, email, subject, message }).catch((emailErr) => {
+      console.warn("Contact email dispatch notice:", emailErr.message);
+    });
 
     return res.status(200).json({
       success: true,
-      message: "Thank you! Your query has been received and sent to amshackathon2026@gmail.com. We will get back to you shortly.",
+      message: "Thank you! Your query has been received and logged. We will get back to you shortly.",
       contactId: savedMsg ? savedMsg._id : null,
     });
   } catch (error) {
-    console.error("Error in submitContactForm:", error);
+    console.error("Error in submitContactForm:", error.message);
     return res.status(500).json({
       success: false,
       message: "Failed to submit contact message. Please try again later.",
@@ -51,14 +53,14 @@ export const submitContactForm = async (req, res) => {
 // @access  Public / Admin
 export const getContactMessages = async (req, res) => {
   try {
-    const messages = await ContactMessage.find().sort({ createdAt: -1 });
+    const messages = await ContactMessage.find({ isDeleted: { $ne: true } }).sort({ createdAt: -1 }).lean();
     return res.status(200).json({
       success: true,
       count: messages.length,
       messages,
     });
   } catch (error) {
-    console.error("Error fetching contact messages:", error);
+    console.error("Error fetching contact messages:", error.message);
     return res.status(500).json({
       success: false,
       message: "Failed to retrieve contact messages",
