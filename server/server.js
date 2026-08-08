@@ -86,14 +86,27 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// API Routes
+// API Routes (supports /api/* and /* aliases)
 app.use("/api/teams", teamRoutes);
+app.use("/teams", teamRoutes);
+
 app.use("/api/payments", paymentRoutes);
-app.use("/api/admin", adminRoutes);
+app.use("/payments", paymentRoutes);
+
 app.use("/api/admin/backups", backupRoutes);
+app.use("/admin/backups", backupRoutes);
+
+app.use("/api/admin", adminRoutes);
+app.use("/admin", adminRoutes);
+
 app.use("/api/certificates", certificateRoutes);
+app.use("/certificates", certificateRoutes);
+
 app.use("/api/announcements", announcementRoutes);
+app.use("/announcements", announcementRoutes);
+
 app.use("/api/contact", contactRoutes);
+app.use("/contact", contactRoutes);
 
 // Error Handling Middlewares
 app.use(notFound);

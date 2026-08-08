@@ -94,13 +94,27 @@ app.get("/api/db-status", async (req, res) => {
   });
 });
 
+// Express Route Mounts (supports /api/* and /* aliases for Vercel rewrites)
 app.use("/api/teams", teamRoutes);
+app.use("/teams", teamRoutes);
+
 app.use("/api/payments", paymentRoutes);
-app.use("/api/admin", adminRoutes);
+app.use("/payments", paymentRoutes);
+
 app.use("/api/admin/backups", backupRoutes);
+app.use("/admin/backups", backupRoutes);
+
+app.use("/api/admin", adminRoutes);
+app.use("/admin", adminRoutes);
+
 app.use("/api/certificates", certificateRoutes);
+app.use("/certificates", certificateRoutes);
+
 app.use("/api/announcements", announcementRoutes);
+app.use("/announcements", announcementRoutes);
+
 app.use("/api/contact", contactRoutes);
+app.use("/contact", contactRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
