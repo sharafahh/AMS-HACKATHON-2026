@@ -13,13 +13,20 @@ import Coordinator from "../models/Coordinator.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Directory where backups are stored securely on the server
-export const BACKUP_DIR = path.join(__dirname, "..", "backups");
+// Directory where backups are stored securely (uses /tmp in Vercel serverless environment)
+export const BACKUP_DIR = process.env.VERCEL
+  ? path.join("/tmp", "backups")
+  : path.join(__dirname, "..", "backups");
+
 export const MANIFEST_FILE = path.join(BACKUP_DIR, "backup_manifest.json");
 
-// Ensure backup directory exists
-if (!fs.existsSync(BACKUP_DIR)) {
-  fs.mkdirSync(BACKUP_DIR, { recursive: true });
+// Ensure backup directory exists safely without crashing serverless initialization
+try {
+  if (!fs.existsSync(BACKUP_DIR)) {
+    fs.mkdirSync(BACKUP_DIR, { recursive: true });
+  }
+} catch (dirErr) {
+  console.warn("Backup directory creation notice (Serverless read-only mode):", dirErr.message);
 }
 
 /**
