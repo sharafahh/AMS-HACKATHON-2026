@@ -106,6 +106,27 @@ function RegisterForm() {
 
   // Final Form Submission -> Razorpay Checkout Integration
   const onSubmit = async (data) => {
+    // ─── 0. Pre-flight Member Validation BEFORE Razorpay Payment ───
+    const numMembers = Number(data.teamSize || 4);
+    const members = Array.isArray(data.members) ? data.members.slice(0, numMembers) : [];
+
+    for (let i = 0; i < numMembers; i++) {
+      const m = members[i];
+      const memberNum = i + 1;
+      if (!m || !m.name || m.name.trim().length < 2) {
+        alert(`Validation Error: Member ${memberNum} name is required.`);
+        return;
+      }
+      if (!m.email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(m.email.trim())) {
+        alert(`Validation Error: Member ${memberNum} email is required and must be a valid email address.`);
+        return;
+      }
+      if (!m.phone || m.phone.replace(/\D/g, "").length < 7) {
+        alert(`Validation Error: Member ${memberNum} phone number is required.`);
+        return;
+      }
+    }
+
     setSubmitting(true);
     setStatusMessage("Creating Razorpay Payment Order...");
 

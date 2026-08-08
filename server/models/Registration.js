@@ -56,6 +56,11 @@ const registrationSchema = new mongoose.Schema(
       required: [true, "Year is required"],
       trim: true,
     },
+    registrationId: {
+      type: String,
+      trim: true,
+      index: true,
+    },
     paymentStatus: {
       type: String,
       enum: ["UNPAID", "PAID", "SUCCESS", "FAILED", "CASH_PAID"],

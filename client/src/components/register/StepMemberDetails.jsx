@@ -25,7 +25,7 @@ function StepMemberDetails({ register, errors, watch }) {
             Step 2: Team Member Details ({teamSize} Members Selected)
           </h2>
           <p className="text-gray-400 text-xs font-light mt-1">
-            Provide member names and departments. Full contact details are collected for the Team Leader (Member 1).
+            Provide full contact details (Name, Email, Phone, Dept, Role) for every member of your team.
           </p>
         </div>
 
@@ -70,7 +70,7 @@ function StepMemberDetails({ register, errors, watch }) {
                 </div>
 
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-300">
-                  {isLeader ? "Full Leader Info" : "Name & Dept"}
+                  {isLeader ? "Leader Info" : `Member #${memberNum} Info`}
                 </span>
               </div>
 
@@ -85,7 +85,7 @@ function StepMemberDetails({ register, errors, watch }) {
                     placeholder={`Member ${memberNum} Full Name`}
                     {...register(`members.${idx}.name`, {
                       required: `Member ${memberNum} name is required`,
-                      minLength: { value: 2, message: "Minimum 2 characters" },
+                      minLength: { value: 2, message: "Minimum 2 characters required" },
                     })}
                     className={`w-full px-4 py-2.5 rounded-xl bg-white/5 border text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none transition-colors ${
                       errors.members?.[idx]?.name ? "border-rose-500/80 bg-rose-500/5" : "border-white/10 focus:border-cyan-500"
@@ -98,7 +98,59 @@ function StepMemberDetails({ register, errors, watch }) {
                   )}
                 </div>
 
-                {/* Member Department (Dept) - Optional */}
+                {/* Member Email */}
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1">
+                    <FiMail className="text-cyan-400" /> Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    placeholder={isLeader ? "leader@college.edu" : `member${memberNum}@college.edu`}
+                    {...register(`members.${idx}.email`, {
+                      required: `Member ${memberNum} email is required`,
+                      pattern: {
+                        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                        message: `Valid email address required for Member ${memberNum}`,
+                      },
+                    })}
+                    className={`w-full px-4 py-2.5 rounded-xl bg-white/5 border text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none transition-colors ${
+                      errors.members?.[idx]?.email ? "border-rose-500/80 bg-rose-500/5" : "border-white/10 focus:border-cyan-500"
+                    }`}
+                  />
+                  {errors.members?.[idx]?.email && (
+                    <p className="text-rose-400 text-[11px] font-medium mt-0.5">
+                      {errors.members[idx].email.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Member Phone */}
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1">
+                    <FiPhone className="text-cyan-400" /> Phone Number (10 Digits) *
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="9876543210"
+                    {...register(`members.${idx}.phone`, {
+                      required: `Member ${memberNum} phone is required`,
+                      pattern: {
+                        value: /^[0-9]{10}$/,
+                        message: `Valid 10-digit mobile required for Member ${memberNum}`,
+                      },
+                    })}
+                    className={`w-full px-4 py-2.5 rounded-xl bg-white/5 border text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none transition-colors ${
+                      errors.members?.[idx]?.phone ? "border-rose-500/80 bg-rose-500/5" : "border-white/10 focus:border-cyan-500"
+                    }`}
+                  />
+                  {errors.members?.[idx]?.phone && (
+                    <p className="text-rose-400 text-[11px] font-medium mt-0.5">
+                      {errors.members[idx].phone.message}
+                    </p>
+                  )}
+                </div>
+
+                {/* Member Department (Dept) */}
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1">
                     <FiLayers className="text-cyan-400" /> Department (Dept) <span className="text-gray-400 font-normal lowercase text-[10px]">(optional)</span>
@@ -111,64 +163,8 @@ function StepMemberDetails({ register, errors, watch }) {
                   />
                 </div>
 
-                {/* Member 1 (Leader) ONLY: Email */}
-                {isLeader && (
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1">
-                      <FiMail className="text-cyan-400" /> Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="leader@college.edu"
-                      {...register(`members.0.email`, {
-                        required: "Leader email is required",
-                        pattern: {
-                          value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                          message: "Invalid email format",
-                        },
-                      })}
-                      className={`w-full px-4 py-2.5 rounded-xl bg-white/5 border text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none transition-colors ${
-                        errors.members?.[0]?.email ? "border-rose-500/80 bg-rose-500/5" : "border-white/10 focus:border-cyan-500"
-                      }`}
-                    />
-                    {errors.members?.[0]?.email && (
-                      <p className="text-rose-400 text-[11px] font-medium mt-0.5">
-                        {errors.members[0].email.message}
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* Member 1 (Leader) ONLY: Phone */}
-                {isLeader && (
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1">
-                      <FiPhone className="text-cyan-400" /> Phone Number (10 Digits) *
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="9876543210"
-                      {...register(`members.0.phone`, {
-                        required: "Leader phone is required",
-                        pattern: {
-                          value: /^[0-9]{10}$/,
-                          message: "Valid 10-digit mobile required",
-                        },
-                      })}
-                      className={`w-full px-4 py-2.5 rounded-xl bg-white/5 border text-white placeholder-gray-500 text-xs sm:text-sm focus:outline-none transition-colors ${
-                        errors.members?.[0]?.phone ? "border-rose-500/80 bg-rose-500/5" : "border-white/10 focus:border-cyan-500"
-                      }`}
-                    />
-                    {errors.members?.[0]?.phone && (
-                      <p className="text-rose-400 text-[11px] font-medium mt-0.5">
-                        {errors.members[0].phone.message}
-                      </p>
-                    )}
-                  </div>
-                )}
-
                 {/* Member Specialty / Role */}
-                <div className="space-y-1">
+                <div className="space-y-1 sm:col-span-2">
                   <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider flex items-center gap-1">
                     <FiCpu className="text-amber-400" /> Primary Role / Specialty *
                   </label>

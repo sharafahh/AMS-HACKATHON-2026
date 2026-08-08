@@ -254,6 +254,7 @@ export const verifyPayment = async (req, res) => {
     const cleanYear = sanitizeString(year || "3rd Year", 20);
 
     const registrationPayload = {
+      registrationId,
       teamName: cleanTeamName,
       teamLeaderName: cleanLeaderName,
       teamMembers: members || [],
