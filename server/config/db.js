@@ -54,7 +54,16 @@ const connectDB = async (maxRetries = process.env.VERCEL ? 1 : 3, retryDelayMs =
   }
 
   // Clean up angle brackets around password if present in env string
-  const cleanUri = rawUri.replace(/<([^>]+)>/g, "$1");
+  let cleanUri = rawUri.replace(/<([^>]+)>/g, "$1");
+
+  // Ensure target database name ams_hackathon_2026 is explicitly set
+  if (cleanUri.includes("mongodb.net/?")) {
+    cleanUri = cleanUri.replace("mongodb.net/?", "mongodb.net/ams_hackathon_2026?");
+  } else if (cleanUri.endsWith("mongodb.net/")) {
+    cleanUri = cleanUri + "ams_hackathon_2026";
+  } else if (cleanUri.endsWith("mongodb.net")) {
+    cleanUri = cleanUri + "/ams_hackathon_2026";
+  }
 
   const mongooseOptions = {
     serverSelectionTimeoutMS: process.env.VERCEL ? 2500 : 4000, // 2.5s fast timeout on Vercel to prevent Gateway Timeouts
