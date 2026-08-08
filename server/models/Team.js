@@ -1,33 +1,10 @@
 import mongoose from "mongoose";
 
 const memberSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Member name is required"],
-    trim: true,
-    minlength: [2, "Member name must be at least 2 characters"],
-    maxlength: [100, "Member name cannot exceed 100 characters"],
-  },
-  email: {
-    type: String,
-    required: [true, "Member email is required"],
-    trim: true,
-    lowercase: true,
-    match: [/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid member email format"],
-  },
-  phone: {
-    type: String,
-    required: [true, "Member phone is required"],
-    trim: true,
-    validate: {
-      validator: function (v) {
-        const digits = String(v).replace(/\D/g, "");
-        return digits.length >= 7 && digits.length <= 15;
-      },
-      message: "Member phone must contain 7-15 digits",
-    },
-  },
-  role: { type: String, required: true, trim: true, default: "Developer" },
+  name: { type: String, trim: true, default: "" },
+  email: { type: String, trim: true, lowercase: true, default: "" },
+  phone: { type: String, trim: true, default: "" },
+  role: { type: String, trim: true, default: "Developer" },
 });
 
 const teamSchema = new mongoose.Schema(
@@ -51,7 +28,7 @@ const teamSchema = new mongoose.Schema(
     teamSize: {
       type: Number,
       required: [true, "Team size is required"],
-      min: [3, "Minimum team size is 3"],
+      min: [1, "Minimum team size is 1"],
       max: [6, "Maximum team size is 6"],
     },
     leader: {
@@ -74,13 +51,6 @@ const teamSchema = new mongoose.Schema(
         type: String,
         required: [true, "Leader phone is required"],
         trim: true,
-        validate: {
-          validator: function (v) {
-            const digits = String(v).replace(/\D/g, "");
-            return digits.length >= 7 && digits.length <= 15;
-          },
-          message: "Leader phone must contain 7-15 digits",
-        },
       },
       college: { type: String, required: [true, "College name is required"], trim: true },
       department: { type: String, required: [true, "Department is required"], trim: true },
@@ -88,12 +58,7 @@ const teamSchema = new mongoose.Schema(
     },
     members: {
       type: [memberSchema],
-      validate: {
-        validator: function (val) {
-          return Array.isArray(val) && val.length >= 3 && val.length <= 6;
-        },
-        message: "Members array must contain between 3 and 6 members",
-      },
+      default: [],
     },
     track: {
       type: String,
