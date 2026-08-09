@@ -2164,7 +2164,11 @@ function AdminDashboard() {
                       type="text"
                       required
                       value={manualForm.leaderName}
-                      onChange={(e) => setManualForm({ ...manualForm, leaderName: e.target.value })}
+                      onChange={(e) => {
+                        const newMembers = [...manualForm.members];
+                        if (newMembers.length > 0) newMembers[0].name = e.target.value;
+                        setManualForm({ ...manualForm, leaderName: e.target.value, members: newMembers });
+                      }}
                       className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
                     />
                   </div>
@@ -2175,7 +2179,11 @@ function AdminDashboard() {
                       type="email"
                       required
                       value={manualForm.leaderEmail}
-                      onChange={(e) => setManualForm({ ...manualForm, leaderEmail: e.target.value })}
+                      onChange={(e) => {
+                        const newMembers = [...manualForm.members];
+                        if (newMembers.length > 0) newMembers[0].email = e.target.value;
+                        setManualForm({ ...manualForm, leaderEmail: e.target.value, members: newMembers });
+                      }}
                       className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
                     />
                   </div>
@@ -2186,7 +2194,11 @@ function AdminDashboard() {
                       type="tel"
                       required
                       value={manualForm.leaderPhone}
-                      onChange={(e) => setManualForm({ ...manualForm, leaderPhone: e.target.value })}
+                      onChange={(e) => {
+                        const newMembers = [...manualForm.members];
+                        if (newMembers.length > 0) newMembers[0].phone = e.target.value;
+                        setManualForm({ ...manualForm, leaderPhone: e.target.value, members: newMembers });
+                      }}
                       className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
                     />
                   </div>
@@ -2208,7 +2220,11 @@ function AdminDashboard() {
                       type="text"
                       required
                       value={manualForm.department}
-                      onChange={(e) => setManualForm({ ...manualForm, department: e.target.value })}
+                      onChange={(e) => {
+                        const newMembers = [...manualForm.members];
+                        if (newMembers.length > 0) newMembers[0].department = e.target.value;
+                        setManualForm({ ...manualForm, department: e.target.value, members: newMembers });
+                      }}
                       className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
                     />
                   </div>
