@@ -159,10 +159,10 @@ function AdminDashboard() {
     problemTitle: "",
     notes: "",
     members: [
-      { name: "", email: "", phone: "", role: "Lead Developer" },
-      { name: "", email: "", phone: "", role: "Frontend / UI/UX Developer" },
-      { name: "", email: "", phone: "", role: "Backend & API Engineer" },
-      { name: "", email: "", phone: "", role: "Hardware & Embedded Systems Tech" },
+      { name: "", email: "", phone: "", department: "IT", role: "Lead Developer" },
+      { name: "", email: "", phone: "", department: "IT", role: "Frontend / UI/UX Developer" },
+      { name: "", email: "", phone: "", department: "IT", role: "Backend & API Engineer" },
+      { name: "", email: "", phone: "", department: "IT", role: "Hardware & Embedded Systems Tech" },
     ],
   });
 
@@ -275,10 +275,10 @@ function AdminDashboard() {
           problemTitle: "",
           notes: "",
           members: [
-            { name: "", email: "", phone: "", role: "Lead Developer" },
-            { name: "", email: "", phone: "", role: "Frontend / UI/UX Developer" },
-            { name: "", email: "", phone: "", role: "Backend & API Engineer" },
-            { name: "", email: "", phone: "", role: "Hardware & Embedded Systems Tech" },
+            { name: "", email: "", phone: "", department: "IT", role: "Lead Developer" },
+            { name: "", email: "", phone: "", department: "IT", role: "Frontend / UI/UX Developer" },
+            { name: "", email: "", phone: "", department: "IT", role: "Backend & API Engineer" },
+            { name: "", email: "", phone: "", department: "IT", role: "Hardware & Embedded Systems Tech" },
           ],
         });
         fetchDashboardData();
@@ -2142,7 +2142,7 @@ function AdminDashboard() {
                         let newMembers = [...manualForm.members];
                         if (newSize > newMembers.length) {
                           for (let i = newMembers.length; i < newSize; i++) {
-                            newMembers.push({ name: "", email: "", phone: "", role: "Developer" });
+                            newMembers.push({ name: "", email: "", phone: "", department: "IT", role: "Developer" });
                           }
                         } else {
                           newMembers = newMembers.slice(0, newSize);
@@ -2296,6 +2296,22 @@ function AdminDashboard() {
                           />
                         </div>
                         <div>
+                          <label className="text-[10px] text-gray-400 font-bold block mb-1">Department *</label>
+                          <select
+                            value={member.department || "IT"}
+                            onChange={(e) => {
+                              const newMembers = [...manualForm.members];
+                              newMembers[idx].department = e.target.value;
+                              setManualForm({ ...manualForm, members: newMembers });
+                            }}
+                            className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                          >
+                            {["IT", "AIDS", "AIML/CSBS", "CSE", "Cyber", "MECH", "EEE", "ECE"].map((dept) => (
+                              <option key={dept} value={dept}>{dept}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="sm:col-span-2">
                           <label className="text-[10px] text-gray-400 font-bold block mb-1">Role *</label>
                           <input
                             type="text"

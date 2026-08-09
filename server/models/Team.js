@@ -4,6 +4,7 @@ const memberSchema = new mongoose.Schema({
   name: { type: String, trim: true, default: "" },
   email: { type: String, trim: true, lowercase: true, default: "" },
   phone: { type: String, trim: true, default: "" },
+  department: { type: String, trim: true, default: "" },
   role: { type: String, trim: true, default: "Developer" },
 });
 
