@@ -158,6 +158,12 @@ function AdminDashboard() {
     track: "AI & Machine Learning",
     problemTitle: "",
     notes: "",
+    members: [
+      { name: "", email: "", phone: "", role: "Lead Developer" },
+      { name: "", email: "", phone: "", role: "Frontend / UI/UX Developer" },
+      { name: "", email: "", phone: "", role: "Backend & API Engineer" },
+      { name: "", email: "", phone: "", role: "Hardware & Embedded Systems Tech" },
+    ],
   });
 
   // Check Auth Token on Mount
@@ -268,6 +274,12 @@ function AdminDashboard() {
           track: "AI & Machine Learning",
           problemTitle: "",
           notes: "",
+          members: [
+            { name: "", email: "", phone: "", role: "Lead Developer" },
+            { name: "", email: "", phone: "", role: "Frontend / UI/UX Developer" },
+            { name: "", email: "", phone: "", role: "Backend & API Engineer" },
+            { name: "", email: "", phone: "", role: "Hardware & Embedded Systems Tech" },
+          ],
         });
         fetchDashboardData();
       }
@@ -2125,7 +2137,18 @@ function AdminDashboard() {
                     <label className="text-[10px] text-gray-400 font-bold block mb-1">Team Size *</label>
                     <select
                       value={manualForm.teamSize}
-                      onChange={(e) => setManualForm({ ...manualForm, teamSize: Number(e.target.value) })}
+                      onChange={(e) => {
+                        const newSize = Number(e.target.value);
+                        let newMembers = [...manualForm.members];
+                        if (newSize > newMembers.length) {
+                          for (let i = newMembers.length; i < newSize; i++) {
+                            newMembers.push({ name: "", email: "", phone: "", role: "Developer" });
+                          }
+                        } else {
+                          newMembers = newMembers.slice(0, newSize);
+                        }
+                        setManualForm({ ...manualForm, teamSize: newSize, members: newMembers });
+                      }}
                       className="w-full px-4 py-2.5 rounded-xl bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
                     >
                       <option value={3}>3 Members (₹300)</option>
@@ -2204,6 +2227,91 @@ function AdminDashboard() {
                       ))}
                     </select>
                   </div>
+                </div>
+
+                {/* Team Members Section */}
+                <div className="pt-4 border-t border-white/10 mt-4 space-y-4">
+                  <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                    <FiUsers className="text-cyan-400" />
+                    Team Members Details
+                  </h4>
+                  {manualForm.members.map((member, idx) => (
+                    <div key={idx} className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                      <div className="flex justify-between items-center mb-2">
+                         <h5 className="text-xs font-bold text-cyan-400">Member {idx + 1} {idx === 0 && "(Leader)"}</h5>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[10px] text-gray-400 font-bold block mb-1">Name *</label>
+                          <input
+                            type="text"
+                            required
+                            value={member.name}
+                            onChange={(e) => {
+                              const newMembers = [...manualForm.members];
+                              newMembers[idx].name = e.target.value;
+                              if (idx === 0) {
+                                setManualForm({ ...manualForm, members: newMembers, leaderName: e.target.value });
+                              } else {
+                                setManualForm({ ...manualForm, members: newMembers });
+                              }
+                            }}
+                            className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] text-gray-400 font-bold block mb-1">Email *</label>
+                          <input
+                            type="email"
+                            required
+                            value={member.email}
+                            onChange={(e) => {
+                              const newMembers = [...manualForm.members];
+                              newMembers[idx].email = e.target.value;
+                              if (idx === 0) {
+                                setManualForm({ ...manualForm, members: newMembers, leaderEmail: e.target.value });
+                              } else {
+                                setManualForm({ ...manualForm, members: newMembers });
+                              }
+                            }}
+                            className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] text-gray-400 font-bold block mb-1">Phone *</label>
+                          <input
+                            type="tel"
+                            required
+                            value={member.phone}
+                            onChange={(e) => {
+                              const newMembers = [...manualForm.members];
+                              newMembers[idx].phone = e.target.value;
+                              if (idx === 0) {
+                                setManualForm({ ...manualForm, members: newMembers, leaderPhone: e.target.value });
+                              } else {
+                                setManualForm({ ...manualForm, members: newMembers });
+                              }
+                            }}
+                            className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] text-gray-400 font-bold block mb-1">Role *</label>
+                          <input
+                            type="text"
+                            required
+                            value={member.role}
+                            onChange={(e) => {
+                              const newMembers = [...manualForm.members];
+                              newMembers[idx].role = e.target.value;
+                              setManualForm({ ...manualForm, members: newMembers });
+                            }}
+                            className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <div className="pt-2 flex justify-end gap-3">
