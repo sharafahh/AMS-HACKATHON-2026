@@ -20,7 +20,7 @@ const parseJSONResponse = async (response, defaultErrorMessage = "Request failed
   }
 
   if (!response.ok) {
-    if (response.status === 401 && (data.message?.includes("token") || data.message?.includes("authorized") || data.message?.includes("Not authorized"))) {
+    if (response.status === 401 && (data.message?.includes("token") || data.message?.includes("authorized") || data.message?.includes("Not authorized") || data.message?.includes("expired"))) {
       localStorage.removeItem("ams_hackathon_2026_admin_token");
       localStorage.removeItem("ams_hackathon_2026_admin_user");
       if (typeof window !== "undefined" && window.location.pathname.startsWith("/admin") && !window.location.pathname.includes("/admin/login")) {
@@ -127,6 +127,21 @@ export const getTeamsAPI = async () => {
     return await parseJSONResponse(response, "Failed to fetch teams");
   } catch (error) {
     console.error("API error fetching teams:", error);
+    throw error;
+  }
+};
+
+export const getAdminRegistrationsAPI = async () => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/registrations`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    return await parseJSONResponse(response, "Failed to fetch registrations");
+  } catch (error) {
+    console.error("API error fetching registrations:", error);
     throw error;
   }
 };
