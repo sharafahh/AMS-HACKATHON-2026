@@ -2247,6 +2247,19 @@ function AdminDashboard() {
                   </div>
 
                   <div>
+                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Leader Year *</label>
+                    <select
+                      value={manualForm.year}
+                      onChange={(e) => setManualForm({ ...manualForm, year: e.target.value })}
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                    >
+                      {["1st Year", "2nd Year", "3rd Year", "4th Year"].map((y) => (
+                        <option key={y} value={y}>{y}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
                     <label className="text-[10px] text-gray-400 font-bold block mb-1">Department *</label>
                     <input
                       type="text"
