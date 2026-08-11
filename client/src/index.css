@@ -199,3 +199,16 @@
   mask-composite: exclude;
   filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.45));
 }
+
+@keyframes infinite-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-infinite-scroll {
+  animation: infinite-scroll 35s linear infinite;
+}
+
+.animate-infinite-scroll:hover {
+  animation-play-state: paused;
+}
