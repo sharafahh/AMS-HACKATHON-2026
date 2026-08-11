@@ -12,21 +12,25 @@ const tier1Sponsors = [
     name: "Infosys Springboard",
     logo: infosysLogo,
     tag: "Platinum Sponsor",
+    link: "https://infyspringboard.onwingspan.com/",
   },
   {
     name: "Thözhil",
     logo: thozhilLogo,
     tag: "Global Internship Platform",
+    link: "https://thozhil.co.in/",
   },
   {
     name: "ONeyes Infotech Solutions",
     logo: oneyesLogo,
     tag: "Technology Partner",
+    link: "https://oneyesinfotechsolutions.com/",
   },
   {
     name: "Gateway Software Solutions",
     logo: gatewayLogo,
     tag: "IT & ITES Partner",
+    link: "https://www.gatewaysoftwaresolutions.com/",
   },
 ];
 
@@ -36,21 +40,24 @@ const tier2Sponsors = [
     logo: renderLogo,
     tag: "Hosting Partner",
     imgScale: "scale-[1.4] opacity-90",
-    hoverScale: "group-hover:scale-[1.5]"
+    hoverScale: "group-hover:scale-[1.5]",
+    link: "https://render.com/",
   },
   {
     name: "xyz.gen",
     logo: xyzLogo,
     tag: "Domain Partner",
     imgScale: "scale-100 grayscale opacity-60",
-    hoverScale: "group-hover:scale-105"
+    hoverScale: "group-hover:scale-105",
+    link: "https://gen.xyz/",
   },
   {
     name: "CodeCrafters",
     logo: codecrafterLogo,
     tag: "Developer Tooling",
     imgScale: "scale-[1.2] opacity-80 grayscale",
-    hoverScale: "group-hover:scale-[1.3]"
+    hoverScale: "group-hover:scale-[1.3]",
+    link: "https://codecrafters.io/",
   },
 ];
 
@@ -82,9 +89,12 @@ function Sponsors() {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {tier1Sponsors.map((sponsor, idx) => (
-              <div 
+              <a 
                 key={idx} 
-                className="group relative rounded-2xl bg-[#0b1120]/50 backdrop-blur-sm border border-white/10 hover:border-cyan-500/50 p-6 flex flex-row items-center justify-start h-32 md:h-40 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(6,182,212,0.15)] cursor-pointer gap-6"
+                href={sponsor.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative rounded-2xl bg-[#0b1120]/50 backdrop-blur-sm border border-white/10 hover:border-cyan-500/50 p-6 flex flex-row items-center justify-start h-32 md:h-40 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(6,182,212,0.15)] cursor-pointer gap-6 block"
               >
                 <div className="w-1/3 h-full flex items-center justify-center overflow-hidden">
                   <img 
@@ -101,7 +111,7 @@ function Sponsors() {
                     {sponsor.tag}
                   </span>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -113,9 +123,12 @@ function Sponsors() {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {tier2Sponsors.map((sponsor, idx) => (
-              <div 
+              <a 
                 key={idx} 
-                className="group relative rounded-xl bg-[#0b1120]/40 backdrop-blur-sm border border-white/5 hover:border-blue-500/40 p-5 flex flex-row items-center justify-start h-24 md:h-28 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(59,130,246,0.1)] cursor-pointer gap-4"
+                href={sponsor.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative rounded-xl bg-[#0b1120]/40 backdrop-blur-sm border border-white/5 hover:border-blue-500/40 p-5 flex flex-row items-center justify-start h-24 md:h-28 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(59,130,246,0.1)] cursor-pointer gap-4 block"
               >
                 <div className="w-1/3 h-full flex items-center justify-center overflow-visible">
                   <img 
@@ -132,7 +145,7 @@ function Sponsors() {
                     {sponsor.tag}
                   </span>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
