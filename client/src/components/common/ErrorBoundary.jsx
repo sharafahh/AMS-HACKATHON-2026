@@ -13,9 +13,26 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error("Unhandled Error caught by ErrorBoundary:", error, errorInfo);
+    
+    // Automatically recover from Vite dynamic import chunk failures
+    if (
+      error.message && 
+      (error.message.includes("Failed to fetch dynamically imported module") || 
+       error.message.includes("Importing a module script failed"))
+    ) {
+      const hasReloaded = sessionStorage.getItem("chunk_failed_reload");
+      if (!hasReloaded) {
+        sessionStorage.setItem("chunk_failed_reload", "true");
+        window.location.reload(true);
+        return;
+      }
+    } else {
+      sessionStorage.removeItem("chunk_failed_reload");
+    }
   }
 
   handleReload = () => {
+    sessionStorage.removeItem("chunk_failed_reload");
     window.location.reload();
   };
 
