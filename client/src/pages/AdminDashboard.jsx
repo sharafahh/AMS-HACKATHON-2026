@@ -37,6 +37,7 @@ import {
   FiDatabase,
   FiHardDrive,
   FiCheck,
+  FiEdit,
 } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
 import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
@@ -54,6 +55,7 @@ import {
   getContactMessagesAPI,
   deleteContactMessageAPI,
   createManualRegistrationAPI,
+  updateRegistrationAPI,
   getBackupHistoryAPI,
   createManualBackupAPI,
   getBackupDownloadUrl,
@@ -142,6 +144,11 @@ function AdminDashboard() {
 
   // Contact Inquiries
   const [contactMessages, setContactMessages] = useState([]);
+
+  // Edit Registration State
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editLoading, setEditLoading] = useState(false);
+  const [editForm, setEditForm] = useState(null);
 
   // Manual Cash Registration State
   const [showManualModal, setShowManualModal] = useState(false);
@@ -287,6 +294,25 @@ function AdminDashboard() {
       alert(`Error creating manual registration: ${err.message}`);
     } finally {
       setManualLoading(false);
+    }
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setEditLoading(true);
+    try {
+      const regId = editForm.registrationId || editForm._id;
+      const res = await updateRegistrationAPI(regId, editForm);
+      if (res.success) {
+        alert(`✅ Registration Updated Successfully!`);
+        setShowEditModal(false);
+        setEditForm(null);
+        fetchDashboardData();
+      }
+    } catch (err) {
+      alert(`Error updating registration: ${err.message}`);
+    } finally {
+      setEditLoading(false);
     }
   };
 
@@ -1186,12 +1212,18 @@ function AdminDashboard() {
                                 </span>
                                 <p className="text-[11px] text-amber-400 font-bold">₹{(t.teamSize || 4) * REGISTRATION_FEE_PER_PERSON}</p>
                               </td>
-                              <td className="p-4 text-center">
+                              <td className="p-4 text-center space-y-2">
                                 <button
                                   onClick={() => setSelectedTeamInspect(t)}
-                                  className="px-3 py-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 border border-cyan-500/40 text-[11px] font-semibold flex items-center gap-1 mx-auto transition-colors"
+                                  className="px-3 py-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 border border-cyan-500/40 text-[11px] font-semibold flex items-center gap-1 mx-auto transition-colors w-full justify-center"
                                 >
                                   <FiEye /> Inspect
+                                </button>
+                                <button
+                                  onClick={() => { setEditForm(JSON.parse(JSON.stringify(t))); setShowEditModal(true); }}
+                                  className="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40 text-[11px] font-semibold flex items-center gap-1 mx-auto transition-colors w-full justify-center"
+                                >
+                                  <FiEdit /> Edit
                                 </button>
                               </td>
                             </tr>
@@ -2361,6 +2393,253 @@ function AdminDashboard() {
                     className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-extrabold text-xs uppercase tracking-wider"
                   >
                     {manualLoading ? "Processing..." : `Register & Collect ₹${manualForm.teamSize * REGISTRATION_FEE_PER_PERSON}`}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* Edit Registration Modal */}
+      <AnimatePresence>
+        {showEditModal && editForm && (
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="glass-card max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 rounded-3xl border border-white/15 space-y-6 relative"
+            >
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white"
+              >
+                <FiX size={20} />
+              </button>
+
+              <div className="border-b border-white/10 pb-4">
+                <span className="px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 text-xs font-bold font-['Space_Grotesk']">
+                  Admin Edit
+                </span>
+                <h3 className="text-2xl font-extrabold font-['Space_Grotesk'] text-white mt-2">
+                  Edit Team Details
+                </h3>
+              </div>
+
+              <form onSubmit={handleEditSubmit} className="space-y-4 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Team Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={editForm.teamName || ""}
+                      onChange={(e) => setEditForm({ ...editForm, teamName: e.target.value })}
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Innovation Track *</label>
+                    <select
+                      value={editForm.track || ""}
+                      onChange={(e) => setEditForm({ ...editForm, track: e.target.value })}
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                    >
+                      {initialTracks.map((t) => (
+                        <option key={t} value={t}>{t}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Leader Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={editForm.leader?.name || ""}
+                      onChange={(e) => {
+                        const newLeader = { ...editForm.leader, name: e.target.value };
+                        setEditForm({ ...editForm, leader: newLeader });
+                      }}
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Leader Email *</label>
+                    <input
+                      type="email"
+                      required
+                      value={editForm.leader?.email || ""}
+                      onChange={(e) => {
+                        const newLeader = { ...editForm.leader, email: e.target.value };
+                        setEditForm({ ...editForm, leader: newLeader });
+                      }}
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Leader Phone *</label>
+                    <input
+                      type="tel"
+                      required
+                      value={editForm.leader?.phone || ""}
+                      onChange={(e) => {
+                        const newLeader = { ...editForm.leader, phone: e.target.value };
+                        setEditForm({ ...editForm, leader: newLeader });
+                      }}
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-gray-400 font-bold block mb-1">College Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={editForm.leader?.college || ""}
+                      onChange={(e) => {
+                        const newLeader = { ...editForm.leader, college: e.target.value };
+                        setEditForm({ ...editForm, leader: newLeader });
+                      }}
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Department *</label>
+                    <input
+                      type="text"
+                      required
+                      value={editForm.leader?.department || ""}
+                      onChange={(e) => {
+                        const newLeader = { ...editForm.leader, department: e.target.value };
+                        setEditForm({ ...editForm, leader: newLeader });
+                      }}
+                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Leader Year *</label>
+                    <select
+                      value={editForm.leader?.year || "3rd Year"}
+                      onChange={(e) => {
+                        const newLeader = { ...editForm.leader, year: e.target.value };
+                        setEditForm({ ...editForm, leader: newLeader });
+                      }}
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                    >
+                      {["1st Year", "2nd Year", "3rd Year", "4th Year"].map((y) => (
+                        <option key={y} value={y}>{y}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-white/10 mt-4 space-y-4">
+                  <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                    <FiUsers className="text-cyan-400" />
+                    Edit Team Members
+                  </h4>
+                  {editForm.members && editForm.members.map((member, idx) => (
+                    <div key={idx} className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
+                      <div className="flex justify-between items-center mb-2">
+                         <h5 className="text-xs font-bold text-cyan-400">Member {idx + 1} {idx === 0 && "(Leader)"}</h5>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-[10px] text-gray-400 font-bold block mb-1">Name</label>
+                          <input
+                            type="text"
+                            required
+                            value={member.name || ""}
+                            onChange={(e) => {
+                              const newMembers = [...editForm.members];
+                              newMembers[idx].name = e.target.value;
+                              setEditForm({ ...editForm, members: newMembers });
+                            }}
+                            className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] text-gray-400 font-bold block mb-1">Email</label>
+                          <input
+                            type="email"
+                            required
+                            value={member.email || ""}
+                            onChange={(e) => {
+                              const newMembers = [...editForm.members];
+                              newMembers[idx].email = e.target.value;
+                              setEditForm({ ...editForm, members: newMembers });
+                            }}
+                            className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] text-gray-400 font-bold block mb-1">Phone</label>
+                          <input
+                            type="tel"
+                            required
+                            value={member.phone || ""}
+                            onChange={(e) => {
+                              const newMembers = [...editForm.members];
+                              newMembers[idx].phone = e.target.value;
+                              setEditForm({ ...editForm, members: newMembers });
+                            }}
+                            className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] text-gray-400 font-bold block mb-1">Department</label>
+                          <input
+                            type="text"
+                            required
+                            value={member.department || ""}
+                            onChange={(e) => {
+                              const newMembers = [...editForm.members];
+                              newMembers[idx].department = e.target.value;
+                              setEditForm({ ...editForm, members: newMembers });
+                            }}
+                            className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                        <div className="sm:col-span-2">
+                          <label className="text-[10px] text-gray-400 font-bold block mb-1">Role</label>
+                          <input
+                            type="text"
+                            required
+                            value={member.role || ""}
+                            onChange={(e) => {
+                              const newMembers = [...editForm.members];
+                              newMembers[idx].role = e.target.value;
+                              setEditForm({ ...editForm, members: newMembers });
+                            }}
+                            className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-2 flex justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setShowEditModal(false)}
+                    className="px-5 py-2.5 rounded-xl bg-white/5 text-gray-300 font-bold text-xs"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={editLoading}
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-extrabold text-xs uppercase tracking-wider"
+                  >
+                    {editLoading ? "Saving..." : `Save Changes`}
                   </button>
                 </div>
               </form>

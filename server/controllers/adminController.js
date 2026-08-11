@@ -396,3 +396,83 @@ export const createManualRegistration = async (req, res) => {
     });
   }
 };
+
+// @desc    Update Registration Details by Admin
+// @route   PUT /api/admin/registrations/:id
+// @access  Private / Admin
+export const updateRegistration = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { teamName, leader, members, track, problemTitle, problemAbstract } = req.body;
+
+    const query = [];
+    if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
+      query.push({ _id: id });
+    }
+    query.push({ registrationId: id });
+
+    let team = await Team.findOne({ $or: query });
+    if (!team) {
+      return res.status(404).json({ success: false, message: "Team/Registration not found" });
+    }
+
+    // Update Team Details
+    if (teamName !== undefined) team.teamName = teamName;
+    if (leader) {
+      if (leader.name !== undefined) team.leader.name = leader.name;
+      if (leader.email !== undefined) team.leader.email = leader.email;
+      if (leader.phone !== undefined) team.leader.phone = leader.phone;
+      if (leader.college !== undefined) team.leader.college = leader.college;
+      if (leader.department !== undefined) team.leader.department = leader.department;
+      if (leader.year !== undefined) team.leader.year = leader.year;
+    }
+    if (members && Array.isArray(members)) {
+      // Update existing members only, do not change teamSize or add/remove
+      for (let i = 0; i < Math.min(team.members.length, members.length); i++) {
+        if (members[i].name !== undefined) team.members[i].name = members[i].name;
+        if (members[i].email !== undefined) team.members[i].email = members[i].email;
+        if (members[i].phone !== undefined) team.members[i].phone = members[i].phone;
+        if (members[i].department !== undefined) team.members[i].department = members[i].department;
+        if (members[i].role !== undefined) team.members[i].role = members[i].role;
+      }
+    }
+    if (track !== undefined) team.track = track;
+    if (problemTitle !== undefined) team.problemTitle = problemTitle;
+    if (problemAbstract !== undefined) team.problemAbstract = problemAbstract;
+
+    await team.save();
+
+    // Try to update Registration document if it exists to keep them in sync
+    const regQuery = [];
+    if (team.registrationId) regQuery.push({ razorpayOrderId: team.registrationId }, { registrationId: team.registrationId });
+    regQuery.push({ teamName: team.teamName }); // Fallback
+    if (id && id.match(/^[0-9a-fA-F]{24}$/)) regQuery.push({ _id: id });
+
+    let reg = await Registration.findOne({ $or: regQuery }).sort({ createdAt: -1 });
+    if (reg) {
+      if (teamName !== undefined) reg.teamName = teamName;
+      if (leader) {
+        if (leader.name !== undefined) reg.teamLeaderName = leader.name;
+        if (leader.email !== undefined) reg.email = leader.email;
+        if (leader.phone !== undefined) reg.phoneNumber = leader.phone;
+        if (leader.college !== undefined) reg.collegeName = leader.college;
+        if (leader.department !== undefined) reg.department = leader.department;
+        if (leader.year !== undefined) reg.year = leader.year;
+      }
+      if (members !== undefined) reg.teamMembers = team.members;
+      await reg.save();
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Registration updated successfully",
+      team,
+    });
+  } catch (error) {
+    console.error("Error updating registration:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update registration",
+    });
+  }
+};

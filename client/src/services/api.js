@@ -290,6 +290,24 @@ export const createManualRegistrationAPI = async (formData) => {
   }
 };
 
+export const updateRegistrationAPI = async (id, formData) => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/registrations/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(formData),
+    });
+    return await parseJSONResponse(response, "Failed to update registration");
+  } catch (error) {
+    console.error("API error updating registration:", error);
+    throw error;
+  }
+};
+
 // Database Backup System APIs
 export const getBackupHistoryAPI = async () => {
   const token = localStorage.getItem("ams_hackathon_2026_admin_token");
