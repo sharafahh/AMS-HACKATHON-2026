@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { REGISTRATION_FEE_PER_PERSON } from "../constants/fee";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -85,6 +85,7 @@ const initialTracks = [
 
 function AdminDashboard() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("overview");
 
   // Main Data States
@@ -188,6 +189,27 @@ function AdminDashboard() {
   useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm, selectedCollegeFilter, selectedDeptFilter, selectedTrackFilter, selectedPaymentFilter, selectedDateFilter, sortOption]);
+
+  // URL-driven modal state for Inspect and Edit
+  useEffect(() => {
+    const action = searchParams.get("action");
+    const id = searchParams.get("id");
+    
+    if (teams.length > 0 && id) {
+      const team = teams.find(t => (t.registrationId === id || t._id === id));
+      if (team) {
+        if (action === "edit") {
+          setEditForm(JSON.parse(JSON.stringify(team)));
+          setShowEditModal(true);
+        } else if (action === "inspect") {
+          setSelectedTeamInspect(team);
+        }
+      }
+    } else if (!action) {
+      setShowEditModal(false);
+      setSelectedTeamInspect(null);
+    }
+  }, [searchParams, teams]);
 
   const fetchContactMessages = async () => {
     try {
@@ -308,6 +330,7 @@ function AdminDashboard() {
         alert(`✅ Registration Updated Successfully!`);
         setShowEditModal(false);
         setEditForm(null);
+        setSearchParams({});
         fetchDashboardData();
       }
     } catch (err) {
@@ -1228,13 +1251,13 @@ function AdminDashboard() {
                               </td>
                               <td className="p-4 text-center space-y-2">
                                 <button
-                                  onClick={() => setSelectedTeamInspect(t)}
+                                  onClick={() => setSearchParams({ action: 'inspect', id: t.registrationId || t._id })}
                                   className="px-3 py-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 border border-cyan-500/40 text-[11px] font-semibold flex items-center gap-1 mx-auto transition-colors w-full justify-center"
                                 >
                                   <FiEye /> Inspect
                                 </button>
                                 <button
-                                  onClick={() => { setEditForm(JSON.parse(JSON.stringify(t))); setShowEditModal(true); }}
+                                  onClick={() => setSearchParams({ action: 'edit', id: t.registrationId || t._id })}
                                   className="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40 text-[11px] font-semibold flex items-center gap-1 mx-auto transition-colors w-full justify-center"
                                 >
                                   <FiEdit /> Edit
@@ -2093,8 +2116,8 @@ function AdminDashboard() {
               className="glass-card max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 rounded-3xl border border-white/15 space-y-6 relative"
             >
               <button
-                onClick={() => setSelectedTeamInspect(null)}
-                className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white"
+                onClick={() => { setSelectedTeamInspect(null); setSearchParams({}); }}
+                className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
               >
                 <FiX size={20} />
               </button>
@@ -2444,7 +2467,7 @@ function AdminDashboard() {
               className="glass-card max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 rounded-3xl border border-white/15 space-y-6 relative"
             >
               <button
-                onClick={() => setShowEditModal(false)}
+                onClick={() => { setShowEditModal(false); setSearchParams({}); }}
                 className="absolute top-6 right-6 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white"
               >
                 <FiX size={20} />
@@ -2661,7 +2684,7 @@ function AdminDashboard() {
                 <div className="pt-2 flex justify-end gap-3">
                   <button
                     type="button"
-                    onClick={() => setShowEditModal(false)}
+                    onClick={() => { setShowEditModal(false); setSearchParams({}); }}
                     className="px-5 py-2.5 rounded-xl bg-white/5 text-gray-300 font-bold text-xs"
                   >
                     Cancel

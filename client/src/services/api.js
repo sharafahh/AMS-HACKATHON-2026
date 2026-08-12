@@ -146,6 +146,21 @@ export const getAdminRegistrationsAPI = async () => {
   }
 };
 
+export const getRegistrationByIdAPI = async (id) => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/registrations/${id}`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    return await parseJSONResponse(response, "Failed to fetch registration details");
+  } catch (error) {
+    console.error("API error fetching single registration:", error);
+    throw error;
+  }
+};
+
 export const getAnnouncementsAPI = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/announcements`);

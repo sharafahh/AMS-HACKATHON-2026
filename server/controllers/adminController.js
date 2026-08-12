@@ -530,3 +530,80 @@ export const deleteRegistration = async (req, res) => {
     });
   }
 };
+
+// @desc    Get Single Registration by ID
+// @route   GET /api/admin/registrations/:id
+// @access  Private / Admin
+export const getRegistrationById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const query = [];
+    if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
+      query.push({ _id: id });
+    }
+    query.push({ registrationId: id });
+    query.push({ razorpayOrderId: id });
+
+    const team = await Team.findOne({ $or: query, isDeleted: { $ne: true } }).lean();
+    
+    let reg = null;
+    if (!team) {
+       reg = await Registration.findOne({ $or: query, isDeleted: { $ne: true } }).lean();
+    }
+
+    if (!team && !reg) {
+      return res.status(404).json({ success: false, message: "Team/Registration not found" });
+    }
+
+    const data = team ? {
+      _id: team._id,
+      teamName: team.teamName,
+      leader: team.leader,
+      email: team.leader?.email,
+      phone: team.leader?.phone,
+      paymentStatus: team.paymentStatus || "PAID",
+      registrationDate: team.createdAt,
+      department: team.leader?.department,
+      year: team.leader?.year,
+      registrationId: team.registrationId || team._id,
+      members: team.members || [],
+      track: team.track,
+      problemTitle: team.problemTitle,
+      problemAbstract: team.problemAbstract,
+    } : {
+      _id: reg._id,
+      teamName: reg.teamName,
+      leader: {
+        name: reg.teamLeaderName,
+        email: reg.email,
+        phone: reg.phoneNumber,
+        college: reg.collegeName,
+        department: reg.department,
+        year: reg.year,
+      },
+      email: reg.email,
+      phone: reg.phoneNumber,
+      paymentStatus: reg.paymentStatus || "PAID",
+      registrationDate: reg.registrationTimestamp || reg.createdAt,
+      department: reg.department,
+      year: reg.year,
+      registrationId: reg.razorpayOrderId || reg._id,
+      members: reg.teamMembers || [],
+      track: "N/A",
+      problemTitle: "N/A",
+      problemAbstract: "N/A",
+    };
+
+    return res.status(200).json({
+      success: true,
+      registration: data,
+    });
+  } catch (error) {
+    console.error("Error fetching single registration:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch registration",
+    });
+  }
+};
