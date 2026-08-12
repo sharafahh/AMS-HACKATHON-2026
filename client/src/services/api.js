@@ -308,6 +308,22 @@ export const updateRegistrationAPI = async (id, formData) => {
   }
 };
 
+export const deleteRegistrationAPI = async (id) => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/registrations/${id}`, {
+      method: "DELETE",
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    return await parseJSONResponse(response, "Failed to delete registration");
+  } catch (error) {
+    console.error("API error deleting registration:", error);
+    throw error;
+  }
+};
+
 // Database Backup System APIs
 export const getBackupHistoryAPI = async () => {
   const token = localStorage.getItem("ams_hackathon_2026_admin_token");

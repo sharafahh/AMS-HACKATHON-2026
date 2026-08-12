@@ -476,3 +476,57 @@ export const updateRegistration = async (req, res) => {
     });
   }
 };
+
+// @desc    Delete Registration Details by Admin
+// @route   DELETE /api/admin/registrations/:id
+// @access  Private / Admin
+export const deleteRegistration = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const query = [];
+    if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
+      query.push({ _id: id });
+    }
+    query.push({ registrationId: id });
+
+    // Mark as deleted in Team
+    const team = await Team.findOneAndUpdate(
+      { $or: query },
+      { isDeleted: true, deletedAt: new Date() },
+      { new: true }
+    );
+
+    // Try to update Registration document if it exists to keep them in sync
+    const regQuery = [];
+    if (team && team.registrationId) {
+      regQuery.push({ razorpayOrderId: team.registrationId }, { registrationId: team.registrationId });
+      regQuery.push({ teamName: team.teamName });
+    }
+    if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
+      regQuery.push({ _id: id });
+    }
+    regQuery.push({ razorpayOrderId: id }, { razorpayPaymentId: id }, { registrationId: id });
+
+    const reg = await Registration.findOneAndUpdate(
+      { $or: regQuery },
+      { isDeleted: true, deletedAt: new Date() },
+      { new: true }
+    );
+
+    if (!team && !reg) {
+      return res.status(404).json({ success: false, message: "Team/Registration not found" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Registration deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting registration:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete registration",
+    });
+  }
+};

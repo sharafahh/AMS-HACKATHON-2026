@@ -56,6 +56,7 @@ import {
   deleteContactMessageAPI,
   createManualRegistrationAPI,
   updateRegistrationAPI,
+  deleteRegistrationAPI,
   getBackupHistoryAPI,
   createManualBackupAPI,
   getBackupDownloadUrl,
@@ -313,6 +314,19 @@ function AdminDashboard() {
       alert(`Error updating registration: ${err.message}`);
     } finally {
       setEditLoading(false);
+    }
+  };
+
+  const handleDeleteRegistration = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this registration? This action cannot be undone.")) return;
+    try {
+      const res = await deleteRegistrationAPI(id);
+      if (res.success) {
+        alert(`✅ Registration Deleted Successfully!`);
+        fetchDashboardData();
+      }
+    } catch (err) {
+      alert(`Error deleting registration: ${err.message}`);
     }
   };
 
@@ -1224,6 +1238,12 @@ function AdminDashboard() {
                                   className="px-3 py-1.5 rounded-xl bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40 text-[11px] font-semibold flex items-center gap-1 mx-auto transition-colors w-full justify-center"
                                 >
                                   <FiEdit /> Edit
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteRegistration(t.registrationId || t._id)}
+                                  className="px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 border border-rose-500/40 text-[11px] font-semibold flex items-center gap-1 mx-auto transition-colors w-full justify-center mt-1"
+                                >
+                                  <FiTrash2 /> Delete
                                 </button>
                               </td>
                             </tr>
