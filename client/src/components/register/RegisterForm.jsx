@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiChevronLeft, FiChevronRight, FiCheck, FiCreditCard, FiLock } from "react-icons/fi";
 
@@ -32,15 +32,11 @@ const loadRazorpayScript = () => {
   });
 };
 
-const REGISTRATION_DEADLINE = new Date("2026-08-12T23:59:59").getTime();
-
 function RegisterForm() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-
-  const isDeadlinePassed = new Date().getTime() > REGISTRATION_DEADLINE;
 
   const {
     register,
@@ -243,35 +239,6 @@ function RegisterForm() {
 
   const progressPercentage = (currentStep / steps.length) * 100;
   const currentTotalFee = watchTeamSize * REGISTRATION_FEE_PER_PERSON;
-
-  if (isDeadlinePassed) {
-    return (
-      <div className="w-full max-w-2xl mx-auto glass-card p-8 sm:p-12 rounded-3xl border border-rose-500/40 bg-rose-500/5 text-center space-y-6 shadow-2xl">
-        <div className="w-16 h-16 mx-auto rounded-full bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-rose-400">
-          <FiLock size={32} />
-        </div>
-        <div className="space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-extrabold font-['Space_Grotesk'] text-white">
-            Registrations for AMS HACKATHON 2026 are closed.
-          </h2>
-          <p className="text-rose-300 font-semibold text-sm">
-            Registration deadline was 12 August 2026.
-          </p>
-        </div>
-        <p className="text-gray-300 text-xs sm:text-sm font-light max-w-lg mx-auto">
-          Online team registration and payment submission for AMS HACKATHON 2026 ended on 12 August 2026 at 11:59 PM IST.
-        </p>
-        <div className="pt-4 flex justify-center">
-          <Link
-            to="/portal"
-            className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold font-['Space_Grotesk'] text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/25 hover:scale-105 transition-transform"
-          >
-            Check Participant Portal Status
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8">
