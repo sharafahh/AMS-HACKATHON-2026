@@ -39,15 +39,20 @@ const tier2Sponsors = [
     name: "Render",
     logo: renderLogo,
     tag: "Hosting Partner",
-    imgScale: "scale-[1.4] opacity-90",
+    imgScale: "scale-[1.4] opacity-100 md:opacity-90",
     hoverScale: "group-hover:scale-[1.5]",
     link: "https://render.com/",
+    cardBg: "bg-white",
+    titleColor: "text-red-600 group-hover:text-red-500",
+    tagColor: "text-red-500/80",
+    borderHover: "hover:border-red-500/50",
+    shadowHover: "hover:shadow-[0_4px_20px_rgba(239,68,68,0.3)]"
   },
   {
     name: "xyz.gen",
     logo: xyzLogo,
     tag: "Domain Partner",
-    imgScale: "scale-100 grayscale opacity-60",
+    imgScale: "scale-100 grayscale-0 opacity-100 md:grayscale md:opacity-60",
     hoverScale: "group-hover:scale-105",
     link: "https://gen.xyz/",
   },
@@ -55,9 +60,14 @@ const tier2Sponsors = [
     name: "CodeCrafters",
     logo: codecrafterLogo,
     tag: "Developer Tooling",
-    imgScale: "scale-[1.2] opacity-80 grayscale",
+    imgScale: "scale-[1.2] grayscale-0 opacity-100 md:grayscale md:opacity-80",
     hoverScale: "group-hover:scale-[1.3]",
     link: "https://codecrafters.io/",
+    cardBg: "bg-white",
+    titleColor: "text-red-600 group-hover:text-red-500",
+    tagColor: "text-red-500/80",
+    borderHover: "hover:border-red-500/50",
+    shadowHover: "hover:shadow-[0_4px_20px_rgba(239,68,68,0.3)]"
   },
 ];
 
@@ -100,7 +110,7 @@ function Sponsors() {
                   <img 
                     src={sponsor.logo} 
                     alt={sponsor.name}
-                    className="max-h-full max-w-full object-contain filter grayscale opacity-75 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105"
+                    className="max-h-full max-w-full object-contain filter grayscale-0 opacity-100 md:grayscale md:opacity-75 transition-all duration-500 md:group-hover:grayscale-0 md:group-hover:opacity-100 group-hover:scale-105"
                   />
                 </div>
                 <div className="w-2/3 flex flex-col items-start justify-center text-left">
@@ -128,20 +138,20 @@ function Sponsors() {
                 href={sponsor.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative rounded-xl bg-[#0b1120]/40 backdrop-blur-sm border border-white/5 hover:border-blue-500/40 p-5 flex flex-row items-center justify-start h-24 md:h-28 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_20px_rgba(59,130,246,0.1)] cursor-pointer gap-4 block"
+                className={`group relative rounded-xl ${sponsor.cardBg || 'bg-[#0b1120]/40'} backdrop-blur-sm border border-white/5 ${sponsor.borderHover || 'hover:border-blue-500/40'} p-5 flex flex-row items-center justify-start h-24 md:h-28 transition-all duration-300 hover:-translate-y-1 ${sponsor.shadowHover || 'hover:shadow-[0_4px_20px_rgba(59,130,246,0.1)]'} cursor-pointer gap-4 block`}
               >
                 <div className="w-1/3 h-full flex items-center justify-center overflow-visible">
                   <img 
                     src={sponsor.logo} 
                     alt={sponsor.name}
-                    className={`max-h-full max-w-full object-contain filter transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100 ${sponsor.imgScale || 'grayscale opacity-60'} ${sponsor.hoverScale || 'group-hover:scale-105'}`}
+                    className={`max-h-full max-w-full object-contain filter transition-all duration-500 md:group-hover:grayscale-0 md:group-hover:opacity-100 ${sponsor.imgScale || 'grayscale-0 opacity-100 md:grayscale md:opacity-60'} ${sponsor.hoverScale || 'group-hover:scale-105'}`}
                   />
                 </div>
                 <div className="w-2/3 flex flex-col items-start justify-center text-left">
-                  <h4 className="text-sm md:text-base font-bold font-['Space_Grotesk'] text-gray-400 group-hover:text-blue-300 transition-colors duration-300 leading-tight">
+                  <h4 className={`text-sm md:text-base font-bold font-['Space_Grotesk'] transition-colors duration-300 leading-tight ${sponsor.titleColor || 'text-gray-400 group-hover:text-blue-300'}`}>
                     {sponsor.name}
                   </h4>
-                  <span className="text-[10px] text-blue-400/70 uppercase tracking-wider font-semibold mt-1.5">
+                  <span className={`text-[10px] uppercase tracking-wider font-semibold mt-1.5 ${sponsor.tagColor || 'text-blue-400/70'}`}>
                     {sponsor.tag}
                   </span>
                 </div>
