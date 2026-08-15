@@ -32,7 +32,7 @@ const loadRazorpayScript = () => {
   });
 };
 
-const REGISTRATION_DEADLINE = new Date("2026-08-12T23:59:59").getTime();
+const REGISTRATION_DEADLINE = new Date("2026-08-15T23:59:59").getTime();
 
 function RegisterForm() {
   const navigate = useNavigate();
@@ -255,11 +255,11 @@ function RegisterForm() {
             Registrations for AMS HACKATHON 2026 are closed.
           </h2>
           <p className="text-rose-300 font-semibold text-sm">
-            Registration deadline was 12 August 2026.
+            Registration deadline was 15 August 2026.
           </p>
         </div>
         <p className="text-gray-300 text-xs sm:text-sm font-light max-w-lg mx-auto">
-          Online team registration and payment submission for AMS HACKATHON 2026 ended on 12 August 2026 at 11:59 PM IST.
+          Online team registration and payment submission for AMS HACKATHON 2026 ended on 15 August 2026 at 11:59 PM IST.
         </p>
         <div className="pt-4 flex justify-center">
           <Link

@@ -146,6 +146,22 @@ function AdminDashboard() {
   // Manual Cash Registration State
   const [showManualModal, setShowManualModal] = useState(false);
   const [manualLoading, setManualLoading] = useState(false);
+  const manualRolesList = [
+    "Lead Developer",
+    "Frontend / UI/UX Developer",
+    "Backend & API Engineer",
+    "Hardware & Embedded Systems Tech",
+    "AI / Machine Learning Engineer",
+    "Cyber Security Specialist",
+    "Cloud & DevOps Engineer",
+  ];
+  const createEmptyMembers = (size) =>
+    Array.from({ length: size }, (_, i) => ({
+      name: "",
+      email: "",
+      phone: "",
+      role: i === 0 ? "Lead Developer" : "Frontend / UI/UX Developer",
+    }));
   const [manualForm, setManualForm] = useState({
     teamName: "",
     teamSize: 4,
@@ -158,6 +174,7 @@ function AdminDashboard() {
     track: "AI & Machine Learning",
     problemTitle: "",
     notes: "",
+    members: createEmptyMembers(4),
   });
 
   // Check Auth Token on Mount
@@ -250,9 +267,35 @@ function AdminDashboard() {
 
   const handleManualRegistrationSubmit = async (e) => {
     e.preventDefault();
+    // Pre-flight member validation
+    const members = manualForm.members || [];
+    for (let i = 0; i < manualForm.teamSize; i++) {
+      const m = members[i];
+      const num = i + 1;
+      if (!m || !m.name || m.name.trim().length < 2) {
+        alert(`Member ${num}: Full name is required.`);
+        return;
+      }
+      if (!m.email || !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(m.email.trim())) {
+        alert(`Member ${num}: A valid email address is required.`);
+        return;
+      }
+      if (!m.phone || !/^[0-9]{10}$/.test(m.phone.trim())) {
+        alert(`Member ${num}: A valid 10-digit phone number is required.`);
+        return;
+      }
+    }
     setManualLoading(true);
     try {
-      const res = await createManualRegistrationAPI(manualForm);
+      // Sync leader fields from Member 1 for backend compatibility
+      const payload = {
+        ...manualForm,
+        leaderName: members[0]?.name || manualForm.leaderName,
+        leaderEmail: members[0]?.email || manualForm.leaderEmail,
+        leaderPhone: members[0]?.phone || manualForm.leaderPhone,
+        members: members.slice(0, manualForm.teamSize),
+      };
+      const res = await createManualRegistrationAPI(payload);
       if (res.success) {
         alert(`✅ Cash Registration Created Successfully!\nRegistration ID: ${res.registrationId}`);
         setShowManualModal(false);
@@ -268,6 +311,7 @@ function AdminDashboard() {
           track: "AI & Machine Learning",
           problemTitle: "",
           notes: "",
+          members: createEmptyMembers(4),
         });
         fetchDashboardData();
       }
@@ -2108,117 +2152,219 @@ function AdminDashboard() {
                 </h3>
               </div>
 
-              <form onSubmit={handleManualRegistrationSubmit} className="space-y-4 text-xs">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Team Name *</label>
-                    <input
-                      type="text"
-                      required
-                      value={manualForm.teamName}
-                      onChange={(e) => setManualForm({ ...manualForm, teamName: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Team Size *</label>
-                    <select
-                      value={manualForm.teamSize}
-                      onChange={(e) => setManualForm({ ...manualForm, teamSize: Number(e.target.value) })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
-                    >
-                      <option value={3}>3 Members (₹300)</option>
-                      <option value={4}>4 Members (₹400)</option>
-                      <option value={5}>5 Members (₹500)</option>
-                      <option value={6}>6 Members (₹600)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Leader Name *</label>
-                    <input
-                      type="text"
-                      required
-                      value={manualForm.leaderName}
-                      onChange={(e) => setManualForm({ ...manualForm, leaderName: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Leader Email *</label>
-                    <input
-                      type="email"
-                      required
-                      value={manualForm.leaderEmail}
-                      onChange={(e) => setManualForm({ ...manualForm, leaderEmail: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Leader Phone *</label>
-                    <input
-                      type="tel"
-                      required
-                      value={manualForm.leaderPhone}
-                      onChange={(e) => setManualForm({ ...manualForm, leaderPhone: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] text-gray-400 font-bold block mb-1">College Name *</label>
-                    <input
-                      type="text"
-                      required
-                      value={manualForm.college}
-                      onChange={(e) => setManualForm({ ...manualForm, college: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Department *</label>
-                    <input
-                      type="text"
-                      required
-                      value={manualForm.department}
-                      onChange={(e) => setManualForm({ ...manualForm, department: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-[10px] text-gray-400 font-bold block mb-1">Innovation Track *</label>
-                    <select
-                      value={manualForm.track}
-                      onChange={(e) => setManualForm({ ...manualForm, track: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
-                    >
-                      {initialTracks.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                    </select>
+              <form onSubmit={handleManualRegistrationSubmit} className="space-y-5 text-xs">
+                {/* ── Section 1: Team & College Info ── */}
+                <div>
+                  <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest mb-3">Team & College Details</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[10px] text-gray-400 font-bold block mb-1">Team Name *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. CyberKnights"
+                        value={manualForm.teamName}
+                        onChange={(e) => setManualForm({ ...manualForm, teamName: e.target.value })}
+                        className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-gray-400 font-bold block mb-1">Team Size *</label>
+                      <select
+                        value={manualForm.teamSize}
+                        onChange={(e) => {
+                          const newSize = Number(e.target.value);
+                          const currentMembers = manualForm.members || [];
+                          let newMembers;
+                          if (newSize > currentMembers.length) {
+                            newMembers = [...currentMembers, ...createEmptyMembers(newSize - currentMembers.length)];
+                          } else {
+                            newMembers = currentMembers.slice(0, newSize);
+                          }
+                          setManualForm({ ...manualForm, teamSize: newSize, members: newMembers });
+                        }}
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                      >
+                        <option value={3}>3 Members (₹{3 * REGISTRATION_FEE_PER_PERSON})</option>
+                        <option value={4}>4 Members (₹{4 * REGISTRATION_FEE_PER_PERSON})</option>
+                        <option value={5}>5 Members (₹{5 * REGISTRATION_FEE_PER_PERSON})</option>
+                        <option value={6}>6 Members (₹{6 * REGISTRATION_FEE_PER_PERSON})</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-gray-400 font-bold block mb-1">College Name *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Aalim Muhammed Salegh CoE"
+                        value={manualForm.college}
+                        onChange={(e) => setManualForm({ ...manualForm, college: e.target.value })}
+                        className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-gray-400 font-bold block mb-1">Department *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. CSE, AIDS, ECE"
+                        value={manualForm.department}
+                        onChange={(e) => setManualForm({ ...manualForm, department: e.target.value })}
+                        className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-gray-400 font-bold block mb-1">Academic Year *</label>
+                      <select
+                        value={manualForm.year}
+                        onChange={(e) => setManualForm({ ...manualForm, year: e.target.value })}
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                      >
+                        <option value="1st Year">1st Year</option>
+                        <option value="2nd Year">2nd Year</option>
+                        <option value="3rd Year">3rd Year</option>
+                        <option value="4th Year">4th Year</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-gray-400 font-bold block mb-1">Innovation Track *</label>
+                      <select
+                        value={manualForm.track}
+                        onChange={(e) => setManualForm({ ...manualForm, track: e.target.value })}
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                      >
+                        {initialTracks.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
 
-                <div className="pt-2 flex justify-end gap-3">
+                {/* ── Section 2: Member Details ── */}
+                <div>
+                  <p className="text-[10px] text-cyan-400 font-bold uppercase tracking-widest mb-3">
+                    Member Details ({manualForm.teamSize} Members)
+                  </p>
+                  <div className="space-y-4 max-h-[340px] overflow-y-auto pr-1 custom-scrollbar">
+                    {(manualForm.members || []).slice(0, manualForm.teamSize).map((member, idx) => {
+                      const memberNum = idx + 1;
+                      const isLeader = idx === 0;
+                      const updateMember = (field, value) => {
+                        const updated = [...(manualForm.members || [])];
+                        updated[idx] = { ...updated[idx], [field]: value };
+                        setManualForm({ ...manualForm, members: updated });
+                      };
+                      return (
+                        <div
+                          key={idx}
+                          className={`p-4 rounded-2xl border transition-all ${
+                            isLeader
+                              ? "border-cyan-500/40 bg-cyan-500/5"
+                              : "border-white/10 bg-white/[0.02]"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                              isLeader ? "bg-cyan-500 text-black" : "bg-white/10 text-white"
+                            }`}>M{memberNum}</span>
+                            <span className="text-white font-bold text-xs">
+                              Member {memberNum} {isLeader && <span className="text-cyan-400 font-normal">(Team Leader)</span>}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                              <label className="text-[10px] text-gray-400 font-bold block mb-1">Full Name *</label>
+                              <input
+                                type="text"
+                                required
+                                placeholder={`Member ${memberNum} Full Name`}
+                                value={member.name}
+                                onChange={(e) => updateMember("name", e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-gray-400 font-bold block mb-1">Email Address *</label>
+                              <input
+                                type="email"
+                                required
+                                placeholder={isLeader ? "leader@college.edu" : `member${memberNum}@college.edu`}
+                                value={member.email}
+                                onChange={(e) => updateMember("email", e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-gray-400 font-bold block mb-1">Phone (10 digits) *</label>
+                              <input
+                                type="tel"
+                                required
+                                placeholder="9876543210"
+                                value={member.phone}
+                                onChange={(e) => updateMember("phone", e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-[10px] text-gray-400 font-bold block mb-1">Role / Specialty *</label>
+                              <select
+                                value={member.role}
+                                onChange={(e) => updateMember("role", e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg bg-[#0b1329] border border-white/10 text-white text-xs focus:outline-none focus:border-cyan-500"
+                              >
+                                {manualRolesList.map((r) => (
+                                  <option key={r} value={r}>{r}</option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* ── Section 3: Problem Details (optional) ── */}
+                <div>
+                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-2">Problem Details (Optional)</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[10px] text-gray-400 font-bold block mb-1">Problem Title</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Smart Campus Navigator"
+                        value={manualForm.problemTitle}
+                        onChange={(e) => setManualForm({ ...manualForm, problemTitle: e.target.value })}
+                        className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-gray-400 font-bold block mb-1">Notes</label>
+                      <input
+                        type="text"
+                        placeholder="Any notes about cash collection"
+                        value={manualForm.notes}
+                        onChange={(e) => setManualForm({ ...manualForm, notes: e.target.value })}
+                        className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 text-xs focus:outline-none focus:border-cyan-500"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Submit Buttons ── */}
+                <div className="pt-2 flex justify-end gap-3 border-t border-white/10 pt-4">
                   <button
                     type="button"
                     onClick={() => setShowManualModal(false)}
-                    className="px-5 py-2.5 rounded-xl bg-white/5 text-gray-300 font-bold text-xs"
+                    className="px-5 py-2.5 rounded-xl bg-white/5 text-gray-300 font-bold text-xs hover:bg-white/10 transition-colors"
                   >
                     Cancel
                   </button>
-
                   <button
                     type="submit"
                     disabled={manualLoading}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-extrabold text-xs uppercase tracking-wider"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-extrabold text-xs uppercase tracking-wider hover:shadow-lg hover:shadow-amber-500/20 transition-all"
                   >
                     {manualLoading ? "Processing..." : `Register & Collect ₹${manualForm.teamSize * REGISTRATION_FEE_PER_PERSON}`}
                   </button>

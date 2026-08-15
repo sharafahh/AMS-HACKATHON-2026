@@ -22,7 +22,7 @@ const timelineEvents = [
   {
     phase: "Phase 02",
     title: "Registration Closes",
-    date: "12 August 2026",
+    date: "15 August 2026",
     time: "11:59 PM IST",
     icon: FiUserCheck,
     gradient: "from-purple-500 to-indigo-600",
