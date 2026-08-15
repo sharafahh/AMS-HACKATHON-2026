@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+﻿import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoadingScreen from "./components/common/LoadingScreen";
 import ErrorBoundary from "./components/common/ErrorBoundary";
@@ -10,6 +10,7 @@ const Portal = lazy(() => import("./pages/Portal"));
 const Certificates = lazy(() => import("./pages/Certificates"));
 const Verify = lazy(() => import("./pages/Verify"));
 const HardwareProblems = lazy(() => import("./pages/HardwareProblems"));
+const Evaluator = lazy(() => import("./pages/Evaluator"));
 const Success = lazy(() => import("./pages/Success"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
@@ -29,6 +30,8 @@ function App() {
             <Route path="/verify/:id" element={<Verify />} />
             <Route path="/hardware-problems" element={<HardwareProblems />} />
             <Route path="/problem-statements" element={<HardwareProblems />} />
+            <Route path="/evaluator" element={<Evaluator />} />
+            <Route path="/evaluators" element={<Evaluator />} />
             <Route path="/success" element={<Success />} />
 
             {/* Admin Protected Console */}

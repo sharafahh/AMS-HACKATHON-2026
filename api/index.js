@@ -11,6 +11,7 @@ import certificateRoutes from "../server/routes/certificateRoutes.js";
 import announcementRoutes from "../server/routes/announcementRoutes.js";
 import contactRoutes from "../server/routes/contactRoutes.js";
 import backupRoutes from "../server/routes/backupRoutes.js";
+import evaluatorRoutes from "../server/routes/evaluatorRoutes.js";
 
 import { notFound, errorHandler } from "../server/middlewares/errorHandler.js";
 

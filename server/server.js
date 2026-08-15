@@ -12,6 +12,7 @@ import certificateRoutes from "./routes/certificateRoutes.js";
 import announcementRoutes from "./routes/announcementRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import backupRoutes from "./routes/backupRoutes.js";
+import evaluatorRoutes from "./routes/evaluatorRoutes.js";
 import { initBackupScheduler } from "./utils/backupScheduler.js";
 
 import { notFound, errorHandler } from "./middlewares/errorHandler.js";
@@ -107,6 +108,9 @@ app.use("/announcements", announcementRoutes);
 
 app.use("/api/contact", contactRoutes);
 app.use("/contact", contactRoutes);
+
+app.use("/api/evaluator", evaluatorRoutes);
+app.use("/evaluator", evaluatorRoutes);
 
 // Error Handling Middlewares
 app.use(notFound);
