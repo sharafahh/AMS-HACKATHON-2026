@@ -14,7 +14,7 @@ const statsData = [
   },
   {
     icon: FiLayers,
-    target: 12,
+    target: 11,
     prefix: "",
     suffix: " Tracks",
     label: "Innovation Domains",

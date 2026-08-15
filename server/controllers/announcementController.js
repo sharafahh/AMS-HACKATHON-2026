@@ -13,7 +13,7 @@ const demoAnnouncements = [
   {
     _id: "ann-2",
     title: "Smart India Hackathon Inspired Themes Released",
-    content: "Explore the 12 track domains including AI & ML, Cyber Security, Space Tech, and FinTech.",
+    content: "Explore the 11 track domains including AI & ML, Cyber Security, FinTech, and Smart Mobility.",
     category: "GENERAL",
     isPinned: false,
     author: "AMSCE Tech Club",

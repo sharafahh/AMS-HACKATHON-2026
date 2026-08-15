@@ -37,8 +37,8 @@
    - Sticky glassmorphic navbar with active section scroll spy (`#hero`, `#about`, `#stats`, `#tracks`, `#prizes`, `#timeline`, `#facilities`, `#faq`, `#contact`).
    - Campus Image showcase inside a glowing 3D-effect frame.
    - Live Ticking Countdown Timer to September 15, 2026 launch.
-   - Animated Counters for 24 Hours, 12 Tracks, ₹25,500 Prize Pool, 4 Podium Winners, and 100% Certificates.
-   - 12 Track Cards with interactive spec modals.
+   - Animated Counters for 24 Hours, 11 Tracks, ₹25,500 Prize Pool, 4 Podium Winners, and 100% Certificates.
+   - 11 Track Cards with interactive spec modals.
    - Category-filtered & searchable FAQ accordion.
    - Styled dark-theme Google Maps frame & contact form.
 
