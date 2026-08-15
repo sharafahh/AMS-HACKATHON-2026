@@ -1,5 +1,4 @@
-﻿import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiCpu,
@@ -12,12 +11,11 @@ import {
   FiDollarSign,
   FiGlobe,
   FiAlertTriangle,
-  FiNavigation,
+  FiZap,
   FiFolderPlus,
   FiX,
   FiCheckCircle,
   FiArrowRight,
-  FiFileText,
 } from "react-icons/fi";
 
 const tracksData = [
@@ -111,10 +109,10 @@ const tracksData = [
     description: "Develop early warning systems, emergency response mesh networks, and flood/fire evacuation mapping tools.",
     details: "Build satellite imagery damage assessors, offline emergency mesh communication nodes, and community relief coordination apps.",
   },
-  {
+    {
     id: 11,
     title: "Quantum Computing",
-    icon: FiNavigation,
+    icon: FiZap,
     gradient: "from-indigo-500 to-cyan-500",
     border: "border-indigo-500/30 hover:border-indigo-400",
     description: "Build quantum algorithms, Qiskit/Cirq circuit simulators, post-quantum cryptography, and hybrid quantum-classical solvers.",
@@ -126,19 +124,13 @@ const tracksData = [
     icon: FiFolderPlus,
     gradient: "from-fuchsia-500 to-purple-600",
     border: "border-fuchsia-500/30 hover:border-fuchsia-400",
-    description: "open innovation is not permitted",
-    details: "open innovation is not permitted",
+    description: "Unleash wild, unconventional ideas combining software and hardware that don't fit traditional boundaries.",
+    details: "Anything groundbreaking! Web3, Quantum computing simulators, metaverse tools, creative arts tech, or multi-disciplinary inventions.",
   },
 ];
 
 function Tracks() {
   const [selectedTrack, setSelectedTrack] = useState(null);
-  const navigate = useNavigate();
-
-  const handleExploreTrack = (trackTitle, e) => {
-    if (e) e.stopPropagation();
-    navigate(`/problem-statements?track=${encodeURIComponent(trackTitle)}`);
-  };
 
   return (
     <section id="tracks" className="py-24 relative bg-[#050816] overflow-hidden">
@@ -223,21 +215,9 @@ function Tracks() {
                   </p>
                 </div>
 
-                <div className="pt-5 space-y-3 relative z-10">
-                  <div className="flex items-center justify-between text-xs font-semibold text-gray-400 group-hover:text-cyan-300 transition-colors">
-                    <span className="text-[11px]">View Track Specs</span>
-                    <FiArrowRight className="group-hover:translate-x-1.5 transition-all text-xs" />
-                  </div>
-
-                  {/* Explore Problem Statements Button */}
-                  <button
-                    type="button"
-                    onClick={(e) => handleExploreTrack(track.title, e)}
-                    className="w-full py-2.5 px-3.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/25 border border-cyan-500/30 hover:border-cyan-400 text-cyan-300 hover:text-white font-bold text-xs font-['Space_Grotesk'] tracking-wide flex items-center justify-center gap-2 transition-all duration-300 shadow-md hover:shadow-cyan-500/20 group/btn"
-                  >
-                    <FiFileText size={14} className="text-cyan-400 group-hover/btn:rotate-6 transition-transform" />
-                    <span>Click here to explore the problem statements</span>
-                  </button>
+                <div className="pt-6 flex items-center justify-between text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition-colors relative z-10">
+                  <span>View Details & Specs</span>
+                  <FiArrowRight className="text-cyan-400 group-hover:translate-x-2 group-hover:text-white transition-all duration-300 text-sm" />
                 </div>
               </motion.div>
             );
@@ -305,24 +285,12 @@ function Tracks() {
                   </div>
                 </div>
 
-                <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="pt-2 flex justify-end">
                   <button
                     onClick={() => setSelectedTrack(null)}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-gray-300 font-semibold text-xs uppercase tracking-wider transition-colors"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-semibold text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition-transform"
                   >
                     Close Track Spec
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      const trackTitle = selectedTrack.title;
-                      setSelectedTrack(null);
-                      handleExploreTrack(trackTitle);
-                    }}
-                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                  >
-                    <FiFileText size={14} />
-                    <span>Click here to explore the problem statements</span>
                   </button>
                 </div>
               </motion.div>
