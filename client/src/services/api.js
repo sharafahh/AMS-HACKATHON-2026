@@ -20,7 +20,7 @@ const parseJSONResponse = async (response, defaultErrorMessage = "Request failed
   }
 
   if (!response.ok) {
-    if (response.status === 401 && (data.message?.includes("token") || data.message?.includes("authorized") || data.message?.includes("Not authorized"))) {
+    if (response.status === 401 && (data.message?.includes("token") || data.message?.includes("authorized") || data.message?.includes("Not authorized") || data.message?.includes("expired"))) {
       localStorage.removeItem("ams_hackathon_2026_admin_token");
       localStorage.removeItem("ams_hackathon_2026_admin_user");
       if (typeof window !== "undefined" && window.location.pathname.startsWith("/admin") && !window.location.pathname.includes("/admin/login")) {
@@ -127,6 +127,36 @@ export const getTeamsAPI = async () => {
     return await parseJSONResponse(response, "Failed to fetch teams");
   } catch (error) {
     console.error("API error fetching teams:", error);
+    throw error;
+  }
+};
+
+export const getAdminRegistrationsAPI = async () => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/registrations`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    return await parseJSONResponse(response, "Failed to fetch registrations");
+  } catch (error) {
+    console.error("API error fetching registrations:", error);
+    throw error;
+  }
+};
+
+export const getRegistrationByIdAPI = async (id) => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/registrations/${id}`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    return await parseJSONResponse(response, "Failed to fetch registration details");
+  } catch (error) {
+    console.error("API error fetching single registration:", error);
     throw error;
   }
 };
@@ -271,6 +301,40 @@ export const createManualRegistrationAPI = async (formData) => {
     return await parseJSONResponse(response, "Failed to create manual registration");
   } catch (error) {
     console.error("API error creating manual cash registration:", error);
+    throw error;
+  }
+};
+
+export const updateRegistrationAPI = async (id, formData) => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/registrations/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(formData),
+    });
+    return await parseJSONResponse(response, "Failed to update registration");
+  } catch (error) {
+    console.error("API error updating registration:", error);
+    throw error;
+  }
+};
+
+export const deleteRegistrationAPI = async (id) => {
+  const token = localStorage.getItem("ams_hackathon_2026_admin_token");
+  try {
+    const response = await fetch(`${API_BASE_URL}/admin/registrations/${id}`, {
+      method: "DELETE",
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+    return await parseJSONResponse(response, "Failed to delete registration");
+  } catch (error) {
+    console.error("API error deleting registration:", error);
     throw error;
   }
 };

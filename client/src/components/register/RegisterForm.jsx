@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiChevronLeft, FiChevronRight, FiCheck, FiCreditCard, FiLock } from "react-icons/fi";
 
@@ -33,14 +33,11 @@ const loadRazorpayScript = () => {
 };
 
 const REGISTRATION_DEADLINE = new Date("2026-08-15T23:59:59").getTime();
-
 function RegisterForm() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-
-  const isDeadlinePassed = new Date().getTime() > REGISTRATION_DEADLINE;
 
   const {
     register,
@@ -272,7 +269,6 @@ function RegisterForm() {
       </div>
     );
   }
-
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8">
       {/* Stepper Header & Progress Bar */}

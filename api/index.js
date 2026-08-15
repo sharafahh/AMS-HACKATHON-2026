@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "../server/config/db.js";
+import mongoose from "mongoose";
 
 import teamRoutes from "../server/routes/teamRoutes.js";
 import paymentRoutes from "../server/routes/paymentRoutes.js";

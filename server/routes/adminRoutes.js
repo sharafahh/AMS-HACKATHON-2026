@@ -7,6 +7,9 @@ import {
   getContactMessages,
   deleteContactMessage,
   createManualRegistration,
+  updateRegistration,
+  deleteRegistration,
+  getRegistrationById,
 } from "../controllers/adminController.js";
 import { protectAdmin } from "../middlewares/authMiddleware.js";
 import { loginRateLimiter } from "../middlewares/rateLimiter.js";
@@ -24,7 +27,10 @@ router.get("/me", protectAdmin, getAdminProfile);
 
 // Admin Registrations Management APIs (ALL PROTECTED)
 router.get("/registrations", protectAdmin, getRegistrations);
+router.get("/registrations/:id", protectAdmin, getRegistrationById);
 router.post("/registrations/manual", protectAdmin, createManualRegistration);
+router.put("/registrations/:id", protectAdmin, updateRegistration);
+router.delete("/registrations/:id", protectAdmin, deleteRegistration);
 router.get("/registrations/export-csv", protectAdmin, exportRegistrationsCSV);
 router.get("/export-csv", protectAdmin, exportRegistrationsCSV);
 

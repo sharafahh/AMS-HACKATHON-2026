@@ -7,6 +7,7 @@ import Timeline from "../components/home/Timeline";
 import Facilities from "../components/home/Facilities";
 import FAQ from "../components/home/FAQ";
 import Contact from "../components/home/Contact";
+import Sponsors from "../components/home/Sponsors";
 import Footer from "../components/layout/Footer";
 import SectionDivider from "../components/common/SectionDivider";
 
@@ -53,7 +54,12 @@ function Home() {
 
         <SectionDivider />
 
-        {/* 9. Contact & Map */}
+        {/* 9. Sponsors */}
+        <Sponsors />
+
+        <SectionDivider />
+
+        {/* 10. Contact & Map */}
         <Contact />
       </main>
 
