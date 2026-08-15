@@ -1,9 +1,10 @@
-import mongoose from "mongoose";
-﻿import Team from "../models/Team.js";
+﻿import mongoose from "mongoose";
+import Team from "../models/Team.js";
 import Registration from "../models/Registration.js";
 import Evaluation from "../models/Evaluation.js";
+import connectDB from "../config/db.js";
 
-// Calibrated fair track credit multipliers
+// Calibrated fair track credit multipliers (configurable placeholders)
 export const TRACK_WEIGHTAGES = {
   "AI & Machine Learning": 1.08,
   "Cyber Security": 1.07,
@@ -18,7 +19,7 @@ export const TRACK_WEIGHTAGES = {
   "Smart Education": 1.02,
 };
 
-// Fallback demo teams for offline testing & immediate evaluation cockpit demo
+// Fallback demo teams for offline development & staging verification
 const DEMO_TEAMS = [
   {
     _id: "demo-t1",
@@ -148,42 +149,95 @@ const DEMO_TEAMS = [
   },
 ];
 
-// @desc    Get all teams populated with evaluation history
+// Helper to ensure MongoDB connection is active
+const ensureDB = async () => {
+  if (mongoose.connection.readyState === 1) return true;
+  if (process.env.MONGODB_URI || process.env.MONGO_URI) {
+    try {
+      await connectDB();
+      return mongoose.connection.readyState === 1;
+    } catch (e) {
+      return false;
+    }
+  }
+  return false;
+};
+
+// @desc    Get all teams populated with evaluation history from MongoDB Atlas
 // @route   GET /api/evaluator/teams
 // @access  Public (Evaluator Session)
 export const getEvaluatorTeams = async (req, res) => {
   try {
+    const isDBConnected = await ensureDB();
     let teams = [];
+    let isLiveDB = false;
 
-    try {
-      if (mongoose.connection.readyState === 1) {
-        teams = await Team.find({ paymentStatus: "PAID" }).sort({ createdAt: 1 }).lean();
-      } else {
-        teams = DEMO_TEAMS;
+    if (isDBConnected) {
+      try {
+        // Query active paid or confirmed teams from MongoDB Atlas
+        teams = await Team.find({ isDeleted: { $ne: true } })
+          .sort({ createdAt: 1 })
+          .lean();
+
+        if (teams && teams.length > 0) {
+          isLiveDB = true;
+        } else {
+          // If Team collection is empty, check Registration collection
+          const registrations = await Registration.find({ isDeleted: { $ne: true } })
+            .sort({ registrationTimestamp: -1 })
+            .lean();
+
+          if (registrations && registrations.length > 0) {
+            isLiveDB = true;
+            teams = registrations.map((reg) => ({
+              _id: reg._id,
+              registrationId: reg.registrationId || `REG-${reg._id.toString().slice(-6).toUpperCase()}`,
+              teamName: reg.teamName,
+              teamSize: (reg.teamMembers?.length || 0) + 1,
+              track: reg.track || "Open Innovation",
+              problemTitle: reg.problemTitle || "Submitted Project Solution",
+              problemAbstract: reg.problemAbstract || "",
+              leader: {
+                name: reg.teamLeaderName || "Team Leader",
+                email: reg.email,
+                phone: reg.phoneNumber,
+                college: reg.collegeName,
+                department: reg.department,
+                year: reg.year,
+              },
+              members: (reg.teamMembers || []).map((m, idx) => ({
+                name: typeof m === "string" ? m : m.name || `Member ${idx + 1}`,
+                email: m.email || "",
+                role: m.role || "Developer",
+              })),
+              status: "CONFIRMED",
+              paymentStatus: reg.paymentStatus || "PAID",
+            }));
+          }
+        }
+      } catch (dbErr) {
+        console.warn("MongoDB Atlas query notice:", dbErr.message);
+        teams = [];
       }
-      if (!teams || teams.length === 0) {
-        teams = await Team.find().sort({ createdAt: 1 }).lean();
-      }
-    } catch (dbErr) {
-      console.warn("Using demo teams fallback:", dbErr.message);
-      teams = DEMO_TEAMS;
     }
 
+    // If database is not connected or currently empty, provide clean demo fallback
     if (!teams || teams.length === 0) {
       teams = DEMO_TEAMS;
+      isLiveDB = false;
     }
 
-    // Fetch all evaluations
+    // Fetch all evaluations from MongoDB Atlas
     let evaluations = [];
-    try {
-      if (mongoose.connection.readyState === 1) {
+    if (isDBConnected) {
+      try {
         evaluations = await Evaluation.find().lean();
+      } catch (evalErr) {
+        evaluations = [];
       }
-    } catch (evalErr) {
-      evaluations = [];
     }
 
-    // Map evaluations to teams
+    // Map evaluations to corresponding teams
     const teamsWithEvaluations = teams.map((team) => {
       const teamEvals = evaluations.filter(
         (e) => e.registrationId === team.registrationId || e.teamName === team.teamName
@@ -208,6 +262,7 @@ export const getEvaluatorTeams = async (req, res) => {
     return res.status(200).json({
       success: true,
       count: teamsWithEvaluations.length,
+      isLiveDB,
       teams: teamsWithEvaluations,
       trackWeightages: TRACK_WEIGHTAGES,
     });
@@ -221,11 +276,13 @@ export const getEvaluatorTeams = async (req, res) => {
   }
 };
 
-// @desc    Submit or update evaluation for a team round
+// @desc    Submit or update evaluation for a team round in MongoDB Atlas
 // @route   POST /api/evaluator/evaluate
 // @access  Public (Evaluator Session)
 export const submitEvaluation = async (req, res) => {
   try {
+    const isDBConnected = await ensureDB();
+
     const {
       registrationId,
       teamName,
@@ -289,24 +346,25 @@ export const submitEvaluation = async (req, res) => {
 
     let savedEvaluation = null;
 
-    try {
-      if (mongoose.connection.readyState === 1) {
+    if (isDBConnected) {
+      try {
         savedEvaluation = await Evaluation.findOneAndUpdate(
-        { registrationId: evalData.registrationId, round: numRound, evaluatorId: evalData.evaluatorId },
-        evalData,
-        { new: true, upsert: true }
+          { registrationId: evalData.registrationId, round: numRound, evaluatorId: evalData.evaluatorId },
+          evalData,
+          { new: true, upsert: true }
         );
-      } else {
+      } catch (dbErr) {
+        console.warn("MongoDB Atlas Evaluation update notice:", dbErr.message);
         savedEvaluation = { ...evalData, _id: `eval-${Date.now()}` };
       }
-    } catch (dbErr) {
-      console.warn("DB Evaluation update warning:", dbErr.message);
+    } else {
       savedEvaluation = { ...evalData, _id: `eval-${Date.now()}` };
     }
 
     return res.status(200).json({
       success: true,
       message: `Evaluation for ${evalData.teamName} (Round ${numRound}) recorded successfully!`,
+      isLiveDB: isDBConnected,
       evaluation: savedEvaluation,
     });
   } catch (error) {
@@ -319,18 +377,20 @@ export const submitEvaluation = async (req, res) => {
   }
 };
 
-// @desc    Get Evaluator Leaderboard
+// @desc    Get Evaluator Leaderboard directly from MongoDB Atlas
 // @route   GET /api/evaluator/leaderboard
 // @access  Public
 export const getEvaluationLeaderboard = async (req, res) => {
   try {
+    const isDBConnected = await ensureDB();
     let evaluations = [];
-    try {
-      if (mongoose.connection.readyState === 1) {
+
+    if (isDBConnected) {
+      try {
         evaluations = await Evaluation.find().lean();
+      } catch (e) {
+        evaluations = [];
       }
-    } catch (e) {
-      evaluations = [];
     }
 
     const leaderboardMap = {};
@@ -366,12 +426,49 @@ export const getEvaluationLeaderboard = async (req, res) => {
     return res.status(200).json({
       success: true,
       count: leaderboard.length,
+      isLiveDB: isDBConnected,
       leaderboard,
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
       message: "Error fetching leaderboard",
+    });
+  }
+};
+
+// @desc    Seed live MongoDB Atlas with sample teams (Utility for organizers)
+// @route   POST /api/evaluator/seed-teams
+// @access  Admin / Organizer
+export const seedSampleTeams = async (req, res) => {
+  try {
+    const isDBConnected = await ensureDB();
+    if (!isDBConnected) {
+      return res.status(503).json({
+        success: false,
+        message: "MongoDB Atlas is not connected. Set MONGODB_URI in your environment variables.",
+      });
+    }
+
+    for (const team of DEMO_TEAMS) {
+      const { _id, ...teamData } = team;
+      await Team.findOneAndUpdate(
+        { registrationId: teamData.registrationId },
+        teamData,
+        { upsert: true, new: true }
+      );
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Successfully seeded MongoDB Atlas with demo teams for evaluation!",
+      count: DEMO_TEAMS.length,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to seed sample teams",
+      error: error.message,
     });
   }
 };

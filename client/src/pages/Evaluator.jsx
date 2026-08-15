@@ -98,6 +98,7 @@ function Evaluator() {
 
   // Data States
   const [teams, setTeams] = useState([]);
+  const [isLiveDB, setIsLiveDB] = useState(false);
   const [trackWeightages, setTrackWeightages] = useState({});
   const [selectedTeamIndex, setSelectedTeamIndex] = useState(0);
   const [loading, setLoading] = useState(true);
