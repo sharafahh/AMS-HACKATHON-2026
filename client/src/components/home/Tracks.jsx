@@ -11,7 +11,7 @@ import {
   FiDollarSign,
   FiGlobe,
   FiAlertTriangle,
-  FiNavigation,
+  FiZap,
   FiFolderPlus,
   FiX,
   FiCheckCircle,
@@ -109,14 +109,14 @@ const tracksData = [
     description: "Develop early warning systems, emergency response mesh networks, and flood/fire evacuation mapping tools.",
     details: "Build satellite imagery damage assessors, offline emergency mesh communication nodes, and community relief coordination apps.",
   },
-  {
+    {
     id: 11,
-    title: "Space Technology",
-    icon: FiNavigation,
+    title: "Quantum Computing",
+    icon: FiZap,
     gradient: "from-indigo-500 to-cyan-500",
     border: "border-indigo-500/30 hover:border-indigo-400",
-    description: "Explore satellite data processing, CubeSat telemetry simulators, space debris tracking, and astrophysics tools.",
-    details: "Create orbit determination models, atmospheric payload sensors, ground station control software, and astronomical data visualization.",
+    description: "Build quantum algorithms, Qiskit/Cirq circuit simulators, post-quantum cryptography, and hybrid quantum-classical solvers.",
+    details: "Develop variational quantum eigensolvers (VQE), quantum key distribution (QKD) simulators, QAOA optimization for logistics, and quantum machine learning (QML) models.",
   },
   {
     id: 12,

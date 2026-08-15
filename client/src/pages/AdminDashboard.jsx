@@ -79,7 +79,7 @@ const initialTracks = [
   "FinTech",
   "Sustainability",
   "Disaster Management",
-  "Space Technology",
+  "Quantum Computing",
   "Open Innovation",
 ];
 
@@ -183,16 +183,7 @@ function AdminDashboard() {
     track: "AI & Machine Learning",
     problemTitle: "",
     notes: "",
-<<<<<<< HEAD
     members: createEmptyMembers(4),
-=======
-    members: [
-      { name: "", email: "", phone: "", department: "IT", role: "Lead Developer" },
-      { name: "", email: "", phone: "", department: "IT", role: "Frontend / UI/UX Developer" },
-      { name: "", email: "", phone: "", department: "IT", role: "Backend & API Engineer" },
-      { name: "", email: "", phone: "", department: "IT", role: "Hardware & Embedded Systems Tech" },
-    ],
->>>>>>> 673d3f3a81805675913c54d73dc465bac14224e3
   });
 
   // Check Auth Token on Mount
@@ -350,16 +341,7 @@ function AdminDashboard() {
           track: "AI & Machine Learning",
           problemTitle: "",
           notes: "",
-<<<<<<< HEAD
           members: createEmptyMembers(4),
-=======
-          members: [
-            { name: "", email: "", phone: "", department: "IT", role: "Lead Developer" },
-            { name: "", email: "", phone: "", department: "IT", role: "Frontend / UI/UX Developer" },
-            { name: "", email: "", phone: "", department: "IT", role: "Backend & API Engineer" },
-            { name: "", email: "", phone: "", department: "IT", role: "Hardware & Embedded Systems Tech" },
-          ],
->>>>>>> 673d3f3a81805675913c54d73dc465bac14224e3
         });
         fetchDashboardData();
       }

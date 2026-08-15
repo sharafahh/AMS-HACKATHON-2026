@@ -74,7 +74,7 @@ const aboutPillars = [
     gradient: "from-pink-500 to-rose-600",
     border: "border-pink-500/30",
     description:
-      "Focusing on themes critical to Smart Mobility, Healthcare, Disaster Management, and Space Technology to create tangible solutions for society.",
+      "Focusing on themes critical to Smart Mobility, Healthcare, Disaster Management, and Quantum Computing to create tangible solutions for society.",
     points: [
       "Directly addresses United Nations Sustainable Development Goals.",
       "Helps bridge urban-rural digital divides through smart automation.",

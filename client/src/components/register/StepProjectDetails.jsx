@@ -11,7 +11,7 @@ const tracksList = [
   "FinTech",
   "Sustainability",
   "Disaster Management",
-  "Space Technology",
+  "Quantum Computing",
   "Open Innovation",
 ];
 
