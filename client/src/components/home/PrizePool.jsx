@@ -10,6 +10,7 @@ import {
 } from "react-icons/fi";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import renderLogo from "../../assets/logos/render_nobg.png";
+import xyzLogo from "../../assets/logos/xyz_nobg.png";
 import codecrafterLogo from "../../assets/logos/codecrafters_nobg.png";
 
 const prizes = [
@@ -83,12 +84,27 @@ const builderPerks = [
     logo: renderLogo,
     tag: "Hosting Partner",
     link: "https://render.com/",
+    cardClass: "bg-white hover:shadow-[0_8px_30px_rgba(239,68,68,0.18)]",
+    titleClass: "text-gray-900",
+    tagClass: "text-red-500/80",
+  },
+  {
+    name: "xyz.gen",
+    logo: xyzLogo,
+    tag: "Domain Partner",
+    link: "https://gen.xyz/",
+    cardClass: "bg-[#0b1120] border-cyan-500/30 hover:border-cyan-400/50 hover:shadow-[0_8px_30px_rgba(34,211,238,0.16)]",
+    titleClass: "text-cyan-300",
+    tagClass: "text-blue-400/80",
   },
   {
     name: "CodeCrafters",
     logo: codecrafterLogo,
     tag: "Developer Tooling",
     link: "https://codecrafters.io/",
+    cardClass: "bg-white hover:shadow-[0_8px_30px_rgba(239,68,68,0.18)]",
+    titleClass: "text-gray-900",
+    tagClass: "text-red-500/80",
   },
 ];
 
@@ -373,7 +389,7 @@ function PrizePool() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {builderPerks.map((partner, i) => (
               <motion.a
                 key={partner.name}
@@ -385,7 +401,7 @@ function PrizePool() {
                 whileHover={{ y: -4 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
-                className="group flex items-center gap-5 rounded-2xl bg-white p-5 border border-white/10 hover:shadow-[0_8px_30px_rgba(239,68,68,0.18)] transition-shadow"
+                className={`group flex items-center gap-5 rounded-2xl p-5 border border-white/10 transition-shadow ${partner.cardClass}`}
               >
                 <div className="h-14 w-28 flex items-center justify-center">
                   <img
@@ -395,8 +411,8 @@ function PrizePool() {
                   />
                 </div>
                 <div>
-                  <h4 className="text-gray-900 font-bold font-['Space_Grotesk']">{partner.name}</h4>
-                  <p className="text-[11px] uppercase tracking-wider text-red-500/80 font-semibold mt-1">
+                  <h4 className={`font-bold font-['Space_Grotesk'] ${partner.titleClass}`}>{partner.name}</h4>
+                  <p className={`text-[11px] uppercase tracking-wider font-semibold mt-1 ${partner.tagClass}`}>
                     {partner.tag}
                   </p>
                 </div>
