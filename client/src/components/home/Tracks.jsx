@@ -124,8 +124,8 @@ const tracksData = [
     icon: FiFolderPlus,
     gradient: "from-fuchsia-500 to-purple-600",
     border: "border-fuchsia-500/30 hover:border-fuchsia-400",
-    description: "Unleash wild, unconventional ideas combining software and hardware that don't fit traditional boundaries.",
-    details: "Anything groundbreaking! Web3, Quantum computing simulators, metaverse tools, creative arts tech, or multi-disciplinary inventions.",
+    description: "open innovation is not permitted",
+    details: "open innovation is not permitted",
   },
 ];
 
