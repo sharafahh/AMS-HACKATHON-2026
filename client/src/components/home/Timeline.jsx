@@ -85,12 +85,10 @@ const timelineEvents = [
 function Timeline() {
   return (
     <section id="timeline" className="py-24 relative bg-[#050816] overflow-hidden">
-      {/* Background Orbs */}
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
@@ -120,74 +118,84 @@ function Timeline() {
           </motion.p>
         </div>
 
-        {/* Horizontal Timeline Container */}
-        <div className="relative pt-6">
-          {/* Grid Layout for Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10 justify-center">
+        <div className="relative max-w-5xl mx-auto">
+          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2 overflow-hidden">
+            <motion.div
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+              className="h-full w-full origin-top bg-gradient-to-b from-cyan-400 via-purple-500 to-amber-400"
+            />
+          </div>
+
+          <ol className="relative space-y-10 md:space-y-16">
             {timelineEvents.map((event, index) => {
               const Icon = event.icon;
+              const isLeft = index % 2 === 0;
 
               return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  whileHover={{ y: -8, scale: 1.03 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className={`glass-card p-5 rounded-3xl border ${event.border} flex flex-col justify-between relative group overflow-hidden transition-all duration-300 shadow-xl hover:shadow-2xl cursor-pointer`}
-                >
-                  {/* Dynamic Ambient Hover Glow behind card */}
-                  <div
-                    className={`absolute -inset-1 bg-gradient-to-r ${event.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
-                  />
+                <li key={event.phase} className="relative md:grid md:grid-cols-2 md:gap-16">
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true, amount: 0.6 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.15 }}
+                    className="absolute left-6 md:left-1/2 top-6 z-20 -translate-x-1/2"
+                  >
+                    <span
+                      className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${event.gradient} text-white shadow-lg ring-4 ring-[#050816]`}
+                    >
+                      <Icon size={20} />
+                    </span>
+                    <span
+                      className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${event.gradient} blur-md opacity-50 -z-10`}
+                    />
+                  </motion.div>
 
-                  {/* Top Glowing Accent Line */}
-                  <div
-                    className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${event.gradient} opacity-80 group-hover:h-1.5 group-hover:opacity-100 transition-all duration-300`}
-                  />
+                  <motion.article
+                    initial={{ opacity: 0, x: isLeft ? -56 : 56, y: 24 }}
+                    whileInView={{ opacity: 1, x: 0, y: 0 }}
+                    viewport={{ once: true, amount: 0.35 }}
+                    transition={{ duration: 0.55, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+                    whileHover={{ y: -6, scale: 1.015 }}
+                    className={`glass-card relative ml-16 md:ml-0 p-5 sm:p-6 rounded-3xl border ${event.border} group overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 ${
+                      isLeft ? "md:col-start-1" : "md:col-start-2"
+                    }`}
+                  >
+                    <div
+                      className={`absolute -inset-1 bg-gradient-to-r ${event.gradient} rounded-3xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10`}
+                    />
+                    <div
+                      className={`absolute top-0 ${isLeft ? "md:right-0 md:left-auto" : "left-0"} w-full h-1 bg-gradient-to-r ${event.gradient} opacity-80 group-hover:h-1.5 group-hover:opacity-100 transition-all duration-300`}
+                    />
 
-                  <div className="space-y-4 relative z-10">
-                    {/* Header Node Icon */}
-                    <div className="flex items-center justify-between">
-                      <div
-                        className={`p-3 rounded-2xl bg-gradient-to-br ${event.gradient} text-white shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}
-                      >
-                        <Icon size={20} />
-                      </div>
+                    <div className={`flex items-center justify-between gap-3 ${isLeft ? "md:flex-row-reverse" : ""}`}>
                       <span className="text-[10px] font-extrabold tracking-widest text-cyan-400 uppercase px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 group-hover:border-cyan-400 transition-colors">
                         {event.phase}
                       </span>
+                      <span className="text-[10px] font-semibold text-gray-400 group-hover:text-cyan-300 transition-colors">
+                        Step {String(index + 1).padStart(2, "0")} of {String(timelineEvents.length).padStart(2, "0")}
+                      </span>
                     </div>
 
-                    {/* Time & Title */}
-                    <div>
-                      <span className="text-[11px] font-bold text-amber-400 block mb-1">
-                        ⏱️ {event.time}
-                      </span>
-                      <h3 className="text-base font-bold font-['Space_Grotesk'] text-white group-hover:text-cyan-300 transition-colors">
+                    <div className="mt-4 space-y-2">
+                      <span className="text-[11px] font-bold text-amber-400 block">⏱️ {event.time}</span>
+                      <h3 className="text-lg sm:text-xl font-bold font-['Space_Grotesk'] text-white group-hover:text-cyan-300 transition-colors">
                         {event.title}
                       </h3>
-                      <p className="text-xs text-gray-400 font-medium mt-1 group-hover:text-gray-300 transition-colors">
+                      <p className="text-xs text-gray-400 font-medium group-hover:text-gray-300 transition-colors">
                         📅 {event.date}
                       </p>
+                      <p className="text-gray-300 text-sm font-light leading-relaxed group-hover:text-white transition-colors">
+                        {event.description}
+                      </p>
                     </div>
-
-                    {/* Description */}
-                    <p className="text-gray-300 text-xs font-light leading-relaxed group-hover:text-white transition-colors">
-                      {event.description}
-                    </p>
-                  </div>
-
-                  {/* Step Connector Indicator */}
-                  <div className="pt-4 mt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-semibold text-gray-400 group-hover:text-cyan-300 transition-colors relative z-10">
-                    <span>Step 0{index + 1} of 0{timelineEvents.length}</span>
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:scale-125 animate-pulse transition-transform" />
-                  </div>
-                </motion.div>
+                  </motion.article>
+                </li>
               );
             })}
-          </div>
+          </ol>
         </div>
       </div>
     </section>
