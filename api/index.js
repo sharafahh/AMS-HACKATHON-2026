@@ -118,6 +118,9 @@ app.use("/announcements", announcementRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/contact", contactRoutes);
 
+app.use("/api/evaluator", evaluatorRoutes);
+app.use("/evaluator", evaluatorRoutes);
+
 app.use(notFound);
 app.use(errorHandler);
 
