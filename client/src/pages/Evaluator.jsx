@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -32,6 +32,9 @@ import {
   FiRefreshCw,
   FiChevronDown,
   FiChevronUp,
+  FiCopy,
+  FiCommand,
+  FiCornerRightDown,
 } from "react-icons/fi";
 import collegeLogo from "../assets/logos/college-logo.png";
 import amsHackathonLogo from "../assets/logos/ams-hackathon-logo.png";
@@ -87,18 +90,20 @@ const RUBRIC_CRITERIA = [
 const VALID_PASSCODES = ["AMS2026", "JURY2026", "EVAL2026", "DEMO2026", "ADMIN2026"];
 
 function Evaluator() {
-  // Single Unified Evaluator Authentication State (No individual names)
+  // Single Unified Evaluator Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return sessionStorage.getItem("ams_evaluator_auth") === "true";
   });
   const [loginPass, setLoginPass] = useState("");
   const [authError, setAuthError] = useState("");
+  const searchInputRef = useRef(null);
 
-  // Navigation & Views
+  // Navigation & View States
   const [activeView, setActiveView] = useState("evaluate"); // 'evaluate' | 'leaderboard'
   const [selectedRound, setSelectedRound] = useState(1); // 1, 2, 3, 4
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-  const [showAbstractModal, setShowAbstractModal] = useState(false);
+  const [dossierTab, setDossierTab] = useState("problem"); // 'problem' | 'roster' | 'previous'
+  const [copiedId, setCopiedId] = useState(null);
 
   // Data States
   const [teams, setTeams] = useState([]);
@@ -117,6 +122,7 @@ function Evaluator() {
   // Leaderboard data
   const [leaderboard, setLeaderboard] = useState([]);
   const [leaderboardLoading, setLeaderboardLoading] = useState(false);
+  const [leaderboardSearch, setLeaderboardSearch] = useState("");
 
   // Active Team Scoring State
   const [scores, setScores] = useState({
@@ -173,6 +179,40 @@ function Evaluator() {
       fetchLeaderboard();
     }
   }, [isAuthenticated, activeView]);
+
+  // Keyboard Shortcuts Listener (Ctrl+S to save, / to search, Alt+Arrows for team)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isAuthenticated) return;
+
+      // Save shortcut: Ctrl+S or Cmd+S
+      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault();
+        handleSave(false);
+      }
+
+      // Search shortcut: / (when not typing in textarea or input)
+      if (e.key === "/" && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+        e.preventDefault();
+        if (searchInputRef.current) searchInputRef.current.focus();
+      }
+
+      // Alt + Right Arrow: Next team
+      if (e.altKey && e.key === "ArrowRight") {
+        e.preventDefault();
+        setSelectedTeamIndex((prev) => Math.min(filteredTeams.length - 1, prev + 1));
+      }
+
+      // Alt + Left Arrow: Previous team
+      if (e.altKey && e.key === "ArrowLeft") {
+        e.preventDefault();
+        setSelectedTeamIndex((prev) => Math.max(0, prev - 1));
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  });
 
   // Filtered teams list based on search and track filter
   const filteredTeams = useMemo(() => {
@@ -256,6 +296,10 @@ function Evaluator() {
     return Number((rawTotal * trackMultiplier).toFixed(2));
   }, [rawTotal, trackMultiplier]);
 
+  const criteriaEvaluatedCount = useMemo(() => {
+    return Object.values(scores).filter((v) => Number(v) > 0).length;
+  }, [scores]);
+
   // Stepper handlers
   const handleScoreChange = (key, delta) => {
     setScores((prev) => {
@@ -270,7 +314,13 @@ function Evaluator() {
     setScores((prev) => ({ ...prev, [key]: num }));
   };
 
-  // Unified Authentication Login (No individual name required)
+  const handleCopyId = (id) => {
+    navigator.clipboard.writeText(id);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  // Unified Authentication Login
   const handleLogin = (e) => {
     if (e) e.preventDefault();
     const clean = loginPass.trim().toUpperCase();
@@ -279,7 +329,7 @@ function Evaluator() {
       setIsAuthenticated(true);
       setAuthError("");
     } else {
-      setAuthError("Invalid Jury Passcode. Please contact the hackathon organizing committee.");
+      setAuthError("Invalid Jury Passcode. Please contact the organizing committee.");
     }
   };
 
@@ -380,8 +430,19 @@ function Evaluator() {
     return ["ALL", ...Array.from(set)];
   }, [teams]);
 
+  const filteredLeaderboard = useMemo(() => {
+    if (!leaderboardSearch.trim()) return leaderboard;
+    const q = leaderboardSearch.toLowerCase();
+    return leaderboard.filter(
+      (item) =>
+        item.teamName?.toLowerCase().includes(q) ||
+        item.registrationId?.toLowerCase().includes(q) ||
+        item.track?.toLowerCase().includes(q)
+    );
+  }, [leaderboard, leaderboardSearch]);
+
   return (
-    <div className="min-h-screen clay-bg-executive text-slate-800 font-['Inter'] selection:bg-indigo-500 selection:text-white flex flex-col pt-6 sm:pt-8 pb-28 lg:pb-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen clay-bg-executive text-slate-800 font-['Inter'] selection:bg-indigo-500 selection:text-white flex flex-col pt-8 pb-28 lg:pb-16 px-4 sm:px-6 lg:px-8">
       {/* Top Floating Notification Toast */}
       <AnimatePresence>
         {saveToast && (
@@ -399,15 +460,15 @@ function Evaluator() {
         )}
       </AnimatePresence>
 
-      {/* ─── SINGLE UNIFIED EVALUATOR LOGIN GATE (NO NAMES) ─── */}
+      {/* ─── UNIFIED JURY AUTHENTICATION GATE ─── */}
       {!isAuthenticated ? (
-        <div className="flex-1 flex items-center justify-center py-12">
+        <div className="flex-1 flex items-center justify-center py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-md w-full clay-box p-8 sm:p-10 space-y-7 shadow-xl bg-white"
+            className="max-w-md w-full clay-box p-8 sm:p-10 space-y-7 shadow-xl bg-white relative overflow-hidden"
           >
-            {/* Brand Header */}
+            {/* Header Brand */}
             <div className="text-center space-y-3">
               <div className="flex items-center justify-center gap-3">
                 <img src={collegeLogo} alt="College Logo" className="h-9 w-auto object-contain" />
@@ -427,7 +488,7 @@ function Evaluator() {
               </div>
             </div>
 
-            {/* Single Unified Passcode Form */}
+            {/* Single Passcode Form */}
             <form onSubmit={handleLogin} className="space-y-4 pt-2">
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
@@ -451,7 +512,7 @@ function Evaluator() {
                 )}
               </div>
 
-              {/* Quick Preset Passcode Chips */}
+              {/* Quick Fill Preset Keys */}
               <div className="flex items-center gap-2 text-xs text-slate-500 pt-1">
                 <span>Quick Fill:</span>
                 {["AMS2026", "JURY2026"].map((code) => (
@@ -486,9 +547,9 @@ function Evaluator() {
           </motion.div>
         </div>
       ) : (
-        /* ─── MAIN EVALUATION APP WORKSPACE ─── */
+        /* ─── MAIN APP WORKSPACE (ORGANIZED & SPACIOUS) ─── */
         <div className="max-w-7xl w-full mx-auto space-y-6">
-          {/* Top Floating Sleek Navigation Bar (Not glued to the ceiling!) */}
+          {/* Top Floating Sleek Navigation Bar */}
           <header className="clay-box p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 bg-white shadow-sm">
             {/* Left Brand */}
             <div className="flex items-center justify-between w-full md:w-auto gap-4">
@@ -573,7 +634,7 @@ function Evaluator() {
                 </button>
               </div>
 
-              {/* Unified Status Badge */}
+              {/* Status Badge */}
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 font-semibold">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Jury Panel Active</span>
@@ -631,7 +692,7 @@ function Evaluator() {
               {leaderboard.length >= 4 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   {/* 1st Place (Grand Champion) */}
-                  <div className="clay-box p-5 bg-gradient-to-b from-amber-50/70 via-white to-white border-t-4 border-amber-500 space-y-3 shadow-md relative overflow-hidden">
+                  <div className="clay-box p-5 bg-gradient-to-b from-amber-50/80 via-white to-white border-t-4 border-amber-500 space-y-3 shadow-md relative overflow-hidden">
                     <div className="flex items-center justify-between">
                       <span className="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-[11px] font-extrabold flex items-center gap-1.5">
                         🏆 1st Champion
@@ -714,9 +775,18 @@ function Evaluator() {
 
               {/* Full Standings Table */}
               <div className="clay-box overflow-hidden bg-white">
-                <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
+                <div className="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <h3 className="font-bold text-slate-800 text-sm sm:text-base">Full Team Standings</h3>
-                  <span className="text-xs text-slate-500">{leaderboard.length} Teams Ranked</span>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={leaderboardSearch}
+                      onChange={(e) => setLeaderboardSearch(e.target.value)}
+                      placeholder="Filter leaderboard..."
+                      className="clay-input-field pl-8 pr-3 py-1.5 text-xs text-slate-800 placeholder-slate-400"
+                    />
+                    <FiSearch className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" size={13} />
+                  </div>
                 </div>
 
                 <div className="overflow-x-auto">
@@ -733,7 +803,7 @@ function Evaluator() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {leaderboard.map((item, idx) => (
+                      {filteredLeaderboard.map((item, idx) => (
                         <tr key={item.registrationId} className="hover:bg-slate-50/80 transition-colors">
                           <td className="py-3.5 px-4 text-center font-extrabold text-slate-700">
                             {idx === 0 ? "🥇 1" : idx === 1 ? "🥈 2" : idx === 2 ? "🥉 3" : idx === 3 ? "🎖️ 4" : `#${idx + 1}`}
@@ -766,16 +836,28 @@ function Evaluator() {
                 <div className="space-y-2.5">
                   <div className="relative">
                     <input
+                      ref={searchInputRef}
                       type="text"
                       value={searchQuery}
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
                         setSelectedTeamIndex(0);
                       }}
-                      placeholder="Search team or reg ID..."
-                      className="w-full clay-input-field pl-9 pr-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
+                      placeholder="Search team or ID..."
+                      className="w-full clay-input-field pl-9 pr-8 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
                     />
                     <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                    {searchQuery ? (
+                      <button
+                        type="button"
+                        onClick={() => setSearchQuery("")}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5"
+                      >
+                        <FiX size={13} />
+                      </button>
+                    ) : (
+                      <span className="kbd-badge absolute right-2.5 top-1/2 -translate-y-1/2">/</span>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
@@ -945,9 +1027,15 @@ function Evaluator() {
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
                         <div className="space-y-1.5">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-mono font-bold text-xs px-3 py-1 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">
-                              {currentTeam.registrationId}
-                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleCopyId(currentTeam.registrationId)}
+                              className="inline-flex items-center gap-1.5 font-mono font-bold text-xs px-3 py-1 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 hover:bg-indigo-100 transition-colors"
+                              title="Click to copy ID"
+                            >
+                              <span>{currentTeam.registrationId}</span>
+                              {copiedId === currentTeam.registrationId ? <FiCheck size={12} /> : <FiCopy size={12} />}
+                            </button>
                             <span className="text-xs px-3 py-1 rounded-md bg-slate-100 text-slate-700 font-semibold">
                               {currentTeam.track} • {trackMultiplier}x Multiplier
                             </span>
@@ -967,7 +1055,7 @@ function Evaluator() {
                             disabled={selectedTeamIndex === 0}
                             onClick={() => setSelectedTeamIndex((prev) => Math.max(0, prev - 1))}
                             className="clay-btn-ghost p-2.5 text-slate-600 disabled:opacity-40 cursor-pointer"
-                            title="Previous Team"
+                            title="Previous Team (Alt+Left)"
                           >
                             <FiChevronLeft size={16} />
                           </button>
@@ -979,106 +1067,137 @@ function Evaluator() {
                             disabled={selectedTeamIndex >= filteredTeams.length - 1}
                             onClick={() => setSelectedTeamIndex((prev) => Math.min(filteredTeams.length - 1, prev + 1))}
                             className="clay-btn-ghost p-2.5 text-slate-600 disabled:opacity-40 cursor-pointer"
-                            title="Next Team"
+                            title="Next Team (Alt+Right)"
                           >
                             <FiChevronRight size={16} />
                           </button>
                         </div>
                       </div>
 
-                      {/* Problem Statement Snippet / Collapsible */}
-                      <div className="clay-well p-4 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                            <FiFileText className="text-indigo-600" />
-                            Problem Statement
-                          </span>
+                      {/* Interactive Tabbed Drawer (Problem Statement / Roster / Previous Feedback) */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
                           <button
                             type="button"
-                            onClick={() => setShowAbstractModal(!showAbstractModal)}
-                            className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 cursor-pointer"
+                            onClick={() => setDossierTab("problem")}
+                            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                              dossierTab === "problem"
+                                ? "bg-indigo-50 text-indigo-700"
+                                : "text-slate-500 hover:text-slate-800"
+                            }`}
                           >
-                            <span>{showAbstractModal ? "Hide Abstract" : "View Full Abstract"}</span>
-                            {showAbstractModal ? <FiChevronUp size={14} /> : <FiChevronDown size={14} />}
+                            Problem Statement
                           </button>
-                        </div>
-                        <p className="font-semibold text-slate-900 text-xs sm:text-sm">
-                          {currentTeam.problemTitle || "AMS Hackathon Challenge"}
-                        </p>
-                        {showAbstractModal && (
-                          <motion.p
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="text-xs text-slate-600 pt-2 leading-relaxed border-t border-slate-200 mt-2"
+                          <button
+                            type="button"
+                            onClick={() => setDossierTab("roster")}
+                            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                              dossierTab === "roster"
+                                ? "bg-indigo-50 text-indigo-700"
+                                : "text-slate-500 hover:text-slate-800"
+                            }`}
                           >
-                            {currentTeam.problemAbstract || "No problem abstract submitted."}
-                          </motion.p>
-                        )}
-                      </div>
+                            Team Roster ({currentTeam.members?.length || currentTeam.teamSize || 4})
+                          </button>
+                          {selectedRound > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => setDossierTab("previous")}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                dossierTab === "previous"
+                                  ? "bg-amber-100 text-amber-900"
+                                  : "text-amber-700 hover:bg-amber-50"
+                              }`}
+                            >
+                              Round {selectedRound - 1} Feedback
+                            </button>
+                          )}
+                        </div>
 
-                      {/* Team Roster */}
-                      <div className="flex flex-wrap items-center gap-2 text-xs text-slate-700">
-                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Roster:</span>
-                        <span className="px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-900 font-semibold text-xs">
-                          ⭐ {currentTeam.leader?.name || "Leader"} ({currentTeam.leader?.department || "CSE"})
-                        </span>
-                        {currentTeam.members?.slice(1).map((m, mIdx) => (
-                          <span key={mIdx} className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-xs">
-                            {m.name || `Member ${mIdx + 2}`}
-                          </span>
-                        ))}
+                        {dossierTab === "problem" && (
+                          <div className="clay-well p-4 space-y-2">
+                            <h4 className="font-bold text-slate-900 text-xs sm:text-sm">
+                              {currentTeam.problemTitle || "AMS Hackathon Challenge"}
+                            </h4>
+                            <p className="text-xs text-slate-600 leading-relaxed">
+                              {currentTeam.problemAbstract || "No problem abstract submitted."}
+                            </p>
+                          </div>
+                        )}
+
+                        {dossierTab === "roster" && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div className="clay-well p-3 space-y-0.5">
+                              <div className="text-[10px] font-bold uppercase text-indigo-600">⭐ Team Leader</div>
+                              <div className="font-bold text-slate-900 text-xs">{currentTeam.leader?.name || "Leader"}</div>
+                              <div className="text-[11px] text-slate-500">{currentTeam.leader?.department} ({currentTeam.leader?.year})</div>
+                            </div>
+                            {currentTeam.members?.slice(1).map((m, mIdx) => (
+                              <div key={mIdx} className="clay-well p-3 space-y-0.5">
+                                <div className="text-[10px] font-bold uppercase text-slate-500">Member #{mIdx + 2}</div>
+                                <div className="font-bold text-slate-900 text-xs">{m.name || "Member"}</div>
+                                <div className="text-[11px] text-slate-500">{m.role || "Developer"}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
+                        {dossierTab === "previous" && selectedRound > 1 && (
+                          <div className="clay-box p-4 space-y-2.5 bg-amber-50/50 border border-amber-200">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                              <span className="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1">
+                                <FiCornerDownRight className="text-amber-700" />
+                                Action Items from Round {selectedRound - 1}
+                              </span>
+                              <div className="flex items-center gap-1">
+                                {["RESOLVED", "PARTIAL", "UNADDRESSED", "N/A"].map((st) => (
+                                  <button
+                                    key={st}
+                                    type="button"
+                                    onClick={() => setPreviousActionItemsStatus(st)}
+                                    className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-all cursor-pointer ${
+                                      previousActionItemsStatus === st
+                                        ? st === "RESOLVED"
+                                          ? "bg-emerald-600 text-white shadow-sm"
+                                          : st === "PARTIAL"
+                                          ? "bg-amber-600 text-white shadow-sm"
+                                          : st === "UNADDRESSED"
+                                          ? "bg-rose-600 text-white shadow-sm"
+                                          : "bg-slate-700 text-white shadow-sm"
+                                        : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                                    }`}
+                                  >
+                                    {st}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                            <p className="text-xs text-slate-700 bg-white p-3 rounded-lg border border-amber-200/70 italic">
+                              {currentTeam.evaluationsByRound?.[selectedRound - 1]?.actionItemsForNextRound ||
+                                "No specific action items recorded in previous round."}
+                            </p>
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                    {/* 2. Previous Round Feedback & Status (If Round > 1) */}
-                    {selectedRound > 1 && (
-                      <div className="clay-box p-4 sm:p-5 space-y-3 bg-amber-50/50 border border-amber-200">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                          <span className="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
-                            <FiCornerDownRight className="text-amber-700" />
-                            Round {selectedRound - 1} Assigned Action Items
-                          </span>
-                          <div className="flex items-center gap-1.5">
-                            {["RESOLVED", "PARTIAL", "UNADDRESSED", "N/A"].map((st) => (
-                              <button
-                                key={st}
-                                type="button"
-                                onClick={() => setPreviousActionItemsStatus(st)}
-                                className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-all cursor-pointer ${
-                                  previousActionItemsStatus === st
-                                    ? st === "RESOLVED"
-                                      ? "bg-emerald-600 text-white shadow-sm"
-                                      : st === "PARTIAL"
-                                      ? "bg-amber-600 text-white shadow-sm"
-                                      : st === "UNADDRESSED"
-                                      ? "bg-rose-600 text-white shadow-sm"
-                                      : "bg-slate-700 text-white shadow-sm"
-                                    : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
-                                }`}
-                              >
-                                {st}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                        <p className="text-xs text-slate-700 bg-white p-3 rounded-xl border border-amber-200/70 italic leading-relaxed">
-                          {currentTeam.evaluationsByRound?.[selectedRound - 1]?.actionItemsForNextRound ||
-                            "No specific action items recorded in previous round."}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* 3. Rubric Scoring Cards (5 Criteria) */}
+                    {/* 2. Rubric Scoring Cards (5 Criteria) */}
                     <div className="space-y-4">
                       <div className="flex items-center justify-between px-1">
-                        <h3 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
-                          <FiSliders className="text-indigo-600" />
-                          Round {selectedRound} Rubric Criteria (0 to 10 Points Each)
-                        </h3>
-                        <span className="text-xs font-semibold text-slate-500">
-                          Subtotal: <strong className="text-indigo-700 font-bold">{rawTotal}</strong> / 50
-                        </span>
+                        <div>
+                          <h3 className="font-bold text-slate-900 text-sm sm:text-base flex items-center gap-2">
+                            <FiSliders className="text-indigo-600" />
+                            Round {selectedRound} Evaluation Criteria
+                          </h3>
+                          <p className="text-[11px] text-slate-500 mt-0.5">
+                            Evaluate each dimension from 0 to 10 points. Click segments or use steppers.
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xs font-semibold text-slate-500">
+                            Subtotal: <strong className="text-indigo-700 font-bold text-sm">{rawTotal}</strong> / 50
+                          </span>
+                        </div>
                       </div>
 
                       <div className="space-y-3.5">
@@ -1088,7 +1207,7 @@ function Evaluator() {
                           return (
                             <div
                               key={crit.key}
-                              className="clay-box p-4 sm:p-5 space-y-3 bg-white transition-all hover:border-indigo-200"
+                              className="clay-box p-4 sm:p-5 space-y-3.5 bg-white transition-all hover:border-indigo-200"
                             >
                               {/* Top Row: Category + Title + Subtitle */}
                               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
@@ -1104,14 +1223,14 @@ function Evaluator() {
                                   <p className="text-xs text-slate-500 mt-1 leading-relaxed">{crit.desc}</p>
                                 </div>
 
-                                {/* Tactile Stepper Control (Ergonomic 42px touch buttons) */}
+                                {/* Tactile Stepper Control (Ergonomic 44px touch buttons) */}
                                 <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
                                   <button
                                     type="button"
                                     onClick={() => handleScoreChange(crit.key, -1)}
                                     disabled={val <= 0}
                                     className="clay-step-btn cursor-pointer"
-                                    title="Decrease"
+                                    title="Decrease score"
                                   >
                                     <FiMinus size={16} />
                                   </button>
@@ -1125,46 +1244,52 @@ function Evaluator() {
                                     onClick={() => handleScoreChange(crit.key, 1)}
                                     disabled={val >= crit.max}
                                     className="clay-step-btn cursor-pointer"
-                                    title="Increase"
+                                    title="Increase score"
                                   >
                                     <FiPlus size={16} />
                                   </button>
                                 </div>
                               </div>
 
-                              {/* Slider & Quick Presets */}
+                              {/* Interactive 10-Segment Score Meter & Preset Chips */}
                               <div className="space-y-2 pt-1">
-                                <input
-                                  type="range"
-                                  min="0"
-                                  max="10"
-                                  step="1"
-                                  value={val}
-                                  onChange={(e) => setScoreDirect(crit.key, e.target.value)}
-                                  className="clay-range cursor-pointer"
-                                />
-
-                                <div className="flex items-center justify-between gap-1.5 text-[11px]">
-                                  {[
-                                    { num: 2, label: "2 (Basic)" },
-                                    { num: 4, label: "4 (Fair)" },
-                                    { num: 6, label: "6 (Good)" },
-                                    { num: 8, label: "8 (Great)" },
-                                    { num: 10, label: "10 (Elite)" },
-                                  ].map((preset) => (
-                                    <button
-                                      key={preset.num}
-                                      type="button"
-                                      onClick={() => setScoreDirect(crit.key, preset.num)}
-                                      className={`px-2.5 py-1 rounded-md transition-all cursor-pointer font-semibold text-xs ${
-                                        val === preset.num
-                                          ? "bg-indigo-600 text-white shadow-sm font-bold"
-                                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                <div className="grid grid-cols-10 gap-1.5 cursor-pointer">
+                                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((step) => (
+                                    <div
+                                      key={step}
+                                      onClick={() => setScoreDirect(crit.key, step)}
+                                      className={`score-segment ${
+                                        val >= step ? "score-segment-active" : "score-segment-inactive"
                                       }`}
-                                    >
-                                      {preset.label}
-                                    </button>
+                                      title={`Set score to ${step}`}
+                                    />
                                   ))}
+                                </div>
+
+                                <div className="flex items-center justify-between gap-1.5 text-[11px] pt-1">
+                                  <span className="text-[10px] text-slate-400 font-medium">Presets:</span>
+                                  <div className="flex items-center gap-1.5">
+                                    {[
+                                      { num: 2, label: "2 (Basic)" },
+                                      { num: 4, label: "4 (Fair)" },
+                                      { num: 6, label: "6 (Good)" },
+                                      { num: 8, label: "8 (Great)" },
+                                      { num: 10, label: "10 (Elite)" },
+                                    ].map((preset) => (
+                                      <button
+                                        key={preset.num}
+                                        type="button"
+                                        onClick={() => setScoreDirect(crit.key, preset.num)}
+                                        className={`px-2.5 py-1 rounded-md transition-all cursor-pointer font-semibold text-xs ${
+                                          val === preset.num
+                                            ? "bg-indigo-600 text-white shadow-sm font-bold"
+                                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                                        }`}
+                                      >
+                                        {preset.label}
+                                      </button>
+                                    ))}
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -1173,30 +1298,30 @@ function Evaluator() {
                       </div>
                     </div>
 
-                    {/* 4. Score Calculation Summary Banner */}
-                    <div className="clay-box p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-white via-indigo-50/40 to-white border-l-4 border-indigo-600">
+                    {/* 3. Score Calculation Summary Banner */}
+                    <div className="clay-box p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-white via-indigo-50/50 to-white border-l-4 border-indigo-600">
                       <div className="space-y-1 text-center sm:text-left">
-                        <div className="font-bold text-slate-800 text-sm sm:text-base">
-                          Formula: Raw Subtotal ({rawTotal}/50) × Domain Weight ({trackMultiplier}x)
+                        <div className="font-bold text-slate-900 text-sm sm:text-base">
+                          Calculation: Raw ({rawTotal}/50) × Domain Multiplier ({trackMultiplier}x)
                         </div>
                         <div className="text-xs text-slate-500">
-                          Fair domain complexity multiplier for {currentTeam.track}.
+                          {criteriaEvaluatedCount}/5 criteria evaluated • Domain complexity weighting applied for {currentTeam.track}.
                         </div>
                       </div>
                       <div className="text-center sm:text-right">
                         <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-bold">
-                          Round {selectedRound} Score
+                          Round {selectedRound} Total
                         </span>
                         <span className="text-3xl sm:text-4xl font-extrabold font-['Space_Grotesk'] text-indigo-700">
                           {weightedTotal}
                         </span>
                         <span className="text-xs text-slate-400 ml-1">
-                          / {(50 * trackMultiplier).toFixed(1)}
+                          / {(50 * trackMultiplier).toFixed(1)} pts
                         </span>
                       </div>
                     </div>
 
-                    {/* 5. Remarks & Future Action Items */}
+                    {/* 4. Remarks & Action Items */}
                     <div className="clay-box p-5 sm:p-6 space-y-4 bg-white">
                       <div className="space-y-1.5">
                         <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
@@ -1229,7 +1354,7 @@ function Evaluator() {
                       )}
                     </div>
 
-                    {/* 6. Desktop Action Control Bar */}
+                    {/* 5. Desktop Action Control Bar */}
                     <div className="hidden sm:flex clay-box p-4 sm:p-5 items-center justify-between gap-4 bg-white">
                       <div className="text-xs text-slate-500 font-medium flex items-center gap-1.5">
                         <FiUserCheck className="text-emerald-600" size={16} />
@@ -1245,6 +1370,7 @@ function Evaluator() {
                         >
                           <FiSave size={15} />
                           <span>{saving ? "Saving..." : "Save Score"}</span>
+                          <span className="kbd-badge">⌘S</span>
                         </button>
 
                         <button

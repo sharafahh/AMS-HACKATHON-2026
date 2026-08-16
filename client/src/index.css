@@ -258,3 +258,50 @@
 .clay-range::-webkit-slider-thumb:hover {
   transform: scale(1.15);
 }
+
+
+/* =========================================================
+   EXPERT FRONTEND POLISH & MICRO-INTERACTION UTILITIES
+   ========================================================= */
+
+@keyframes subtleShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: subtleShimmer 3s infinite;
+}
+
+.kbd-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.375rem;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  box-shadow: 0 1px 0 #94a3b8;
+}
+
+/* Metric Segmented Score Meter */
+.score-segment {
+  height: 6px;
+  border-radius: 9999px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.score-segment-active {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
+}
+
+.score-segment-inactive {
+  background: #e2e8f0;
+}
