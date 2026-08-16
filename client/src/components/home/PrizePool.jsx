@@ -115,13 +115,9 @@ const fadeUp = {
 
 function PrizePool() {
   return (
-    <section id="prizes" className="py-24 relative bg-[#030611] overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(59,130,246,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_78%)]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[720px] h-[420px] bg-cyan-500/10 rounded-full blur-[140px]" />
-        <div className="absolute bottom-24 left-8 w-[380px] h-[380px] bg-purple-600/10 rounded-full blur-[130px]" />
-        <div className="absolute top-1/3 right-0 w-[320px] h-[320px] bg-amber-500/10 rounded-full blur-[120px]" />
-      </div>
+    <section id="prizes" className="py-24 relative bg-[#050816] overflow-hidden">
+      <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
