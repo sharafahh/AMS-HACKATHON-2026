@@ -33,6 +33,7 @@ const TRACKS_LIST = [
   "FinTech",
   "Sustainability",
   "Disaster Management",
+  "Quantum Computing",
   "Open Innovation",
 ];
 
