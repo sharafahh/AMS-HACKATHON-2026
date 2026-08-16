@@ -1,73 +1,84 @@
 import { motion } from "framer-motion";
 import {
-  FiCalendar,
   FiUserCheck,
-  FiPlay,
-  FiUsers,
   FiCheckSquare,
+  FiUsers,
+  FiCode,
+  FiStar,
+  FiMonitor,
   FiAward,
 } from "react-icons/fi";
 
 const timelineEvents = [
   {
     phase: "Phase 01",
-    title: "Registration Opens",
-    date: "1 August 2026",
-    time: "09:00 AM IST",
-    icon: FiCalendar,
+    title: "Offline Registration",
+    date: "22 August 2026",
+    time: "09:00 AM - 10:00 AM",
+    icon: FiUserCheck,
     gradient: "from-cyan-500 to-blue-600",
     border: "border-cyan-500/30 hover:border-cyan-400",
-    description: "Online team registration begins. Submit team details, select track, and reserve slot.",
+    description: "In-person check-in at the venue. Mark your attendance to secure your team's participation.",
   },
   {
     phase: "Phase 02",
-    title: "Registration Closes",
-    date: "15 August 2026",
-    time: "11:59 PM IST",
-    icon: FiUserCheck,
+    title: "Instructions & Selection",
+    date: "22 August 2026",
+    time: "10:30 AM",
+    icon: FiCheckSquare,
     gradient: "from-purple-500 to-indigo-600",
     border: "border-purple-500/30 hover:border-purple-400",
-    description: "Strict deadline for online registration and fee payment completion.",
+    description: "Detailed hackathon instructions and final problem statement selection for the teams.",
   },
   {
     phase: "Phase 03",
-    title: "Hackathon Starts",
+    title: "Round 1 Evaluation",
     date: "22 August 2026",
-    time: "09:00 AM IST",
-    icon: FiPlay,
+    time: "12:00 PM - 01:00 PM",
+    icon: FiUsers,
     gradient: "from-emerald-400 to-teal-600",
     border: "border-emerald-500/30 hover:border-emerald-400",
-    description: "Opening Ceremony at campus. 24-hour non-stop countdown clock starts!",
+    description: "First evaluation round by Infosys Springboard, external experts, and internal jury.",
   },
   {
     phase: "Phase 04",
-    title: "Mentoring",
+    title: "Round 2 Improvements",
     date: "22 August 2026",
-    time: "04:00 PM IST",
-    icon: FiUsers,
+    time: "03:00 PM - 06:00 PM",
+    icon: FiCode,
     gradient: "from-amber-400 to-yellow-600",
     border: "border-amber-500/30 hover:border-amber-400",
-    description: "Industry experts and professors review prototypes and refine pitches.",
+    description: "Dedicated time for project improvements, incorporating feedback from the first round.",
   },
   {
     phase: "Phase 05",
-    title: "Evaluation",
-    date: "23 August 2026",
-    time: "08:00 AM IST",
-    icon: FiCheckSquare,
+    title: "Round 3 Qualifying",
+    date: "22 August 2026",
+    time: "09:00 PM - 11:00 PM",
+    icon: FiStar,
     gradient: "from-rose-500 to-pink-600",
     border: "border-rose-500/30 hover:border-rose-400",
-    description: "24-hour sprint ends. Teams present live software/hardware demos to jury.",
+    description: "Crucial late-night qualifying round to evaluate progress and shortlist top teams.",
   },
   {
     phase: "Phase 06",
+    title: "Final Round",
+    date: "23 August 2026",
+    time: "02:00 AM - 05:00 AM",
+    icon: FiMonitor,
+    gradient: "from-blue-400 to-cyan-500",
+    border: "border-blue-500/30 hover:border-blue-400",
+    description: "The ultimate coding sprint. Finalize prototypes and deploy solutions for the finale.",
+  },
+  {
+    phase: "Phase 07",
     title: "Winner Announcement",
     date: "23 August 2026",
-    time: "11:00 AM IST",
+    time: "09:00 AM",
     icon: FiAward,
     gradient: "from-yellow-400 to-amber-500",
     border: "border-yellow-500/30 hover:border-yellow-400",
-    description: "Grand Valedictory Ceremony. Distribution of ₹25,500 prizes & trophies.",
+    description: "Grand Valedictory Ceremony. Winners will be announced and prizes distributed.",
   },
 ];
 
@@ -111,11 +122,8 @@ function Timeline() {
 
         {/* Horizontal Timeline Container */}
         <div className="relative pt-6">
-          {/* Horizontal Glowing Connection Bar (Desktop) */}
-          <div className="hidden xl:block absolute top-[2.2rem] left-12 right-12 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 via-emerald-500 via-amber-500 to-yellow-500 rounded-full shadow-[0_0_15px_rgba(6,182,212,0.6)] z-0" />
-
-          {/* 6-Column Grid for Desktop / Flex for Mobile */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 relative z-10">
+          {/* Grid Layout for Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10 justify-center">
             {timelineEvents.map((event, index) => {
               const Icon = event.icon;
 
@@ -173,7 +181,7 @@ function Timeline() {
 
                   {/* Step Connector Indicator */}
                   <div className="pt-4 mt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-semibold text-gray-400 group-hover:text-cyan-300 transition-colors relative z-10">
-                    <span>Step 0{index + 1} of 06</span>
+                    <span>Step 0{index + 1} of 0{timelineEvents.length}</span>
                     <span className="w-2 h-2 rounded-full bg-cyan-400 group-hover:scale-125 animate-pulse transition-transform" />
                   </div>
                 </motion.div>
