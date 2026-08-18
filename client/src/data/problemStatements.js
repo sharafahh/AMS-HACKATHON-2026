@@ -47,28 +47,6 @@ export const PROBLEM_STATEMENTS = [
     ],
   },
   {
-    id: "PS-SUS-03",
-    title: "Sustainable Smart Home Controller",
-    track: "Sustainability",
-    category: "Hardware",
-    difficulty: "Advanced",
-    summary: "Develop low-power hardware controller that intelligently manages household appliances based on occupancy, environmental conditions, and energy consumption, to reducing overall electricity usage.",
-    context: "Household appliances run even when rooms are empty or conditions don't require them. An occupancy- and environment-aware controller can cut standby and unnecessary consumption.",
-    deliverables: [
-      "Low-power appliance control hub",
-      "Occupancy and environmental sensing (presence, light, temperature)",
-      "Intelligent appliance scheduling and cut-off logic",
-      "Energy-savings report dashboard",
-    ],
-    techStack: ["ESP32 / Raspberry Pi Pico", "PIR / LDR / DHT sensors", "Relay / smart plug modules", "Low-power sleep modes"],
-    evaluation: [
-      "Working hardware prototype (40%)",
-      "Sensor accuracy & real-time response (25%)",
-      "Innovation & design (20%)",
-      "Presentation & real-world viability (15%)",
-    ],
-  },
-  {
     id: "PS-SUS-04",
     title: "Waste-Heat Energy Recovery System",
     track: "Sustainability",
@@ -90,32 +68,6 @@ export const PROBLEM_STATEMENTS = [
       "Presentation & real-world viability (15%)",
     ],
   },
-  {
-    id: "PS-SUS-05",
-    title: "AI-Based Energy Theft & Wastage Detector",
-    track: "Sustainability",
-    category: "Hardware",
-    difficulty: "Grand Challenge",
-    summary: "Develop hardware monitoring system that analyzes electrical consumption patterns to distinguish normal usage from abnormal consumption, equipment malfunction, or energy wastage.",
-    context: "Energy theft and silent equipment faults distort consumption baselines and inflate losses. Pattern analysis on consumption data can flag anomalies before they grow.",
-    deliverables: [
-      "Consumption monitoring hardware (current / voltage sampling)",
-      "Anomaly detection over consumption patterns",
-      "Normal-vs-abnormal classification (theft, fault, wastage)",
-      "Alert dashboard for consumers and utilities",
-    ],
-    techStack: ["ESP32 / Arduino", "CT / ZMPT current-voltage sensors", "On-device or cloud ML", "Alert dashboard"],
-    evaluation: [
-      "Working hardware prototype (40%)",
-      "Sensor accuracy & real-time response (25%)",
-      "Innovation & design (20%)",
-      "Presentation & real-world viability (15%)",
-    ],
-  },
-
-  // ═══════════════════════════════════════════════════════════════
-  // SMART AUTOMATION (5)
-  // ═══════════════════════════════════════════════════════════════
   {
     id: "PS-AUT-01",
     title: "Smart Safety & Emergency Response System",
@@ -204,32 +156,6 @@ export const PROBLEM_STATEMENTS = [
       "Presentation & real-world viability (15%)",
     ],
   },
-  {
-    id: "PS-AUT-05",
-    title: "Intelligent Motor Control & Efficiency Optimizer",
-    track: "Smart Automation",
-    category: "Hardware",
-    difficulty: "Advanced",
-    summary: "Develop motor controller that continuously analyzes load, speed, temperature, and current and automatically adjusts operating parameters to achieve required performance with minimum energy consumption.",
-    context: "Motors consume a large share of industrial electricity, often running at fixed parameters regardless of load. Adaptive control tuned to live load and temperature cuts waste.",
-    deliverables: [
-      "Motor controller with load/current/temperature sensing",
-      "Automatic parameter adjustment for efficiency",
-      "Performance-vs-energy comparison reporting",
-      "Demo motor rig with variable load",
-    ],
-    techStack: ["ESP32 / Arduino", "Motor driver (L298N/BTS7960)", "Current & temperature sensors", "PWM control loop"],
-    evaluation: [
-      "Working hardware prototype (40%)",
-      "Sensor accuracy & real-time response (25%)",
-      "Innovation & design (20%)",
-      "Presentation & real-world viability (15%)",
-    ],
-  },
-
-  // ═══════════════════════════════════════════════════════════════
-  // SMART MOBILITY (5)
-  // ═══════════════════════════════════════════════════════════════
   {
     id: "PS-MOB-01",
     title: "Autonomous Emergency Vehicle Priority System",
@@ -433,32 +359,6 @@ export const PROBLEM_STATEMENTS = [
     ],
   },
   {
-    id: "PS-AGR-05",
-    title: "Autonomous Fruit Counting & Yield Estimation",
-    track: "Agriculture",
-    category: "Hardware",
-    difficulty: "Advanced",
-    summary: "Develop camera-based agricultural device that automatically counts fruits on plants and estimates expected crop yield using embedded image processing.",
-    context: "Yield estimates today rely on manual sampling and guesswork. Camera-based counting on the plant gives growers an early, data-driven forecast for planning and pricing.",
-    deliverables: [
-      "Camera-based fruit detection and counting",
-      "Embedded image processing pipeline",
-      "Yield estimation model",
-      "Field demo and reporting dashboard",
-    ],
-    techStack: ["Raspberry Pi / ESP32-CAM", "Camera module", "OpenCV / edge ML", "Yield reporting dashboard"],
-    evaluation: [
-      "Working hardware prototype (40%)",
-      "Sensor accuracy & real-time response (25%)",
-      "Innovation & design (20%)",
-      "Presentation & real-world viability (15%)",
-    ],
-  },
-
-  // ═══════════════════════════════════════════════════════════════
-  // SMART EDUCATION (3)
-  // ═══════════════════════════════════════════════════════════════
-  {
     id: "PS-EDU-01",
     title: "Assistive Learning Device for Visually Impaired Students",
     track: "Smart Education",
@@ -473,28 +373,6 @@ export const PROBLEM_STATEMENTS = [
       "Demo with printed material",
     ],
     techStack: ["Raspberry Pi / ESP32", "Camera + OCR (Tesseract)", "Speaker / vibrotactile array", "Battery-powered design"],
-    evaluation: [
-      "Working hardware prototype (40%)",
-      "Sensor accuracy & real-time response (25%)",
-      "Innovation & design (20%)",
-      "Presentation & real-world viability (15%)",
-    ],
-  },
-  {
-    id: "PS-EDU-02",
-    title: "Smart Attendance Using Multi-Modal Detection",
-    track: "Smart Education",
-    category: "Hardware",
-    difficulty: "Advanced",
-    summary: "Design automated attendance system that combines technologies such as RFID, face recognition, or Bluetooth proximity to accurately record attendance while preventing proxy attendance.",
-    context: "Manual attendance is slow and proxy-prone. Combining multiple identification modes (RFID + face / proximity) makes attendance accurate and difficult to fake.",
-    deliverables: [
-      "RFID / Bluetooth / face detection hardware",
-      "Multi-modal identity verification",
-      "Proxy-prevention logic",
-      "Attendance records dashboard",
-    ],
-    techStack: ["ESP32 / Raspberry Pi", "RFID RC522 / camera", "Bluetooth modules", "Attendance dashboard"],
     evaluation: [
       "Working hardware prototype (40%)",
       "Sensor accuracy & real-time response (25%)",
@@ -635,28 +513,6 @@ export const PROBLEM_STATEMENTS = [
       "Wheelchair demo rig",
     ],
     techStack: ["ESP32 / Arduino", "Ultrasonic / IR sensors", "Motor + brake actuators", "Navigation firmware"],
-    evaluation: [
-      "Working hardware prototype (40%)",
-      "Sensor accuracy & real-time response (25%)",
-      "Innovation & design (20%)",
-      "Presentation & real-world viability (15%)",
-    ],
-  },
-  {
-    id: "PS-HC-03",
-    title: "Smart Hospital Bed Automation",
-    track: "Healthcare",
-    category: "Hardware",
-    difficulty: "Advanced",
-    summary: "Develop intelligent hospital bed that monitors patient presence and automatically assists with bed-position adjustment, fall prevention, and caregiver alerts.",
-    context: "Hospital staff juggle many beds; patient falls and unmet positioning needs are constant risks. A smart bed that senses presence, adjusts position, and alerts caregivers improves safety and workload.",
-    deliverables: [
-      "Patient presence detection",
-      "Automatic bed-position adjustment",
-      "Fall-prevention logic",
-      "Caregiver alert dashboard",
-    ],
-    techStack: ["ESP32 / Arduino", "Pressure / presence sensors", "Linear actuators / motors", "Alert dashboard"],
     evaluation: [
       "Working hardware prototype (40%)",
       "Sensor accuracy & real-time response (25%)",
