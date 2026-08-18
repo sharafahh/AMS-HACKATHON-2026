@@ -4,19 +4,20 @@ import Registration from "../models/Registration.js";
 import Evaluation from "../models/Evaluation.js";
 import connectDB from "../config/db.js";
 
-// Calibrated fair track credit multipliers (configurable placeholders)
+// Official track credit multipliers per agent.md §4 (12 innovation domains)
 export const TRACK_WEIGHTAGES = {
-  "AI & Machine Learning": 1.08,
-  "Cyber Security": 1.07,
-  "Smart Automation": 1.07,
-  "Healthcare": 1.06,
-  "Disaster Management": 1.05,
-  "Agriculture": 1.05,
+  "AI & Machine Learning": 1.2,
+  "Cyber Security": 1.2,
+  "Healthcare": 1.1,
+  "Agriculture": 1.1,
+  "Smart Education": 1.0,
+  "Smart Mobility": 1.1,
+  "Smart Automation": 1.1,
+  "FinTech": 1.15,
   "Sustainability": 1.05,
-  "Open Innovation": 1.05,
-  "Smart Mobility": 1.04,
-  "FinTech": 1.04,
-  "Smart Education": 1.02,
+  "Disaster Management": 1.1,
+  "Quantum Computing": 1.25,
+  "Open Innovation": 1.0,
 };
 
 // Fallback demo teams for offline development & staging verification
