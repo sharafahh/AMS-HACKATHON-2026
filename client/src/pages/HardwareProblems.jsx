@@ -20,6 +20,7 @@ import {
   FiAward,
 } from "react-icons/fi";
 import { PROBLEM_STATEMENTS } from "../data/problemStatements";
+import { PROBLEM_REVEAL_TIMESTAMP, formatRevealRemaining } from "../constants/reveal";
 
 const TRACKS_LIST = [
   "All Tracks",
@@ -46,11 +47,31 @@ function HardwareProblems() {
 
   // Authentication State
   const [isUnlocked, setIsUnlocked] = useState(() => {
-    return sessionStorage.getItem("ams_hackathon_ps_unlocked") === "true";
+    return (
+      sessionStorage.getItem("ams_hackathon_ps_unlocked") === "true" ||
+      Date.now() >= PROBLEM_REVEAL_TIMESTAMP
+    );
   });
   const [passcode, setPasscode] = useState("");
   const [authError, setAuthError] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
+
+  // Auto-unlock the moment the official reveal time passes (11:01 AM IST, Aug 19)
+  const [revealCountdown, setRevealCountdown] = useState(() =>
+    Math.max(0, PROBLEM_REVEAL_TIMESTAMP - Date.now())
+  );
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const remaining = PROBLEM_REVEAL_TIMESTAMP - Date.now();
+      setRevealCountdown(Math.max(0, remaining));
+      if (remaining <= 0 && !sessionStorage.getItem("ams_hackathon_ps_unlocked")) {
+        sessionStorage.setItem("ams_hackathon_ps_unlocked", "true");
+        setIsUnlocked(true);
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Filters State
   const [selectedTrack, setSelectedTrack] = useState(() => {
@@ -168,7 +189,7 @@ function HardwareProblems() {
               Hackathon <span className="text-gradient-cyan-purple">Problem Statements</span>
             </h1>
             <p className="text-gray-400 text-xs sm:text-sm font-light">
-              Official challenge statements across 11 innovation domains (Software & Hardware).
+              Official challenge statements across 12 innovation domains (Software & Hardware).
             </p>
           </div>
 
@@ -215,6 +236,12 @@ function HardwareProblems() {
                 <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed">
                   Enter your assigned Participant Passcode or Registration ID to explore the official problem statements and specifications.
                 </p>
+                {revealCountdown > 0 && (
+                  <p className="text-amber-300 text-xs sm:text-sm font-semibold font-['Space_Grotesk'] inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full px-3.5 py-1.5">
+                    <FiClock className="animate-pulse" />
+                    Official Reveal in {formatRevealRemaining(revealCountdown)}
+                  </p>
+                )}
               </div>
 
               {/* Passcode Form */}

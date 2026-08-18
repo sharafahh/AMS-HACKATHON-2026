@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiMenu, FiX, FiChevronRight } from "react-icons/fi";
+import RevealCountdown from "../common/RevealCountdown";
 
 const navLinks = [
   { name: "Home", href: "#hero" },
@@ -116,12 +117,7 @@ function Navbar() {
 
         {/* Action Buttons & Hamburger */}
         <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-          <Link
-            to="/hardware-problems"
-            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full glass-card border border-amber-500/40 text-amber-300 hover:text-white hover:border-amber-500/80 text-[11px] sm:text-xs font-bold font-['Space_Grotesk'] transition-all shadow-md whitespace-nowrap"
-          >
-            Hardware PS
-          </Link>
+          <RevealCountdown variant="desktop" />
 
           <Link
             to="/register"
@@ -166,13 +162,7 @@ function Navbar() {
                 </a>
               ))}
               <div className="pt-2 flex flex-col gap-2">
-                <Link
-                  to="/hardware-problems"
-                  onClick={() => setIsOpen(false)}
-                  className="w-full text-center py-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold text-xs uppercase"
-                >
-                  Hardware PS Portal
-                </Link>
+                <RevealCountdown variant="mobile" onNavigate={() => setIsOpen(false)} />
                 <Link
                   to="/register"
                   onClick={() => setIsOpen(false)}
