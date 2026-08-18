@@ -69,7 +69,7 @@ export const sendConfirmationEmail = async ({
 
     const subject = `🎉 ${eventName} | Registration Confirmed! (ID: ${registrationId})`;
     const whatsappUrl = "https://chat.whatsapp.com/IdPOeoehQUrIVXt00cZibU";
-    const organizerEmail = process.env.SMTP_USER || "amshackathon2026@gmail.com";
+    const organizerEmail = process.env.SMTP_USER || "coordinatoramshackathon@gmail.com";
 
     // Format Team Members into HTML Roster Table
     const memberRowsHtml = Array.isArray(teamMembers) && teamMembers.length > 0
@@ -295,7 +295,7 @@ AMS Hackathon 2026 Committee`;
  */
 export const sendContactMessageEmail = async ({ name, email, subject, message }) => {
   try {
-    const organizerEmail = process.env.ORGANIZER_NOTIFICATION_EMAIL || process.env.ORGANIZER_EMAIL || process.env.SMTP_USER || process.env.EMAIL_USER || "amshackathon2026@gmail.com";
+    const organizerEmail = process.env.ORGANIZER_NOTIFICATION_EMAIL || process.env.ORGANIZER_EMAIL || process.env.SMTP_USER || process.env.EMAIL_USER || "coordinatoramshackathon@gmail.com";
     const mailSubject = `📩 NEW INQUIRY: ${subject || "General Query"} (From ${name})`;
 
     const textBody = `New Participant Inquiry Received:
@@ -325,7 +325,7 @@ ${message}
 
     const transporter = getTransporter();
     if (transporter) {
-      const smtpUser = process.env.SMTP_USER || "amshackathon2026@gmail.com";
+      const smtpUser = process.env.SMTP_USER || "coordinatoramshackathon@gmail.com";
       await transporter.sendMail({
         from: `"AMS Hackathon Contact Desk" <${smtpUser}>`,
         to: organizerEmail,
@@ -375,7 +375,7 @@ export const sendOrganizerNotificationEmail = async ({
     return true;
   }
 
-  const organizerEmail = process.env.ORGANIZER_NOTIFICATION_EMAIL || process.env.ORGANIZER_EMAIL || process.env.SMTP_USER || process.env.EMAIL_USER || "amshackathon2026@gmail.com";
+  const organizerEmail = process.env.ORGANIZER_NOTIFICATION_EMAIL || process.env.ORGANIZER_EMAIL || process.env.SMTP_USER || process.env.EMAIL_USER || "coordinatoramshackathon@gmail.com";
   const formattedTime = new Date(registrationTime).toLocaleString("en-IN", {
     timeZone: "Asia/Kolkata",
     dateStyle: "full",
@@ -461,7 +461,7 @@ Timestamp       : ${formattedTime}`;
         return false;
       }
 
-      const smtpUser = process.env.SMTP_USER || "amshackathon2026@gmail.com";
+      const smtpUser = process.env.SMTP_USER || "coordinatoramshackathon@gmail.com";
       const info = await transporter.sendMail({
         from: `"AMS Hackathon System" <${smtpUser}>`,
         to: organizerEmail,
@@ -573,7 +573,7 @@ Event: 22-23 August 2026, 9:00 AM IST`;
       return false;
     }
 
-    const smtpUser = process.env.SMTP_USER || "amshackathon2026@gmail.com";
+    const smtpUser = process.env.SMTP_USER || "coordinatoramshackathon@gmail.com";
     const info = await transporter.sendMail({
       from: `"AMS Hackathon System" <${smtpUser}>`,
       to: toEmail,
