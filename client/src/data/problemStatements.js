@@ -1,593 +1,667 @@
 export const PROBLEM_STATEMENTS = [
+  // ═══════════════════════════════════════════════════════════════
+  // SUSTAINABILITY (5)
+  // ═══════════════════════════════════════════════════════════════
   {
-    "id": "PS-AI-01",
-    "title": "Autonomous Multi-Agent Regulatory & Compliance Auditing System",
-    "track": "AI & Machine Learning",
-    "category": "Software",
-    "difficulty": "Advanced",
-    "summary": "Develop a cooperative multi-agent LLM framework that scans unstructured enterprise policies, contracts, and financial records to flag non-compliance and generate audit trails.",
-    "context": "Modern enterprises spend thousands of hours manually reviewing thousands of pages of evolving compliance regulations. An autonomous multi-agent system can verify clauses against state and federal laws with high fidelity.",
-    "deliverables": [
-      "Agent orchestration pipeline (retriever, compliance evaluator, synthesizer)",
-      "Interactive dashboard highlighting non-compliant clauses with citation references",
-      "Automated PDF compliance audit report generator",
-      "Confidence scoring and human-in-the-loop dispute workflow"
+    id: "PS-SUS-01",
+    title: "Smart Waste Monitoring and Collection System",
+    track: "Sustainability",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Build an IoT-enabled smart dustbin that monitors waste levels and identifies type of waste being disposed of. System should provide real-time notifications when bin requires collection and help optimize waste-collection routes, reducing fuel consumption and unnecessary transportation.",
+    context: "Municipal waste collection is often scheduled on fixed routes, so partially-empty bins get serviced while overflowing bins wait. Real-time fill-level and waste-type data enables dynamic routing and timely collection.",
+    deliverables: [
+      "IoT dustbin node with fill-level sensing and waste-type identification",
+      "Real-time fill-level notifications when collection is required",
+      "Route optimization module for collection vehicles",
+      "Live monitoring dashboard for waste operators",
     ],
-    "techStack": [
-      "Python / FastAPI",
-      "LangChain / LlamaIndex",
-      "Vector DB (Milvus/Chroma)",
-      "React + Tailwind"
+    techStack: ["ESP32 / Arduino", "Ultrasonic / IR sensors", "LoRa / Wi-Fi / MQTT", "Dashboard (React)"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Accuracy of citation extraction (30%)",
-      "Multi-agent coordination logic (25%)",
-      "Dashboard UI/UX (25%)",
-      "Real-time query latency (20%)"
-    ]
   },
   {
-    "id": "PS-AI-02",
-    "title": "Real-Time Multimodal Edge Vision Defect Detection for Micro-Manufacturing",
-    "track": "AI & Machine Learning",
-    "category": "Dual Track",
-    "difficulty": "Grand Challenge",
-    "summary": "Construct a lightweight computer vision pipeline capable of detecting micro-surface defects on printed circuit boards (PCBs) at sub-second frame rates on edge hardware.",
-    "context": "High-speed assembly lines require visual inspection systems that can detect solder bridging, missing components, and trace fractures without sending raw video feeds to high-latency cloud servers.",
-    "deliverables": [
-      "Trained YOLO / Edge-SAM model quantized for edge inference",
-      "Live camera stream inference dashboard with bounding boxes and heatmaps",
-      "Automated defect classification and reject-signal trigger simulation",
-      "Historical defect analytics log with exportable CSV audit data"
+    id: "PS-SUS-02",
+    title: "Sustainable Hardware Lifecycle Monitor",
+    track: "Sustainability",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Create hardware system that monitors health, energy consumption, and usage of electronic devices to extend their operational lifetime. Solution should identify components that can be repaired or replaced instead of discarding entire device, thereby reducing e-waste and promoting circular economy.",
+    context: "E-waste grows when entire devices are discarded for a single failing part. Continuous health and energy telemetry lets users repair or replace only the degraded component.",
+    deliverables: [
+      "Device health and energy-consumption monitoring hardware",
+      "Component-level fault and degradation identification",
+      "Repair-vs-replace recommendation engine",
+      "Lifecycle analytics dashboard",
     ],
-    "techStack": [
-      "PyTorch / ONNX Runtime",
-      "OpenCV",
-      "FastAPI / WebSockets",
-      "Raspberry Pi / ESP32-CAM Compatible"
+    techStack: ["ESP32 / Raspberry Pi", "Current / voltage sensors", "Temperature sensors", "Analytics dashboard"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Inference FPS & latency (30%)",
-      "Defect detection F1-score (30%)",
-      "Edge deployment architecture (25%)",
-      "Interface usability (15%)"
-    ]
   },
   {
-    "id": "PS-CS-01",
-    "title": "Zero-Trust Behavioral Identity Verification & Session Hijacking Sentinel",
-    "track": "Cyber Security",
-    "category": "Software",
-    "difficulty": "Advanced",
-    "summary": "Build a continuous zero-trust authentication engine that analyzes biometric keystroke dynamics, mouse trajectory patterns, and network anomalies to detect unauthorized session takeovers.",
-    "context": "Static single-sign-on (SSO) is vulnerable to session token theft (Pass-The-Cookie). Continuous behavioral verification flags account hijacking even when valid credentials are used.",
-    "deliverables": [
-      "Client-side passive telemetry collector (keystroke timing, mouse vectors)",
-      "Machine learning risk scoring engine calculating instantaneous threat levels",
-      "Automated step-up MFA challenge trigger when anomaly threshold is breached",
-      "Security Operations Center (SOC) incident visualization dashboard"
+    id: "PS-SUS-03",
+    title: "Sustainable Smart Home Controller",
+    track: "Sustainability",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Develop low-power hardware controller that intelligently manages household appliances based on occupancy, environmental conditions, and energy consumption, to reduce overall electricity usage.",
+    context: "Household appliances run even when rooms are empty or conditions don't require them. An occupancy- and environment-aware controller can cut standby and unnecessary consumption.",
+    deliverables: [
+      "Low-power appliance control hub",
+      "Occupancy and environmental sensing (presence, light, temperature)",
+      "Intelligent appliance scheduling and cut-off logic",
+      "Energy-savings report dashboard",
     ],
-    "techStack": [
-      "Node.js / Go",
-      "TensorFlow.js / Scikit-Learn",
-      "Redis",
-      "React + Tailwind"
+    techStack: ["ESP32 / Raspberry Pi Pico", "PIR / LDR / DHT sensors", "Relay / smart plug modules", "Low-power sleep modes"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Keystroke behavioral anomaly accuracy (35%)",
-      "Zero false-positive user friction (25%)",
-      "SOC Alert real-time dashboard (25%)",
-      "Code security posture (15%)"
-    ]
   },
   {
-    "id": "PS-CS-02",
-    "title": "Automated Smart Contract Bytecode Vulnerability & Reentrancy Scanner",
-    "track": "Cyber Security",
-    "category": "Software",
-    "difficulty": "Intermediate",
-    "summary": "Design an automated static analysis scanner that disassembles EVM bytecode, identifies flash loan vulnerability vectors, reentrancy loops, and generates automated remediation patches.",
-    "context": "DeFi protocols continue to lose millions to subtle smart contract bugs. A fast static analyzer empowers developers to audit contracts prior to mainnet deployment.",
-    "deliverables": [
-      "EVM bytecode disassembler and abstract syntax tree (AST) analyzer",
-      "Detection rules for Reentrancy, Timestamp Dependence, and Integer Overflows",
-      "Interactive code diff view showing proposed vulnerability fixes",
-      "Comprehensive audit score matrix and shareable badge generation"
+    id: "PS-SUS-04",
+    title: "Waste-Heat Energy Recovery System",
+    track: "Sustainability",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Design prototype that captures waste heat from sources such as electronic equipment, exhaust systems, or industrial surfaces and converts it into usable electrical energy using thermoelectric generators.",
+    context: "Large amounts of generated heat are vented away unused. Thermoelectric generators can convert a portion of that waste heat back into usable electrical energy.",
+    deliverables: [
+      "Thermoelectric generator (TEG) prototype with heat capture",
+      "Temperature differential measurement and conversion circuit",
+      "Energy storage and output regulation",
+      "Efficiency measurement and demo rig",
     ],
-    "techStack": [
-      "Solidity",
-      "Rust / Python",
-      "Slither / Mythril AST Hooks",
-      "React"
+    techStack: ["TEG / Peltier modules", "Boost converter", "Heat sink & thermal interface", "Power monitoring"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Vulnerability detection rate (35%)",
-      "Remediation patch correctness (30%)",
-      "Execution speed (20%)",
-      "User experience (15%)"
-    ]
   },
   {
-    "id": "PS-HC-01",
-    "title": "Smart ICU Patient Multi-Vital Telemetry & Early Sepsis Warning Engine",
-    "track": "Healthcare",
-    "category": "Dual Track",
-    "difficulty": "Grand Challenge",
-    "summary": "Create an end-to-end IoT patient telemetry monitor that ingests HR, SpO2, and temperature readings to calculate real-time SOFA scores and forecast septic shocks 4 hours in advance.",
-    "context": "Sepsis is one of the leading causes of ICU mortality. Early predictive intervention based on continuous vital telemetry dramatically improves patient survival rates.",
-    "deliverables": [
-      "ESP32 sensor payload interface simulating ECG/Pulse/SpO2/Temp telemetry",
-      "Real-time clinician monitoring dashboard with audible emergency triage alerts",
-      "Time-series ML forecasting model for 4-hour sepsis onset risk",
-      "Automated SMS/Email escalation to on-call medical personnel"
+    id: "PS-SUS-05",
+    title: "AI-Based Energy Theft & Wastage Detector",
+    track: "Sustainability",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop hardware monitoring system that analyzes electrical consumption patterns to distinguish normal usage from abnormal consumption, equipment malfunction, or energy wastage.",
+    context: "Energy theft and silent equipment faults distort consumption baselines and inflate losses. Pattern analysis on consumption data can flag anomalies before they grow.",
+    deliverables: [
+      "Consumption monitoring hardware (current / voltage sampling)",
+      "Anomaly detection over consumption patterns",
+      "Normal-vs-abnormal classification (theft, fault, wastage)",
+      "Alert dashboard for consumers and utilities",
     ],
-    "techStack": [
-      "ESP32 / Arduino C++",
-      "MQTT / WebSockets",
-      "Python XGBoost / LSTM",
-      "React Chart.js"
+    techStack: ["ESP32 / Arduino", "CT / ZMPT current-voltage sensors", "On-device or cloud ML", "Alert dashboard"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Prediction lead time and ROC-AUC (35%)",
-      "Hardware telemetry reliability (25%)",
-      "Triage UI clarity for nurses (25%)",
-      "Alert delivery speed (15%)"
-    ]
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // SMART AUTOMATION (5)
+  // ═══════════════════════════════════════════════════════════════
+  {
+    id: "PS-AUT-01",
+    title: "Smart Safety & Emergency Response System",
+    track: "Smart Automation",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Create intelligent hardware system capable of detecting hazards such as fire, gas leakage, abnormal temperature, or unauthorized access. Once hazard is detected, system should automatically activate appropriate responses such as shutting down equipment, triggering alarms, activating ventilation, or sending emergency notifications.",
+    context: "Homes, labs, and industrial sites need a single system that detects multiple hazard classes and reacts automatically — shutting equipment, venting, alarming, and notifying — without waiting for human response.",
+    deliverables: [
+      "Multi-sensor hazard detection (fire, gas, temperature, intrusion)",
+      "Automatic response actuation (shutdown, alarm, ventilation)",
+      "Emergency notification dispatch (SMS / app / buzzer)",
+      "Hazard status dashboard",
+    ],
+    techStack: ["ESP32 / Arduino", "Flame / MQ2 gas / DHT sensors", "Relays & buzzer", "Notification service"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
+    ],
   },
   {
-    "id": "PS-HC-02",
-    "title": "Decentralized Medical Prescription & Anti-Counterfeit Drug Verification",
-    "track": "Healthcare",
-    "category": "Software",
-    "difficulty": "Intermediate",
-    "summary": "Architect a tamper-proof digital prescription verification network using cryptographic signatures to eliminate counterfeit pharmaceuticals and illegal prescription reuse.",
-    "context": "Prescription forgery and black-market drug counterfeiting cause severe global health risks. Cryptographic prescription verification ensures single-dispense authenticity.",
-    "deliverables": [
-      "Doctor portal for signing cryptographic e-prescriptions with digital keys",
-      "Pharmacy dispense validation scanner that invalidates one-time redemption tokens",
-      "Patient mobile-friendly prescription wallet and QR verification link",
-      "Drug batch provenance tracker mapping serial numbers to manufacturers"
+    id: "PS-AUT-02",
+    title: "Autonomous Waste Sorting System",
+    track: "Smart Automation",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop smart hardware system that automatically detects and separates different types of waste such as plastic, metal, paper, and electronic components. System should use sensors and embedded intelligence to improve sorting accuracy and reduce manual effort.",
+    context: "Manual waste segregation is slow, inconsistent, and unsafe. Sensor-driven classification with automated separation improves recycling rates and reduces human effort.",
+    deliverables: [
+      "Waste-type detection (plastic, metal, paper, e-waste)",
+      "Automated separation mechanism (conveyor / actuators)",
+      "Embedded classification intelligence",
+      "Sorting accuracy reporting",
     ],
-    "techStack": [
-      "Node.js / Express",
-      "ECDSA Cryptographic Signatures",
-      "MongoDB",
-      "React QR Scanner"
+    techStack: ["ESP32 / Raspberry Pi", "Inductive / capacitive sensors", "Camera (optional)", "Servo / motor actuators"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Cryptographic tamper resistance (35%)",
-      "Workflow simplicity (25%)",
-      "Batch traceability (25%)",
-      "Role access control (15%)"
-    ]
   },
   {
-    "id": "PS-AG-01",
-    "title": "Smart Agricultural Soil NPK Telemetry & LoRaWAN Drone Mesh Gateway",
-    "track": "Agriculture",
-    "category": "Hardware",
-    "difficulty": "Advanced",
-    "summary": "Construct a solar-powered field sensor node measuring Nitrogen, Phosphorus, Potassium (NPK), moisture, and pH, communicating across miles via LoRaWAN telemetry.",
-    "context": "Rural farmlands lack cellular broadband. Low-power LoRa mesh nodes allow farmers to monitor vast hectares of soil without recurring data charges.",
-    "deliverables": [
-      "Embedded sensor node schematic using Arduino/ESP32 and LoRa transceivers",
-      "Solar power management and ultra-low-power sleep cycle firmware",
-      "Central gateway receiver relaying telemetry to cloud dashboard",
-      "Farmer dashboard providing automated fertilizer mixing recommendations"
+    id: "PS-AUT-03",
+    title: "Autonomous Robotic Pick-and-Place System",
+    track: "Smart Automation",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop vision/sensor-based robotic system capable of identifying objects, determining their position, picking them up, and placing them at predefined locations without human intervention.",
+    context: "Assembly and packaging lines depend on repetitive pick-and-place operations. A vision-guided robotic arm that locates and relocates objects autonomously reduces manual labor and errors.",
+    deliverables: [
+      "Robotic arm / gantry with gripper",
+      "Vision or sensor-based object detection and localization",
+      "Autonomous pick-up and place-at-target logic",
+      "Demo workspace with predefined target zones",
     ],
-    "techStack": [
-      "Arduino / ESP32 C++",
-      "LoRa SX1278 (433/868 MHz)",
-      "MQTT Broker",
-      "React Mapbox"
+    techStack: ["Robotic arm / servo kit", "Camera (OpenCV) or ultrasonic/IR", "ESP32 / Raspberry Pi", "Control firmware"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Power efficiency & sleep cycle design (30%)",
-      "Telemetry transmission range (25%)",
-      "Soil health prescription logic (25%)",
-      "Enclosure ruggedness design (20%)"
-    ]
   },
   {
-    "id": "PS-AG-02",
-    "title": "AI-Driven Satellite Crop Health Analyzer & Direct Market Aggregator",
-    "track": "Agriculture",
-    "category": "Software",
-    "difficulty": "Intermediate",
-    "summary": "Develop a platform utilizing Sentinel-2 satellite NDVI imagery to monitor regional crop health and connect farmers directly with wholesale food aggregators.",
-    "context": "Middlemen take over 40% of agricultural profits. Direct price discovery based on verified crop quality data maximizes farm gate revenue.",
-    "deliverables": [
-      "Satellite NDVI calculation pipeline from public Copernicus Sentinel-2 data",
-      "Geospatial crop health map with pest/drought vulnerability heatmaps",
-      "B2B marketplace with live crop bidding and smart transport route matching",
-      "Multilingual SMS advisory for non-smartphone farmers"
+    id: "PS-AUT-04",
+    title: "Adaptive Exoskeleton Control System",
+    track: "Smart Automation",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop hardware prototype that detects human movement and automatically adjusts motor assistance according to user's movement and applied force. System should provide assistance while maintaining safe limits.",
+    context: "Assistive exoskeletons must match human intent in real time — boosting when the user pushes, resisting beyond safe limits — to aid mobility without causing harm.",
+    deliverables: [
+      "Movement and force sensing (IMU / load cells)",
+      "Motor assistance control tuned to user input",
+      "Safety limit enforcement",
+      "Prototype demo with adjustable assistance levels",
     ],
-    "techStack": [
-      "Python GeoPandas / Rasterio",
-      "FastAPI",
-      "PostGIS",
-      "React Tailwind"
+    techStack: ["ESP32 / STM32", "IMU (MPU6050)", "Load cells / force sensors", "DC / servo motors + driver"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Satellite NDVI processing speed (30%)",
-      "Marketplace bidding workflow (25%)",
-      "Advisory actionable quality (25%)",
-      "Multilingual accessibility (20%)"
-    ]
   },
   {
-    "id": "PS-ED-01",
-    "title": "Gamified Adaptive STEM Tutor & Neurodivergent Focus Assistant",
-    "track": "Smart Education",
-    "category": "Software",
-    "difficulty": "Intermediate",
-    "summary": "Build an interactive web-based STEM learning companion that dynamically adjusts question difficulty, visual complexity, and audio pacing based on student focus signals.",
-    "context": "One-size-fits-all education leaves neurodivergent and struggling students behind. Adaptive pacing creates engaging learning environments for all cognitive types.",
-    "deliverables": [
-      "Adaptive quiz progression algorithm with dynamic hint revelation",
-      "Interactive 3D physics / chemistry micro-lab simulators in browser",
-      "Visual distraction filter and high-contrast dyslexia-friendly mode",
-      "Teacher analytics view showing concept mastery and struggle points"
+    id: "PS-AUT-05",
+    title: "Intelligent Motor Control & Efficiency Optimizer",
+    track: "Smart Automation",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Develop motor controller that continuously analyzes load, speed, temperature, and current and automatically adjusts operating parameters to achieve required performance with minimum energy consumption.",
+    context: "Motors consume a large share of industrial electricity, often running at fixed parameters regardless of load. Adaptive control tuned to live load and temperature cuts waste.",
+    deliverables: [
+      "Motor controller with load/current/temperature sensing",
+      "Automatic parameter adjustment for efficiency",
+      "Performance-vs-energy comparison reporting",
+      "Demo motor rig with variable load",
     ],
-    "techStack": [
-      "React",
-      "Three.js / Canvas API",
-      "Node.js",
-      "Web Speech API"
+    techStack: ["ESP32 / Arduino", "Motor driver (L298N/BTS7960)", "Current & temperature sensors", "PWM control loop"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Adaptive algorithm effectiveness (30%)",
-      "Interactive simulator design (30%)",
-      "Accessibility standards compliance (25%)",
-      "Teacher report utility (15%)"
-    ]
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // SMART MOBILITY (5)
+  // ═══════════════════════════════════════════════════════════════
+  {
+    id: "PS-MOB-01",
+    title: "Autonomous Emergency Vehicle Priority System",
+    track: "Smart Mobility",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop smart traffic-control hardware system that detects approaching emergency vehicles such as ambulances and automatically creates priority route by coordinating traffic signals.",
+    context: "Ambulances lose critical minutes waiting at signals. Detecting emergency vehicles and pre-empting signal phases along their path clears a priority corridor automatically.",
+    deliverables: [
+      "Emergency vehicle detection (RF / siren / camera)",
+      "Traffic signal coordination logic",
+      "Priority route computation",
+      "Signal controller demo rig",
+    ],
+    techStack: ["ESP32 / Arduino", "RF modules / microphone array", "Traffic light LED rig", "Coordination firmware"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
+    ],
   },
   {
-    "id": "PS-ED-02",
-    "title": "AI Peer Code Reviewer & Automated Plagiarism Disassembler for Universities",
-    "track": "Smart Education",
-    "category": "Software",
-    "difficulty": "Advanced",
-    "summary": "Create an automated code assignment evaluator that provides semantic line-by-line feedback, detects structural AST-level code cloning, and generates unit test harnesses.",
-    "context": "University professors struggle to grade hundreds of coding submissions manually. An intelligent grading engine provides instant constructive pedagogical feedback.",
-    "deliverables": [
-      "AST-based code similarity analyzer immune to variable renaming or code reordering",
-      "Automated sandboxed test runner executing student code with timeout guards",
-      "AI code reviewer generating hints without revealing direct answers",
-      "Classroom leaderboard and progress tracking portal"
+    id: "PS-MOB-02",
+    title: "Smart Collision Avoidance System",
+    track: "Smart Mobility",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Design hardware system for two-wheelers or small vehicles that detects nearby obstacles and vehicles using sensors and provides real-time warnings or automatic braking assistance to reduce collision risk.",
+    context: "Two-wheeler riders are exposed to blind-spot and rear-end collisions. Onboard sensing with real-time warnings or braking assistance reduces accident risk.",
+    deliverables: [
+      "Obstacle / vehicle detection sensors (ultrasonic, IR, radar)",
+      "Real-time warning alerts (buzzer / display)",
+      "Optional braking-assist actuation",
+      "Vehicle-mount demo rig",
     ],
-    "techStack": [
-      "Python AST",
-      "Docker Container Sandbox",
-      "FastAPI",
-      "React UI"
+    techStack: ["ESP32 / Arduino", "Ultrasonic / IR proximity sensors", "Buzzer / OLED display", "Brake actuator (optional)"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Anti-plagiarism obfuscation resilience (35%)",
-      "Sandbox execution security (30%)",
-      "Pedagogical feedback quality (20%)",
-      "UI/UX (15%)"
-    ]
   },
   {
-    "id": "PS-MO-01",
-    "title": "EV Fleet Battery Telemetry & Dynamic Smart Charging Grid Allocator",
-    "track": "Smart Mobility",
-    "category": "Dual Track",
-    "difficulty": "Advanced",
-    "summary": "Architect an intelligent EV fleet management system that forecasts battery thermal degradation and schedules charging slots based on real-time grid tariff fluctuations.",
-    "context": "Uncoordinated EV charging overloads local transformers. Intelligent grid-aware charging balances power demand while minimizing charging costs for commercial fleets.",
-    "deliverables": [
-      "OBD-II / CAN-Bus telemetry ingestion simulator (SoC, Temperature, Voltage)",
-      "Battery Remaining Useful Life (RUL) predictive regression model",
-      "Linear programming optimizer for low-tariff charging schedule allocation",
-      "Live vehicle map with geofencing and emergency battery reserve alerts"
+    id: "PS-MOB-03",
+    title: "Smart Public Transport Occupancy System",
+    track: "Smart Mobility",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Build hardware system that detects passenger occupancy in buses or other public transportation and provides real-time information about available capacity to passengers and transport operators.",
+    context: "Commuters board crowded buses blindly. Live occupancy data shown to waiting passengers and operators balances load and improves the travel experience.",
+    deliverables: [
+      "Passenger counting / occupancy sensing",
+      "Real-time capacity computation",
+      "Display for passengers and operator dashboard",
+      "Demo bus model rig",
     ],
-    "techStack": [
-      "Python SciPy / PuLP",
-      "Node.js WebSockets",
-      "Mapbox GL",
-      "React + Tailwind"
+    techStack: ["ESP32 / Arduino", "IR break-beam / PIR / camera", "OLED / LED display", "Operator dashboard"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Charging cost optimization efficiency (35%)",
-      "Battery RUL estimation accuracy (25%)",
-      "Fleet live map responsiveness (25%)",
-      "System architecture (15%)"
-    ]
   },
   {
-    "id": "PS-MO-02",
-    "title": "Dynamic Real-Time Urban Traffic Light Controller via Edge Camera Counts",
-    "track": "Smart Mobility",
-    "category": "Software",
-    "difficulty": "Intermediate",
-    "summary": "Develop an automated traffic signal controller that calculates vehicle queue density at intersections from camera feeds and dynamically adjusts green-light duration.",
-    "context": "Fixed-timer traffic lights waste millions of hours in gridlock. Adaptive signal timing based on real-time vehicle queues slashes congestion and vehicle idling emissions.",
-    "deliverables": [
-      "Vehicle queue counting simulation using mock intersection camera feeds",
-      "Adaptive Webster green-split signal timing algorithm",
-      "Emergency vehicle priority override with beacon detection",
-      "City-wide traffic flow synchronization visualization dashboard"
+    id: "PS-MOB-04",
+    title: "Autonomous Lane-Changing System",
+    track: "Smart Mobility",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop hardware prototype that detects surrounding vehicles, evaluates lane availability, and automatically determines safe lane-changing maneuver for miniature autonomous vehicle.",
+    context: "Lane changes are a leading cause of highway collisions. A miniature autonomous vehicle that senses neighbors and only maneuvers when safe demonstrates the core decision logic.",
+    deliverables: [
+      "Surrounding-vehicle detection (ultrasonic / camera)",
+      "Lane availability evaluation",
+      "Safe lane-change decision and actuation",
+      "Miniature vehicle demo track",
     ],
-    "techStack": [
-      "OpenCV / YOLO",
-      "Python / Node.js",
-      "HTML5 Canvas Traffic Sim",
-      "React"
+    techStack: ["ESP32 / Raspberry Pi", "Ultrasonic / camera sensors", "DC motors + driver", "Decision firmware"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Congestion reduction percentage in sim (35%)",
-      "Emergency vehicle override latency (25%)",
-      "Intersection simulator fidelity (25%)",
-      "Dashboard metrics (15%)"
-    ]
   },
   {
-    "id": "PS-AT-01",
-    "title": "Autonomous Industrial Warehouse Obstacle Navigation & Pallet Rover",
-    "track": "Smart Automation",
-    "category": "Hardware",
-    "difficulty": "Grand Challenge",
-    "summary": "Build a microcontroller-powered autonomous rover capable of following dynamic warehouse path markers, avoiding obstacles with ultrasonic/LiDAR sensors, and docking safely.",
-    "context": "Modern fulfillment centers require automated guided vehicles (AGVs) that can safely navigate around workers and dynamic obstacles without fixed track infrastructure.",
-    "deliverables": [
-      "4-wheel rover chassis with motor driver (L298N/TB6612) and sensor array",
-      "Obstacle avoidance and line-following PID control algorithm",
-      "Central warehouse dispatch dashboard sending target waypoint missions",
-      "Emergency stop fail-safe and battery status telemetry"
+    id: "PS-MOB-05",
+    title: "Intelligent Pedestrian Crossing System",
+    track: "Smart Mobility",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Develop smart pedestrian crossing that detects pedestrians, estimates their movement, and dynamically controls traffic signals to provide safe crossing while minimizing vehicle waiting time.",
+    context: "Fixed-timing signals ignore whether pedestrians are actually present. Detecting pedestrians and their movement lets signals grant crossing only when needed, keeping traffic flowing.",
+    deliverables: [
+      "Pedestrian detection (PIR / camera / pressure mat)",
+      "Movement estimation logic",
+      "Dynamic signal control (pedestrian-friendly timing)",
+      "Signal demo rig with pedestrian simulation",
     ],
-    "techStack": [
-      "Arduino / Raspberry Pi",
-      "Ultrasonic / IR Sensor Array",
-      "Node.js WebSocket Server",
-      "React Web Telemetry"
+    techStack: ["ESP32 / Arduino", "PIR / camera / force sensors", "Traffic light LED rig", "Signal timing firmware"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Navigation accuracy & PID stability (35%)",
-      "Obstacle stop reliability (30%)",
-      "Dispatch UI command response (20%)",
-      "Hardware build quality (15%)"
-    ]
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // AGRICULTURE (5)
+  // ═══════════════════════════════════════════════════════════════
+  {
+    id: "PS-AGR-01",
+    title: "Autonomous Precision Irrigation System",
+    track: "Agriculture",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop hardware system that monitors soil moisture, temperature, humidity, and crop conditions and automatically delivers required amount of water to individual crop zones, minimizing water wastage while maintaining optimal soil conditions.",
+    context: "Uniform irrigation over-applies water to zones that don't need it. Zone-wise soil and climate sensing with automated valve control waters each plot precisely.",
+    deliverables: [
+      "Soil moisture / temperature / humidity sensing",
+      "Zone-wise automated irrigation control (valves / pumps)",
+      "Optimal-condition maintenance logic",
+      "Water-usage monitoring dashboard",
+    ],
+    techStack: ["ESP32 / Arduino", "Soil moisture sensors", "Solenoid valves / pumps", "LoRa / Wi-Fi telemetry"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
+    ],
   },
   {
-    "id": "PS-AT-02",
-    "title": "Commercial Building HVAC & Lighting Micro-Grid Energy Optimizer",
-    "track": "Smart Automation",
-    "category": "Software",
-    "difficulty": "Intermediate",
-    "summary": "Design an automated building management system that models occupancy patterns and ambient sunlight to automate lighting and climate zones for 30%+ energy savings.",
-    "context": "Commercial buildings waste vast amounts of energy cooling empty conference rooms. Automated zone sensing reduces carbon footprints and operational costs.",
-    "deliverables": [
-      "Multi-zone building occupancy and temperature simulation engine",
-      "Rule-based & ML predictive cooling/heating scheduler",
-      "Solar irradiance daylight harvesting algorithm for automatic dimming",
-      "Interactive 2.5D building floorplan energy heatmap view"
+    id: "PS-AGR-02",
+    title: "Smart Pest Detection & Targeted Control System",
+    track: "Agriculture",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop intelligent device that detects agricultural pests using cameras, optical sensors, or other methods and activates localized pest-control mechanisms only where pests are detected, reducing unnecessary pesticide usage.",
+    context: "Blanket pesticide spraying harms beneficial organisms and the environment. Detecting pests first and treating only affected zones cuts chemical use substantially.",
+    deliverables: [
+      "Pest detection (camera / optical sensors)",
+      "Localized pest-control actuation",
+      "Detection-triggered treatment logic",
+      "Field demo rig and treatment reporting",
     ],
-    "techStack": [
-      "Python / FastAPI",
-      "React Three Fiber / SVG Floorplan",
-      "SQLite / TimescaleDB",
-      "Tailwind CSS"
+    techStack: ["ESP32 / Raspberry Pi", "Camera (optional)", "Optical / IR sensors", "Spray / lure actuators"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Energy savings calculation model (35%)",
-      "Interactive floorplan UI (30%)",
-      "Zone control response time (20%)",
-      "Data logging capability (15%)"
-    ]
   },
   {
-    "id": "PS-FT-01",
-    "title": "Real-Time Anti-Money Laundering (AML) Graph Neural Network Sentinel",
-    "track": "FinTech",
-    "category": "Software",
-    "difficulty": "Advanced",
-    "summary": "Build a graph analytics engine that constructs multi-hop transaction networks, detects smurfing/layering rings, and computes fraud probability scores in real time.",
-    "context": "Financial criminals disperse illicit funds across thousands of shell accounts in rapid succession. Graph network algorithms identify circular wash-trading patterns instantly.",
-    "deliverables": [
-      "Graph database schema for high-throughput transaction mapping",
-      "Circular transaction and layering cycle detection algorithm",
-      "Interactive graph network visualizer with node drill-down and risk badges",
-      "Regulatory Suspicious Activity Report (SAR) one-click PDF exporter"
+    id: "PS-AGR-03",
+    title: "Smart Greenhouse Climate Controller",
+    track: "Agriculture",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop automated greenhouse system that monitors temperature, humidity, light, CO₂, and soil conditions and automatically controls ventilation, irrigation, shading, and lighting to maintain optimal growing conditions.",
+    context: "Greenhouse yields depend on holding climate variables in a tight band. Automated sensing and actuation keeps conditions optimal without constant manual intervention.",
+    deliverables: [
+      "Climate sensing (temperature, humidity, light, CO₂, soil)",
+      "Automatic control of ventilation, irrigation, shading, lighting",
+      "Optimal-environment set-point logic",
+      "Greenhouse monitoring dashboard",
     ],
-    "techStack": [
-      "Neo4j / NetworkX",
-      "Python / FastAPI",
-      "React D3 / Cytoscape.js",
-      "Tailwind CSS"
+    techStack: ["ESP32 / Arduino", "DHT / LDR / MH-Z19 sensors", "Fans, pumps, servo shades", "Control firmware"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Cycle detection algorithm precision (35%)",
-      "Graph visualization responsiveness (25%)",
-      "SAR Report export completeness (25%)",
-      "API latency under load (15%)"
-    ]
   },
   {
-    "id": "PS-FT-02",
-    "title": "Offline-Capable Secure Micro-Payments Protocol with Cryptographic Vouchers",
-    "track": "FinTech",
-    "category": "Software",
-    "difficulty": "Intermediate",
-    "summary": "Develop a secure peer-to-peer offline transaction protocol utilizing digitally signed cryptovouchers and double-spend proof verification upon network reconnection.",
-    "context": "Disaster zones and rural areas with zero internet connectivity cannot use UPI or card payments. Offline cryptographic vouchers enable commerce without live cell towers.",
-    "deliverables": [
-      "Offline voucher generation with asymmetric digital signatures (RSA/Ed25519)",
-      "P2P BLE / QR code exchange interface between buyer and merchant",
-      "Reconnection reconciliation engine with double-spend detection and dispute resolution",
-      "Merchant audit ledger and settlement dashboard"
+    id: "PS-AGR-04",
+    title: "Automated Crop Harvesting Prototype",
+    track: "Agriculture",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop robotic harvesting system capable of identifying mature fruits or vegetables and carefully picking them while minimizing damage to plant and produce.",
+    context: "Harvest labor is seasonal, expensive, and hard to scale. A robot that identifies maturity and picks gently reduces dependence on manual labor and crop damage.",
+    deliverables: [
+      "Maturity detection (camera / color sensors)",
+      "Robotic picking mechanism with gentle gripper",
+      "Damage-minimizing pick logic",
+      "Demo rig on mock plants",
     ],
-    "techStack": [
-      "JavaScript Web Crypto API",
-      "Node.js / IndexedDB",
-      "React Progressive Web App (PWA)",
-      "Tailwind CSS"
+    techStack: ["Robotic arm / servo kit", "Camera (OpenCV)", "Gripper with force feedback", "ESP32 / Raspberry Pi"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Double-spending prevention mechanism (40%)",
-      "Offline PWA experience (25%)",
-      "Reconciliation speed (20%)",
-      "Security audit score (15%)"
-    ]
   },
   {
-    "id": "PS-SU-01",
-    "title": "Scope 3 Supply Chain Carbon Emissions Tracker & Supplier ESG Scorecard",
-    "track": "Sustainability",
-    "category": "Software",
-    "difficulty": "Intermediate",
-    "summary": "Design an enterprise carbon accounting tool that ingests supplier invoices and logistics manifests to estimate Scope 1, 2, and 3 GHG emissions and suggest carbon offsets.",
-    "context": "Over 70% of an enterprise's carbon footprint lies in Scope 3 indirect supply chain emissions. Transparent tracking helps enterprises achieve carbon neutrality milestones.",
-    "deliverables": [
-      "Automated invoice and freight manifest emission factor calculator (GHG Protocol)",
-      "Supplier ESG compliance scorecard and carbon reduction target tracker",
-      "Verified carbon offset marketplace integration simulation",
-      "Audit-ready ESG disclosure PDF generator matching GRI standards"
+    id: "PS-AGR-05",
+    title: "Autonomous Fruit Counting & Yield Estimation",
+    track: "Agriculture",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Develop camera-based agricultural device that automatically counts fruits on plants and estimates expected crop yield using embedded image processing.",
+    context: "Yield estimates today rely on manual sampling and guesswork. Camera-based counting on the plant gives growers an early, data-driven forecast for planning and pricing.",
+    deliverables: [
+      "Camera-based fruit detection and counting",
+      "Embedded image processing pipeline",
+      "Yield estimation model",
+      "Field demo and reporting dashboard",
     ],
-    "techStack": [
-      "Node.js / Python",
-      "MongoDB / PostgreSQL",
-      "Chart.js / ApexCharts",
-      "React + Tailwind"
+    techStack: ["Raspberry Pi / ESP32-CAM", "Camera module", "OpenCV / edge ML", "Yield reporting dashboard"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Emission factor calculation accuracy (35%)",
-      "Supplier benchmarking dashboard (25%)",
-      "Report generation quality (25%)",
-      "Platform usability (15%)"
-    ]
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // SMART EDUCATION (3)
+  // ═══════════════════════════════════════════════════════════════
+  {
+    id: "PS-EDU-01",
+    title: "Assistive Learning Device for Visually Impaired Students",
+    track: "Smart Education",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop wearable or portable device that converts printed text, classroom information, or objects into audio or tactile feedback to improve independent learning for visually impaired students.",
+    context: "Printed textbooks and classroom content are inaccessible to visually impaired students without assistance. A portable device that reads text aloud or renders tactile feedback restores independent study.",
+    deliverables: [
+      "Text / object capture (camera or OCR module)",
+      "Audio or tactile output conversion",
+      "Portable / wearable form factor",
+      "Demo with printed material",
+    ],
+    techStack: ["Raspberry Pi / ESP32", "Camera + OCR (Tesseract)", "Speaker / vibrotactile array", "Battery-powered design"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
+    ],
   },
   {
-    "id": "PS-SU-02",
-    "title": "Smart Urban Solar-Powered Waste Bin Level Telemetry & Route Optimizer",
-    "track": "Sustainability",
-    "category": "Hardware",
-    "difficulty": "Advanced",
-    "summary": "Create an ultrasonic fill-level sensor node for city trash bins that transmits fill percentages via GSM/LoRa to dynamically calculate optimal municipal garbage truck routes.",
-    "context": "Garbage trucks currently follow fixed routes, emptying half-empty bins while overflowing bins cause sanitation hazards. Dynamic routing cuts fuel waste by 40%.",
-    "deliverables": [
-      "Ultrasonic bin fill sensor with fire/odor detection sensors and solar charging",
-      "Municipal routing dashboard with Travelling Salesperson Problem (TSP) optimization",
-      "Live sanitation truck driver mobile web view with turn-by-turn waypoint routing",
-      "Citizen waste reporting portal with geolocation tagging"
+    id: "PS-EDU-02",
+    title: "Smart Attendance Using Multi-Modal Detection",
+    track: "Smart Education",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Design automated attendance system that combines technologies such as RFID, face recognition, or Bluetooth proximity to accurately record attendance while preventing proxy attendance.",
+    context: "Manual attendance is slow and proxy-prone. Combining multiple identification modes (RFID + face / proximity) makes attendance accurate and difficult to fake.",
+    deliverables: [
+      "RFID / Bluetooth / face detection hardware",
+      "Multi-modal identity verification",
+      "Proxy-prevention logic",
+      "Attendance records dashboard",
     ],
-    "techStack": [
-      "ESP32 / Arduino C++",
-      "Ultrasonic HC-SR04 & MQ-135 Sensors",
-      "Leaflet / OSRM Routing Engine",
-      "React UI"
+    techStack: ["ESP32 / Raspberry Pi", "RFID RC522 / camera", "Bluetooth modules", "Attendance dashboard"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Hardware sensor battery & weatherproofing design (30%)",
-      "Route optimization distance reduction (30%)",
-      "Driver map interface (25%)",
-      "Citizen reporting flow (15%)"
-    ]
   },
   {
-    "id": "PS-DM-01",
-    "title": "Emergency First-Responder Offline Mesh Communicator & SOS Beacon",
-    "track": "Disaster Management",
-    "category": "Hardware",
-    "difficulty": "Grand Challenge",
-    "summary": "Construct a handheld emergency mesh communication device that lets trapped civilians send SOS GPS beacons and text messages to rescue teams without internet or cellular networks.",
-    "context": "During floods and earthquakes, cell towers collapse within hours. Self-healing LoRa mesh networks allow survivors to broadcast distress signals across kilometers.",
-    "deliverables": [
-      "Handheld ESP32 + LoRa radio device with OLED display and emergency SOS button",
-      "Multi-hop mesh routing protocol forwarding packets between distant nodes",
-      "Rescue command center map plotting survivor GPS coordinates and triage tags",
-      "Civilian smartphone web app connecting to node via local WiFi AP"
+    id: "PS-EDU-03",
+    title: "Smart Book for Interactive Learning",
+    track: "Smart Education",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Design physical book integrated with sensors, LEDs, audio, or other electronics that provides interactive explanations, demonstrations, and quizzes when students interact with different pages or learning elements.",
+    context: "Static textbooks don't engage today's learners. Embedding sensors and audio into a physical book turns each page into an interactive learning experience.",
+    deliverables: [
+      "Sensor-equipped physical book (page / touch detection)",
+      "LED / audio feedback per page",
+      "Interactive explanations and quizzes",
+      "Demo across multiple pages",
     ],
-    "techStack": [
-      "ESP32 / LoRa SX1276",
-      "C++ Meshtastic / RadioHead",
-      "Leaflet GIS",
-      "React Web App"
+    techStack: ["ESP32 / Arduino", "Touch / light sensors", "LEDs + speaker module", "Embedded interaction logic"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Mesh multi-hop reliability under packet loss (40%)",
-      "Hardware battery life & portable form-factor (25%)",
-      "Rescue command map speed (20%)",
-      "Civilian interface simplicity (15%)"
-    ]
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // DISASTER MANAGEMENT (3)
+  // ═══════════════════════════════════════════════════════════════
+  {
+    id: "PS-DIS-01",
+    title: "Autonomous Fire Detection & Suppression Robot",
+    track: "Disaster Management",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Build mobile robot that detects fire and smoke, identifies approximate source, navigates toward it while avoiding obstacles, and activates suitable small-scale suppression mechanism.",
+    context: "Firefighters enter burning structures blind and at risk. A robot that locates the source, navigates obstacles, and applies small-scale suppression buys time and reduces danger.",
+    deliverables: [
+      "Fire / smoke detection (flame, MQ2 sensors)",
+      "Obstacle-avoiding navigation to fire source",
+      "Small-scale suppression actuation",
+      "Demo arena with mock fire",
+    ],
+    techStack: ["ESP32 / Arduino", "Flame / MQ2 sensors", "Ultrasonic obstacle sensors", "Pump / extinguisher actuator"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
+    ],
   },
   {
-    "id": "PS-DM-02",
-    "title": "AI Satellite Flood Inundation Predictor & Safe Evacuation Route Engine",
-    "track": "Disaster Management",
-    "category": "Software",
-    "difficulty": "Advanced",
-    "summary": "Develop a geospatial simulation system that models river elevation data and precipitation forecasts to predict flood inundation zones and generate real-time safe evacuation paths.",
-    "context": "Flash floods cut off standard evacuation highways. Predictive flood path mapping identifies which roads will submerge hours before water levels peak.",
-    "deliverables": [
-      "Digital Elevation Model (DEM) and rainfall runoff hydrological simulation",
-      "Dynamic road submergence forecast map with 6-hour warning lead time",
-      "A* / Dijkstra evacuation route planner avoiding submerged corridors",
-      "Public emergency broadcast banner with shelter locations and helpline contacts"
+    id: "PS-DIS-02",
+    title: "Wearable Victim Detection & Location Device",
+    track: "Disaster Management",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Design low-power wearable device that can transmit person's location and emergency status during disasters. It should continue operating with limited connectivity and provide basic information such as movement and environmental conditions.",
+    context: "During disasters, connectivity collapses and victims can't be located. A low-power wearable that keeps broadcasting location and status, even on mesh or limited links, helps rescuers find people.",
+    deliverables: [
+      "Low-power wearable with GPS / location",
+      "Emergency status and movement transmission",
+      "Offline / mesh communication fallback",
+      "Rescuer-side receiver demo",
     ],
-    "techStack": [
-      "Python GDAL / Shapely",
-      "FastAPI",
-      "Mapbox GL / Deck.gl",
-      "React UI"
+    techStack: ["ESP32 / nRF24 LoRa", "GPS module (NEO-6M)", "IMU (movement)", "Low-power deep sleep"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Hydrological simulation accuracy (35%)",
-      "Safe routing algorithm speed (30%)",
-      "Public alert UI clarity (20%)",
-      "Scalability (15%)"
-    ]
   },
   {
-    "id": "PS-OI-01",
-    "title": "Next-Generation Multidisciplinary Breakthrough Challenge",
-    "track": "Open Innovation",
-    "category": "Dual Track",
-    "difficulty": "Grand Challenge",
-    "summary": "Propose and construct an ambitious prototype uniting hardware, software, AI, or distributed ledgers to solve a high-impact humanitarian or engineering problem of your choice.",
-    "context": "The most disruptive innovations defy rigid boundaries. This open track welcomes radical inventions that blend mechanics, machine intelligence, and society-level scale.",
-    "deliverables": [
-      "Comprehensive problem statement definition and target audience impact analysis",
-      "Working prototype demonstration (Hardware and/or Software implementation)",
-      "Technical architecture diagram and scalability roadmap",
-      "Live interactive pitch and jury Q&A demonstration"
+    id: "PS-DIS-03",
+    title: "Underground Rescue Communication System",
+    track: "Disaster Management",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop communication system capable of transmitting short emergency messages through or around obstacles in underground or collapsed environments where conventional wireless communication is unreliable.",
+    context: "Collapsed structures and underground spaces block normal radio. A system using through-ground or low-frequency signaling lets trapped people send short emergency messages to surface teams.",
+    deliverables: [
+      "Short-message transmission through obstacles",
+      "Underground / rubble-friendly signaling method",
+      "Surface receiver with message display",
+      "Demo across simulated obstruction",
     ],
-    "techStack": [
-      "Any Modern Tech Stack (React, Python, Node, Embedded C, Rust, Cloud, Robotics)"
+    techStack: ["ESP32 / Arduino", "LoRa / low-frequency TX", "Through-ground signaling", "Message protocol firmware"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Originality & innovation degree (35%)",
-      "Working prototype execution quality (30%)",
-      "Real-world social/market impact (20%)",
-      "Pitch clarity (15%)"
-    ]
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // HEALTHCARE (3)
+  // ═══════════════════════════════════════════════════════════════
+  {
+    id: "PS-HC-01",
+    title: "Fall Detection & Emergency Response Device",
+    track: "Healthcare",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Develop wearable system that detects falls using motion sensors and automatically sends emergency alert with user's location to designated caregiver.",
+    context: "Elderly and at-risk individuals can be incapacitated by a fall with no way to call for help. A wearable that detects the fall and alerts a caregiver with location provides critical early response.",
+    deliverables: [
+      "Wearable with motion sensing (IMU)",
+      "Fall-detection algorithm",
+      "Automatic alert with location to caregiver",
+      "Caregiver receiver demo",
+    ],
+    techStack: ["ESP32 / nRF52", "IMU (MPU6050)", "GPS (optional)", "SMS / app notification"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
+    ],
   },
   {
-    "id": "PS-OI-02",
-    "title": "Quantum Algorithm Simulator & Post-Quantum Cryptography Migration Tool",
-    "track": "Open Innovation",
-    "category": "Software",
-    "difficulty": "Advanced",
-    "summary": "Build a web-based quantum computing circuit simulator that demonstrates Shor's and Grover's algorithms while testing classical cryptographic key vulnerability against quantum threats.",
-    "context": "The advent of quantum computing threatens legacy RSA and ECC encryption. A visual simulator and migration tool helps engineers transition to NIST-standardized PQC algorithms.",
-    "deliverables": [
-      "Interactive drag-and-drop quantum logic gate circuit builder (Hadamard, CNOT, Phase)",
-      "Statevector and Bloch sphere 3D visualization of qubit superpositions",
-      "Post-Quantum Cryptography (Kyber / Dilithium) performance benchmark sandbox",
-      "Exportable migration readiness report for web servers"
+    id: "PS-HC-02",
+    title: "Smart Wheelchair Navigation System",
+    track: "Healthcare",
+    category: "Hardware",
+    difficulty: "Grand Challenge",
+    summary: "Build intelligent wheelchair that detects obstacles, assists with navigation, and provides automated braking to improve mobility and safety for users with limited mobility.",
+    context: "Manual wheelchair navigation is physically demanding and collision-prone. Obstacle detection with assisted navigation and automated braking improves safety and independence.",
+    deliverables: [
+      "Obstacle detection (ultrasonic / IR array)",
+      "Assisted navigation logic",
+      "Automated braking actuation",
+      "Wheelchair demo rig",
     ],
-    "techStack": [
-      "JavaScript / WebAssembly",
-      "Three.js (Bloch Sphere)",
-      "React + Tailwind",
-      "Rust / C++ WASM"
+    techStack: ["ESP32 / Arduino", "Ultrasonic / IR sensors", "Motor + brake actuators", "Navigation firmware"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
     ],
-    "evaluation": [
-      "Quantum circuit simulation fidelity (35%)",
-      "Bloch sphere 3D visuals (25%)",
-      "PQC benchmark utility (25%)",
-      "Educational UX (15%)"
-    ]
-  }
+  },
+  {
+    id: "PS-HC-03",
+    title: "Smart Hospital Bed Automation",
+    track: "Healthcare",
+    category: "Hardware",
+    difficulty: "Advanced",
+    summary: "Develop intelligent hospital bed that monitors patient presence and automatically assists with bed-position adjustment, fall prevention, and caregiver alerts.",
+    context: "Hospital staff juggle many beds; patient falls and unmet positioning needs are constant risks. A smart bed that senses presence, adjusts position, and alerts caregivers improves safety and workload.",
+    deliverables: [
+      "Patient presence detection",
+      "Automatic bed-position adjustment",
+      "Fall-prevention logic",
+      "Caregiver alert dashboard",
+    ],
+    techStack: ["ESP32 / Arduino", "Pressure / presence sensors", "Linear actuators / motors", "Alert dashboard"],
+    evaluation: [
+      "Working hardware prototype (40%)",
+      "Sensor accuracy & real-time response (25%)",
+      "Innovation & design (20%)",
+      "Presentation & real-world viability (15%)",
+    ],
+  },
 ];

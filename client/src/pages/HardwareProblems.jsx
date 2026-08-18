@@ -68,6 +68,13 @@ function HardwareProblems() {
       if (remaining <= 0 && !sessionStorage.getItem("ams_hackathon_ps_unlocked")) {
         sessionStorage.setItem("ams_hackathon_ps_unlocked", "true");
         setIsUnlocked(true);
+
+        // Backup email trigger: notify server once per browser that the reveal
+        // moment has passed (server is idempotent — sends only once total).
+        if (!sessionStorage.getItem("ams_hackathon_ps_notified")) {
+          sessionStorage.setItem("ams_hackathon_ps_notified", "true");
+          fetch("/api/ps-release/notify", { method: "POST" }).catch(() => {});
+        }
       }
     }, 1000);
     return () => clearInterval(timer);
