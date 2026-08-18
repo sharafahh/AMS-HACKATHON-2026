@@ -52,7 +52,7 @@ export const PROBLEM_STATEMENTS = [
     track: "Sustainability",
     category: "Hardware",
     difficulty: "Advanced",
-    summary: "Develop low-power hardware controller that intelligently manages household appliances based on occupancy, environmental conditions, and energy consumption, to reduce overall electricity usage.",
+    summary: "Develop low-power hardware controller that intelligently manages household appliances based on occupancy, environmental conditions, and energy consumption, to reducing overall electricity usage.",
     context: "Household appliances run even when rooms are empty or conditions don't require them. An occupancy- and environment-aware controller can cut standby and unnecessary consumption.",
     deliverables: [
       "Low-power appliance control hub",
