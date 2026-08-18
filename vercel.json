@@ -4,9 +4,15 @@
   "functions": {
     "api/index.js": {
       "includeFiles": "server/**",
-      "maxDuration": 15
+      "maxDuration": 60
     }
   },
+  "crons": [
+    {
+      "path": "/api/ps-release/notify",
+      "schedule": "31 5 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",

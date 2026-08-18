@@ -483,3 +483,109 @@ Timestamp       : ${formattedTime}`;
 
   return false;
 };
+
+/**
+ * Send Hardware Problem Statements Release Notification Email
+ * Broadcasts to registered team leaders that hardware PS are now live.
+ * Returns true on successful SMTP delivery (single attempt per recipient).
+ */
+export const sendHardwarePSReleaseEmail = async ({ toEmail, leaderName, teamName, registrationId }) => {
+  try {
+    if (!toEmail) {
+      console.warn(`[${new Date().toISOString()}] ⚠️ PS-RELEASE notice: No recipient email provided.`);
+      return false;
+    }
+
+    const subject = "🚀 AMS HACKATHON 2026 | Hardware Problem Statements Are Live!";
+    const siteUrl = "https://ams-hackathon.site/hardware-problems";
+
+    const htmlBody = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Hardware Problem Statements Released</title>
+      </head>
+      <body style="margin: 0; padding: 0; background-color: #050814; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #e2e8f0;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+          <tr>
+            <td align="center" style="padding: 20px 10px;">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 620px; background-color: #0b0f19; border: 1px solid #1e293b; border-radius: 16px; overflow: hidden;">
+                <tr>
+                  <td style="background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%); padding: 32px 24px; text-align: center;">
+                    <div style="background-color: rgba(0, 0, 0, 0.25); display: inline-block; padding: 6px 16px; border-radius: 20px; color: #ffffff; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;">
+                      PROBLEM STATEMENTS RELEASED
+                    </div>
+                    <h1 style="color: #ffffff; font-size: 24px; font-weight: 900; margin: 0;">AMS HACKATHON 2026</h1>
+                    <p style="color: #e0f2fe; font-size: 14px; margin: 6px 0 0 0; font-weight: 500;">Hardware Innovation Track Challenges Are Live</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 28px 24px;">
+                    <p style="font-size: 16px; color: #ffffff; margin-top: 0;">
+                      Dear <strong>${leaderName || "Team Leader"}</strong>,
+                    </p>
+                    <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7;">
+                      Your team <strong style="color: #38bdf8;">"${teamName || "N/A"}"</strong>${registrationId ? ` (Registration ID: <span style="font-family: monospace; color: #facc15;">${registrationId}</span>)` : ""} is registered for AMS HACKATHON 2026!
+                    </p>
+                    <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7;">
+                      The <strong style="color: #ffffff;">Hardware Problem Statements</strong> are now officially released. Choose your track, pick your challenge, and start planning your build before the event begins.
+                    </p>
+                    <div style="text-align: center; margin: 28px 0;">
+                      <a href="${siteUrl}" style="background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #ffffff; padding: 14px 32px; border-radius: 12px; font-size: 14px; font-weight: 800; text-decoration: none; display: inline-block;">
+                        View Hardware Problem Statements
+                      </a>
+                    </div>
+                    <p style="color: #94a3b8; font-size: 12px; line-height: 1.6;">
+                      💡 Remember: Software problem statements will be revealed on-spot at the event opening. Hardware statements are released early so your team can source components in advance.
+                    </p>
+                    <div style="background-color: #151d30; padding: 16px; border-radius: 12px; border: 1px solid #334155; margin-top: 20px;">
+                      <p style="margin: 0; color: #94a3b8; font-size: 12px;">
+                        Event: 22–23 August 2026, 9:00 AM IST · Aalim Muhammed Salegh College of Engineering, Chennai
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 20px 24px; border-top: 1px solid #1e293b; text-align: center; color: #64748b; font-size: 11px;">
+                    AMS HACKATHON 2026 · 24 Hours. Infinite Possibilities.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `;
+
+    const textBody = `HARDWARE PROBLEM STATEMENTS RELEASED - AMS HACKATHON 2026
+Dear ${leaderName || "Team Leader"},
+The Hardware Problem Statements are now live. View them at: ${siteUrl}
+Registration ID: ${registrationId || "N/A"}
+Team: ${teamName || "N/A"}
+Event: 22-23 August 2026, 9:00 AM IST`;
+
+    const transporter = getTransporter();
+    if (!transporter) {
+      console.warn(`[${new Date().toISOString()}] ⚠️ PS-RELEASE: SMTP not configured (SMTP_USER/SMTP_PASS missing).`);
+      return false;
+    }
+
+    const smtpUser = process.env.SMTP_USER || "amshackathon2026@gmail.com";
+    const info = await transporter.sendMail({
+      from: `"AMS Hackathon System" <${smtpUser}>`,
+      to: toEmail,
+      subject,
+      text: textBody,
+      html: htmlBody,
+    });
+
+    console.log(`[${new Date().toISOString()}] [PS_RELEASE_SUCCESS] Email delivered to ${toEmail}. Response: ${info.response}`);
+    return true;
+  } catch (err) {
+    console.error(`[${new Date().toISOString()}] [PS_RELEASE_ERROR] Failed to send to ${toEmail}: ${err.message}`);
+    return false;
+  }
+};
