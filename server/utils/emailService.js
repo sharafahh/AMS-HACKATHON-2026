@@ -602,7 +602,7 @@ export const sendHardwarePSHeadsUpEmail = async ({ toEmail, leaderName, teamName
       return false;
     }
 
-    const subject = "📣 AMS HACKATHON 2026 | Get Ready — Hardware Problem Statements Reveal Tomorrow!";
+    const subject = "📣 AMS HACKATHON 2026 | Get Ready — Hardware Problem Statements Reveal Today at 11:01 AM IST!";
     const siteUrl = "https://ams-hackathon.site/hardware-problems";
 
     const htmlBody = `
@@ -638,7 +638,7 @@ export const sendHardwarePSHeadsUpEmail = async ({ toEmail, leaderName, teamName
                       Your team <strong style="color: #fbbf24;">"${teamName || "N/A"}"</strong>${registrationId ? ` (Registration ID: <span style="font-family: monospace; color: #facc15;">${registrationId}</span>)` : ""} is registered for AMS HACKATHON 2026!
                     </p>
                     <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7;">
-                      <strong style="color: #ffffff;">Get ready!</strong> The official <strong style="color: #ffffff;">Hardware Problem Statements</strong> will be revealed <strong style="color: #fbbf24;">tomorrow, 19 August 2026 at 11:01 AM IST</strong>.
+                      <strong style="color: #ffffff;">Get ready!</strong> The official <strong style="color: #ffffff;">Hardware Problem Statements</strong> will be revealed <strong style="color: #fbbf24;">today, 19 August 2026 at 11:01 AM IST</strong>.
                     </p>
                     <div style="background-color: #151d30; padding: 16px; border-radius: 12px; border: 1px solid #334155; margin: 20px 0;">
                       <p style="margin: 0; color: #e2e8f0; font-size: 14px;">
