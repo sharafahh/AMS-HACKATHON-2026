@@ -589,3 +589,115 @@ Event: 22-23 August 2026, 9:00 AM IST`;
     return false;
   }
 };
+
+/**
+ * Send Hardware Problem Statements "Be Ready" Heads-Up Email
+ * Pre-release notice to registered team leaders: statements reveal at 11:01 AM
+ * IST on Aug 19 — prepare your team to view them.
+ */
+export const sendHardwarePSHeadsUpEmail = async ({ toEmail, leaderName, teamName, registrationId }) => {
+  try {
+    if (!toEmail) {
+      console.warn(`[${new Date().toISOString()}] ⚠️ PS-HEADSUP notice: No recipient email provided.`);
+      return false;
+    }
+
+    const subject = "📣 AMS HACKATHON 2026 | Get Ready — Hardware Problem Statements Reveal Tomorrow!";
+    const siteUrl = "https://ams-hackathon.site/hardware-problems";
+
+    const htmlBody = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Hardware Problem Statements — Get Ready</title>
+      </head>
+      <body style="margin: 0; padding: 0; background-color: #050814; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #e2e8f0;">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;">
+          <tr>
+            <td align="center" style="padding: 20px 10px;">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 620px; background-color: #0b0f19; border: 1px solid #1e293b; border-radius: 16px; overflow: hidden;">
+                <tr>
+                  <td style="background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #ef4444 100%); padding: 32px 24px; text-align: center;">
+                    <div style="background-color: rgba(0, 0, 0, 0.25); display: inline-block; padding: 6px 16px; border-radius: 20px; color: #ffffff; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;">
+                      GET READY
+                    </div>
+                    <h1 style="color: #ffffff; font-size: 24px; font-weight: 900; margin: 0;">AMS HACKATHON 2026</h1>
+                    <p style="color: #fef3c7; font-size: 14px; margin: 6px 0 0 0; font-weight: 600;">
+                      Hardware Problem Statements Reveal on Aug 19, 11:01 AM IST
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 28px 24px;">
+                    <p style="font-size: 16px; color: #ffffff; margin-top: 0;">
+                      Dear <strong>${leaderName || "Team Leader"}</strong>,
+                    </p>
+                    <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7;">
+                      Your team <strong style="color: #fbbf24;">"${teamName || "N/A"}"</strong>${registrationId ? ` (Registration ID: <span style="font-family: monospace; color: #facc15;">${registrationId}</span>)` : ""} is registered for AMS HACKATHON 2026!
+                    </p>
+                    <p style="color: #cbd5e1; font-size: 14px; line-height: 1.7;">
+                      <strong style="color: #ffffff;">Get ready!</strong> The official <strong style="color: #ffffff;">Hardware Problem Statements</strong> will be revealed <strong style="color: #fbbf24;">tomorrow, 19 August 2026 at 11:01 AM IST</strong>.
+                    </p>
+                    <div style="background-color: #151d30; padding: 16px; border-radius: 12px; border: 1px solid #334155; margin: 20px 0;">
+                      <p style="margin: 0; color: #e2e8f0; font-size: 14px;">
+                        ⏰ <strong style="color: #fbbf24;">11:01 AM IST — Aug 19, 2026</strong>
+                      </p>
+                      <p style="margin: 6px 0 0 0; color: #94a3b8; font-size: 12px;">
+                        The countdown is live on the website. When it ends, the statements unlock automatically — no passcode needed.
+                      </p>
+                    </div>
+                    <div style="text-align: center; margin: 24px 0;">
+                      <a href="${siteUrl}" style="background: linear-gradient(135deg, #f59e0b, #f97316); color: #ffffff; padding: 14px 32px; border-radius: 12px; font-size: 14px; font-weight: 800; text-decoration: none; display: inline-block;">
+                        Watch the Countdown
+                      </a>
+                    </div>
+                    <p style="color: #94a3b8; font-size: 12px; line-height: 1.6;">
+                      💡 Hardware statements release early so your team can source components in advance. Software problem statements will be revealed on-spot at the event opening (Aug 22).
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 20px 24px; border-top: 1px solid #1e293b; text-align: center; color: #64748b; font-size: 11px;">
+                    AMS HACKATHON 2026 · 24 Hours. Infinite Possibilities.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `;
+
+    const textBody = `GET READY - AMS HACKATHON 2026
+Dear ${leaderName || "Team Leader"},
+The official Hardware Problem Statements will be revealed on 19 August 2026 at 11:01 AM IST.
+Watch the countdown at: ${siteUrl}
+Registration ID: ${registrationId || "N/A"}
+Team: ${teamName || "N/A"}
+Software PS will be revealed on-spot at the event opening (Aug 22).`;
+
+    const transporter = getTransporter();
+    if (!transporter) {
+      console.warn(`[${new Date().toISOString()}] ⚠️ PS-HEADSUP: SMTP not configured (SMTP_USER/SMTP_PASS missing).`);
+      return false;
+    }
+
+    const smtpUser = process.env.SMTP_USER || "coordinatoramshackathon@gmail.com";
+    const info = await transporter.sendMail({
+      from: `"AMS Hackathon System" <${smtpUser}>`,
+      to: toEmail,
+      subject,
+      text: textBody,
+      html: htmlBody,
+    });
+
+    console.log(`[${new Date().toISOString()}] [PS_HEADSUP_SUCCESS] Email delivered to ${toEmail}. Response: ${info.response}`);
+    return true;
+  } catch (err) {
+    console.error(`[${new Date().toISOString()}] [PS_HEADSUP_ERROR] Failed to send to ${toEmail}: ${err.message}`);
+    return false;
+  }
+};
