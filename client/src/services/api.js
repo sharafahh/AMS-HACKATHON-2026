@@ -375,3 +375,38 @@ export const createManualBackupAPI = async () => {
 export const getBackupDownloadUrl = (filename) => {
   return `${API_BASE_URL}/admin/backups/download/${encodeURIComponent(filename)}`;
 };
+
+// Evaluator Role & Multi-Round Scoring APIs
+export const getEvaluatorTeamsAPI = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/evaluator/teams`);
+    return await parseJSONResponse(response, "Failed to fetch teams for evaluation");
+  } catch (error) {
+    console.error("API error fetching evaluator teams:", error);
+    throw error;
+  }
+};
+
+export const submitEvaluationAPI = async (payload) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/evaluator/evaluate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return await parseJSONResponse(response, "Failed to submit evaluation");
+  } catch (error) {
+    console.error("API error submitting evaluation:", error);
+    throw error;
+  }
+};
+
+export const getEvaluationLeaderboardAPI = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/evaluator/leaderboard`);
+    return await parseJSONResponse(response, "Failed to fetch evaluation leaderboard");
+  } catch (error) {
+    console.error("API error fetching evaluation leaderboard:", error);
+    throw error;
+  }
+};

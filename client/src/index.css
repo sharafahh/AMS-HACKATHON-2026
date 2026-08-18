@@ -27,20 +27,21 @@
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #030712;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #3B82F6, #1D4ED8);
-  border-radius: 5px;
+  background: #cbd5e1;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #60A5FA, #2563EB);
+  background: #94a3b8;
 }
 
-/* Technical Matte Black & Electric Blue Glassmorphism Utilities */
+/* Technical Matte Black & Electric Blue Glassmorphism Utilities (Dark Pages) */
 .glass-card {
   background: rgba(9, 13, 22, 0.75);
   backdrop-filter: blur(20px);
@@ -66,16 +67,9 @@
   border-bottom: 1px solid rgba(59, 130, 246, 0.15);
 }
 
-/* Personalised Electric Blue & Pure White Typography Gradients */
 .text-gradient-cyan-purple,
 .text-gradient-tech-blue {
   background: linear-gradient(135deg, #FFFFFF 0%, #93C5FD 40%, #3B82F6 70%, #1D4ED8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gradient-white {
-  background: linear-gradient(180deg, #FFFFFF 0%, #E5E7EB 70%, #9CA3AF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -86,129 +80,228 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Glow Effects */
-.glow-cyan,
-.glow-blue {
-  box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+/* =========================================================
+   EXECUTIVE CLAYMORPHISM & SOFT MODERN DESIGN SYSTEM
+   ========================================================= */
+
+.clay-bg-executive {
+  background-color: #f8fafc;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(238, 242, 255, 0.8) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(241, 245, 249, 0.9) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(248, 250, 252, 1) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
-.glow-white {
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+/* Elevated Clean Cards */
+.clay-box {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 
+    0 10px 25px -5px rgba(15, 23, 42, 0.04),
+    0 8px 10px -6px rgba(15, 23, 42, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-/* Clean Neat Professional Dark Background (No Grid) */
-.bg-cyber-grid {
-  background-image: none;
+.clay-box-hover {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Keyframe Animations */
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 0.35;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.75;
-    transform: scale(1.05);
-  }
+.clay-box-hover:hover {
+  transform: translateY(-2px);
+  border-color: rgba(199, 210, 254, 0.9);
+  box-shadow: 
+    0 16px 30px -8px rgba(79, 70, 229, 0.08),
+    0 6px 12px -4px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
-.animate-pulse-glow {
-  animation: pulseGlow 6s ease-in-out infinite;
+.clay-box-selected {
+  background: #ffffff;
+  border: 2px solid #4f46e5;
+  box-shadow: 
+    0 14px 28px -6px rgba(79, 70, 229, 0.12),
+    0 4px 8px -2px rgba(79, 70, 229, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
-@keyframes floatSlow {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
+/* Inset Wells & Surfaces */
+.clay-well {
+  background: #f8fafc;
+  border-radius: 0.875rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.03);
 }
 
-.animate-float {
-  animation: floatSlow 5s ease-in-out infinite;
+.clay-input-field {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.875rem;
+  box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.03);
+  transition: all 0.15s ease;
 }
 
-/* 3D Perspective & Elevation Utilities */
-.perspective-1000 {
-  perspective: 1000px;
+.clay-input-field:focus {
+  background: #ffffff;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  outline: none;
 }
 
-.card-3d {
-  transform-style: preserve-3d;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+/* Tactile Buttons */
+.clay-btn-main {
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  color: #ffffff;
+  border-radius: 0.875rem;
+  font-weight: 700;
+  box-shadow: 
+    0 6px 16px -2px rgba(79, 70, 229, 0.35),
+    0 2px 4px -1px rgba(79, 70, 229, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transition: all 0.15s ease;
 }
 
-.card-3d:hover {
-  transform: translateY(-8px) rotateX(4deg) rotateY(-2deg) scale(1.02);
-  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.85), 0 0 35px rgba(59, 130, 246, 0.35);
+.clay-btn-main:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 10px 22px -3px rgba(79, 70, 229, 0.45),
+    0 4px 6px -2px rgba(79, 70, 229, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
-.glass-3d-card {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.94) 100%);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+.clay-btn-main:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
 }
 
-@keyframes lightningBorderSpin {
-  to {
-    transform: rotate(1turn);
-  }
+.clay-btn-ghost {
+  background: #ffffff;
+  color: #334155;
+  border-radius: 0.875rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 
+    0 2px 4px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  transition: all 0.15s ease;
 }
 
-@keyframes lightningBorderFlicker {
-  0%, 100% {
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 0.45;
-  }
+.clay-btn-ghost:hover:not(:disabled) {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06);
 }
 
-.lightning-border {
-  position: relative;
-  isolation: isolate;
+.clay-btn-ghost:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
 }
 
-.lightning-border::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 2px;
-  border-radius: 0;
-  pointer-events: none;
-  z-index: 1;
-  background: conic-gradient(
-    from 0deg,
-    rgba(255, 255, 255, 0) 0deg,
-    rgba(34, 211, 238, 0.95) 42deg,
-    rgba(59, 130, 246, 0.95) 76deg,
-    rgba(255, 255, 255, 0) 118deg,
-    rgba(255, 255, 255, 0) 215deg,
-    rgba(56, 189, 248, 0.95) 250deg,
-    rgba(37, 99, 235, 0.95) 290deg,
-    rgba(255, 255, 255, 0) 332deg,
-    rgba(255, 255, 255, 0) 360deg
-  );
-  animation: lightningBorderSpin 3.6s linear infinite, lightningBorderFlicker 1.4s ease-in-out infinite;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.45));
+/* Stepper Tactile Buttons */
+.clay-step-btn {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 2px 4px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+  transition: all 0.12s ease;
+  user-select: none;
 }
 
-@keyframes infinite-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+.clay-step-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
 }
 
-.animate-infinite-scroll {
-  animation: infinite-scroll 35s linear infinite;
+.clay-step-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(15, 23, 42, 0.08);
 }
 
-.animate-infinite-scroll:hover {
-  animation-play-state: paused;
+/* Slider */
+.clay-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background: #e2e8f0;
+  outline: none;
+}
+
+.clay-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #4f46e5;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.4);
+  border: 2px solid #ffffff;
+  transition: transform 0.1s ease;
+}
+
+.clay-range::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+
+/* =========================================================
+   EXPERT FRONTEND POLISH & MICRO-INTERACTION UTILITIES
+   ========================================================= */
+
+@keyframes subtleShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: subtleShimmer 3s infinite;
+}
+
+.kbd-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.375rem;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  box-shadow: 0 1px 0 #94a3b8;
+}
+
+/* Metric Segmented Score Meter */
+.score-segment {
+  height: 6px;
+  border-radius: 9999px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.score-segment-active {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.35);
+}
+
+.score-segment-inactive {
+  background: #e2e8f0;
 }

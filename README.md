@@ -46,7 +46,7 @@
    - **Step 1**: Team & Leader Details (Team Name, Leader Info, College, Department, Year, Referral Code).
    - **Step 2**: Member Details (Dynamic Member 1 to Member N inputs based on chosen team size 3 to 6).
    - **Step 3**: Track & Problem Statement (Track selector, Problem Title, Abstract).
-   - **Step 4**: Registration Summary & Mandatory Fee Calculation (₹1 per member: 3=₹3, 4=₹4, 5=₹5, 6=₹6).
+   - **Step 4**: Registration Summary & Mandatory Fee Calculation (₹100 per member: 3=₹300, 4=₹400, 5=₹500, 6=₹600).
 
 3. **Razorpay Payment Gateway & HMAC SHA256 Verification**:
    - Creates Razorpay order IDs via Express backend.

@@ -11,7 +11,7 @@ import {
   FiDollarSign,
   FiGlobe,
   FiAlertTriangle,
-  FiNavigation,
+  FiZap,
   FiFolderPlus,
   FiX,
   FiCheckCircle,
@@ -109,10 +109,10 @@ const tracksData = [
     description: "Develop early warning systems, emergency response mesh networks, and flood/fire evacuation mapping tools.",
     details: "Build satellite imagery damage assessors, offline emergency mesh communication nodes, and community relief coordination apps.",
   },
-  {
+    {
     id: 11,
     title: "Quantum Computing",
-    icon: FiNavigation,
+    icon: FiZap,
     gradient: "from-indigo-500 to-cyan-500",
     border: "border-indigo-500/30 hover:border-indigo-400",
     description: "Build quantum algorithms, Qiskit/Cirq circuit simulators, post-quantum cryptography, and hybrid quantum-classical solvers.",
@@ -124,8 +124,8 @@ const tracksData = [
     icon: FiFolderPlus,
     gradient: "from-fuchsia-500 to-purple-600",
     border: "border-fuchsia-500/30 hover:border-fuchsia-400",
-    description: "open innovation is not permitted",
-    details: "open innovation is not permitted",
+    description: "Unleash wild, unconventional ideas combining software and hardware that don't fit traditional boundaries.",
+    details: "Anything groundbreaking! Web3, Quantum computing simulators, metaverse tools, creative arts tech, or multi-disciplinary inventions.",
   },
 ];
 
