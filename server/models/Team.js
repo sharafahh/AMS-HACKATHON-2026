@@ -76,6 +76,16 @@ const teamSchema = new mongoose.Schema(
       required: [true, "Problem abstract is required"],
       trim: true,
     },
+    selectedProblemId: {
+      type: String,
+      default: "",
+      trim: true,
+      uppercase: true,
+    },
+    selectedAt: {
+      type: Date,
+      default: null,
+    },
     referralCode: {
       type: String,
       default: "",

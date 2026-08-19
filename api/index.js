@@ -13,6 +13,7 @@ import contactRoutes from "../server/routes/contactRoutes.js";
 import backupRoutes from "../server/routes/backupRoutes.js";
 import evaluatorRoutes from "../server/routes/evaluatorRoutes.js";
 import psReleaseRoutes from "../server/routes/psReleaseRoutes.js";
+import psSelectionRoutes from "../server/routes/psSelectionRoutes.js";
 
 import { notFound, errorHandler } from "../server/middlewares/errorHandler.js";
 
@@ -121,6 +122,9 @@ app.use("/contact", contactRoutes);
 
 app.use("/api/evaluator", evaluatorRoutes);
 app.use("/evaluator", evaluatorRoutes);
+
+app.use("/api/ps-selection", psSelectionRoutes);
+app.use("/ps-selection", psSelectionRoutes);
 
 app.use("/api/ps-release", psReleaseRoutes);
 app.use("/ps-release", psReleaseRoutes);

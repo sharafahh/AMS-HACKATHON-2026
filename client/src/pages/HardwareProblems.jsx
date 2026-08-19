@@ -21,6 +21,7 @@ import {
 } from "react-icons/fi";
 import { PROBLEM_STATEMENTS } from "../data/problemStatements";
 import { PROBLEM_REVEAL_TIMESTAMP, formatRevealRemaining } from "../constants/reveal";
+import ProblemStatementPicker from "../components/hardware/ProblemStatementPicker";
 
 const TRACKS_LIST = [
   "All Tracks",
@@ -325,6 +326,9 @@ function HardwareProblems() {
             animate={{ opacity: 1 }}
             className="space-y-8"
           >
+            {/* Team Problem Statement Selection */}
+            <ProblemStatementPicker />
+
             {/* Search & Filter Bar */}
             <div className="glass-card p-6 rounded-3xl border border-white/10 space-y-5 bg-[#0b1329]/70 backdrop-blur-xl">
               <div className="flex flex-col lg:flex-row items-center gap-4">
