@@ -685,14 +685,6 @@ function HardwareProblems() {
                     >
                       Close
                     </button>
-
-                    <Link
-                      to="/register"
-                      className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/25 hover:scale-105 transition-transform flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <span>Register for this Track</span>
-                      <FiArrowRight />
-                    </Link>
                   </div>
                 </div>
               </motion.div>
