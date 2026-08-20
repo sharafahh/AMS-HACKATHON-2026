@@ -205,6 +205,18 @@ function Hero() {
           {/* Primary & Secondary CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
             <Link
+              to="/hardware-problems"
+              className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 text-white font-extrabold font-['Space_Grotesk'] text-base tracking-wider shadow-2xl shadow-amber-500/40 hover:shadow-amber-400/70 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 group relative overflow-hidden animate-pulse-cta"
+            >
+              <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <span className="relative z-10 flex items-center gap-3">
+                <FiZap className="group-hover:scale-125 transition-transform" />
+                View Problem Statements
+                <FiArrowRight className="group-hover:translate-x-1.5 transition-transform" />
+              </span>
+            </Link>
+
+            <Link
               to="/register"
               className="w-full sm:w-auto px-10 py-4.5 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white font-extrabold font-['Space_Grotesk'] text-base tracking-wider shadow-2xl shadow-blue-600/40 hover:shadow-blue-500/60 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 group relative overflow-hidden"
             >

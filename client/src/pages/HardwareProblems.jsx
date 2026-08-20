@@ -2,9 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  FiLock,
   FiUnlock,
-  FiKey,
   FiSearch,
   FiCheckCircle,
   FiAlertCircle,
@@ -21,6 +19,7 @@ import {
 } from "react-icons/fi";
 import { PROBLEM_STATEMENTS } from "../data/problemStatements";
 import { PROBLEM_REVEAL_TIMESTAMP, formatRevealRemaining } from "../constants/reveal";
+import ProblemStatementPicker from "../components/hardware/ProblemStatementPicker";
 
 const TRACKS_LIST = [
   "All Tracks",
@@ -38,25 +37,13 @@ const TRACKS_LIST = [
   "Open Innovation",
 ];
 
-const VALID_PASSCODES = ["AMS2026", "HACK2026", "PASS2026", "DEMO2026", "OPEN2026"];
-
 function HardwareProblems() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const queryTrack = searchParams.get("track");
 
-  // Authentication State
-  const [isUnlocked, setIsUnlocked] = useState(() => {
-    return (
-      sessionStorage.getItem("ams_hackathon_ps_unlocked") === "true" ||
-      Date.now() >= PROBLEM_REVEAL_TIMESTAMP
-    );
-  });
-  const [passcode, setPasscode] = useState("");
-  const [authError, setAuthError] = useState("");
-  const [authLoading, setAuthLoading] = useState(false);
-
-  // Auto-unlock the moment the official reveal time passes (11:01 AM IST, Aug 19)
+  // Problem statements are public — no passcode gate. Auto-notify the server
+  // once per browser that the reveal moment has passed (idempotent email backup).
   const [revealCountdown, setRevealCountdown] = useState(() =>
     Math.max(0, PROBLEM_REVEAL_TIMESTAMP - Date.now())
   );
@@ -65,20 +52,20 @@ function HardwareProblems() {
     const timer = setInterval(() => {
       const remaining = PROBLEM_REVEAL_TIMESTAMP - Date.now();
       setRevealCountdown(Math.max(0, remaining));
-      if (remaining <= 0 && !sessionStorage.getItem("ams_hackathon_ps_unlocked")) {
-        sessionStorage.setItem("ams_hackathon_ps_unlocked", "true");
-        setIsUnlocked(true);
-
-        // Backup email trigger: notify server once per browser that the reveal
-        // moment has passed (server is idempotent — sends only once total).
-        if (!sessionStorage.getItem("ams_hackathon_ps_notified")) {
-          sessionStorage.setItem("ams_hackathon_ps_notified", "true");
-          fetch("/api/ps-release/notify", { method: "POST" }).catch(() => {});
-        }
+      if (remaining <= 0 && !sessionStorage.getItem("ams_hackathon_ps_notified")) {
+        sessionStorage.setItem("ams_hackathon_ps_notified", "true");
+        fetch("/api/ps-release/notify", { method: "POST" }).catch(() => {});
       }
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Identity-driven track lock: once a team identifies itself, the catalog is
+  // constrained to their track only (null = everyone can browse all tracks).
+  const [identified, setIdentified] = useState(null);
+
+  const handleIdentify = (info) => setIdentified(info);
+  const handleClearIdentity = () => setIdentified(null);
 
   // Filters State
   const [selectedTrack, setSelectedTrack] = useState(() => {
@@ -99,46 +86,13 @@ function HardwareProblems() {
     }
   }, [queryTrack]);
 
-  // Handle Authentication Submission
-  const handleUnlock = (e) => {
-    if (e) e.preventDefault();
-    setAuthError("");
-    setAuthLoading(true);
-
-    const cleanPass = passcode.trim().toUpperCase();
-
-    const isValidPass =
-      VALID_PASSCODES.includes(cleanPass) ||
-      cleanPass.startsWith("HV26-") ||
-      cleanPass.length >= 6;
-
-    setTimeout(() => {
-      setAuthLoading(false);
-      if (isValidPass) {
-        setIsUnlocked(true);
-        sessionStorage.setItem("ams_hackathon_ps_unlocked", "true");
-      } else {
-        setAuthError("Invalid access key. Use the demo key 'AMS2026' or your Registration ID.");
-      }
-    }, 400);
-  };
-
-  const handleQuickUnlock = () => {
-    setPasscode("AMS2026");
-    setIsUnlocked(true);
-    sessionStorage.setItem("ams_hackathon_ps_unlocked", "true");
-  };
-
-  const handleLockSession = () => {
-    setIsUnlocked(false);
-    sessionStorage.removeItem("ams_hackathon_ps_unlocked");
-    setPasscode("");
-    setAuthError("");
-  };
-
   // Filtered Problem Statements
   const filteredProblems = useMemo(() => {
     return PROBLEM_STATEMENTS.filter((ps) => {
+      // Identity lock: once identified, show ONLY the team's own track
+      if (identified?.track && ps.track !== identified.track) {
+        return false;
+      }
       // Track filter
       if (selectedTrack !== "All Tracks" && ps.track !== selectedTrack) {
         return false;
@@ -167,7 +121,7 @@ function HardwareProblems() {
       }
       return true;
     });
-  }, [selectedTrack, selectedCategory, searchQuery]);
+  }, [selectedTrack, selectedCategory, searchQuery, identified]);
 
   const handleCopyId = (id, e) => {
     if (e) e.stopPropagation();
@@ -199,132 +153,21 @@ function HardwareProblems() {
               Official challenge statements across 12 innovation domains (Software & Hardware).
             </p>
           </div>
-
           <div className="flex items-center gap-3">
-            {isUnlocked ? (
-              <div className="flex items-center gap-3">
-                <span className="px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold font-['Space_Grotesk'] flex items-center gap-1.5">
-                  <FiUnlock size={13} /> Access Granted
-                </span>
-                <button
-                  onClick={handleLockSession}
-                  className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-rose-500/20 hover:border-rose-500/40 border border-white/10 text-gray-300 hover:text-rose-300 text-xs font-semibold font-['Space_Grotesk'] transition-all cursor-pointer"
-                >
-                  Lock Session
-                </button>
-              </div>
-            ) : (
-              <span className="px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold font-['Space_Grotesk'] flex items-center gap-1.5">
-                <FiLock size={13} /> Protected Portal
-              </span>
-            )}
+            <span className="px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold font-['Space_Grotesk'] flex items-center gap-1.5">
+              <FiUnlock size={13} /> Statements Live — Public
+            </span>
           </div>
         </div>
-
-        {/* -------------------- GATED AUTHENTICATION LOCK VIEW -------------------- */}
-        {!isUnlocked ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-xl mx-auto text-center space-y-8 pt-6"
-          >
-            <div className="glass-card p-8 sm:p-10 rounded-3xl border border-cyan-500/30 space-y-6 shadow-2xl relative overflow-hidden bg-gradient-to-b from-[#0b1329] via-[#050816] to-[#0d0920]">
-              <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-xl shadow-cyan-500/10">
-                <FiLock size={36} className="animate-pulse" />
-              </div>
-
-              <div className="space-y-2">
-                <span className="px-3.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-wider font-['Space_Grotesk'] inline-flex items-center gap-1.5">
-                  <FiKey /> Team Access Required
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold font-['Space_Grotesk'] text-white">
-                  Enter Access Passcode
-                </h2>
-                <p className="text-gray-300 text-xs sm:text-sm font-light leading-relaxed">
-                  Enter your assigned Participant Passcode or Registration ID to explore the official problem statements and specifications.
-                </p>
-                {revealCountdown > 0 && (
-                  <p className="text-amber-300 text-xs sm:text-sm font-semibold font-['Space_Grotesk'] inline-flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full px-3.5 py-1.5">
-                    <FiClock className="animate-pulse" />
-                    Official Reveal in {formatRevealRemaining(revealCountdown)}
-                  </p>
-                )}
-              </div>
-
-              {/* Passcode Form */}
-              <form onSubmit={handleUnlock} className="space-y-4 text-left">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-300 font-['Space_Grotesk'] flex items-center gap-1.5">
-                    <FiKey className="text-amber-400" /> Access Key / Passcode
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={passcode}
-                      onChange={(e) => setPasscode(e.target.value)}
-                      placeholder="e.g. AMS2026 or HV26-XXXXX"
-                      className="w-full px-4 py-3.5 rounded-2xl bg-[#030712] border border-white/15 focus:border-cyan-400 text-white placeholder-gray-500 text-sm font-['Space_Grotesk'] focus:outline-none transition-colors shadow-inner"
-                      autoFocus
-                    />
-                  </div>
-                  {authError && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-xs text-rose-400 font-semibold flex items-center gap-1 mt-1.5"
-                    >
-                      <FiAlertCircle /> {authError}
-                    </motion.p>
-                  )}
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={authLoading}
-                  className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-white font-extrabold font-['Space_Grotesk'] text-sm tracking-wider shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  {authLoading ? (
-                    <span className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Verifying Access...
-                    </span>
-                  ) : (
-                    <>
-                      <FiUnlock size={16} />
-                      Unlock Problem Statements
-                    </>
-                  )}
-                </button>
-              </form>
-
-              {/* Placeholder / Demo Pass Banner */}
-              <div className="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-xs text-gray-300 space-y-2 text-left">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-cyan-300 font-['Space_Grotesk'] flex items-center gap-1.5">
-                    <FiInfo className="text-cyan-400" /> Placeholder Demo Key:
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleQuickUnlock}
-                    className="px-2.5 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 font-bold text-[11px] font-['Space_Grotesk'] border border-cyan-500/40 transition-colors cursor-pointer"
-                  >
-                    Quick Unlock (AMS2026)
-                  </button>
-                </div>
-                <p className="text-[11px] text-gray-400 leading-relaxed">
-                  During development and visitor inspection, you can unlock using passcode <strong className="text-cyan-300 font-mono font-bold">AMS2026</strong> or any valid registration ID.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        ) : (
-
           /* -------------------- UNLOCKED PROBLEM STATEMENTS CATALOG -------------------- */
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="space-y-8"
           >
+            {/* Team Problem Statement Selection */}
+            <ProblemStatementPicker onIdentify={handleIdentify} onClearIdentity={handleClearIdentity} />
+
             {/* Search & Filter Bar */}
             <div className="glass-card p-6 rounded-3xl border border-white/10 space-y-5 bg-[#0b1329]/70 backdrop-blur-xl">
               <div className="flex flex-col lg:flex-row items-center gap-4">
@@ -348,54 +191,70 @@ function HardwareProblems() {
                   )}
                 </div>
 
-                {/* Category Selector Tabs */}
-                <div className="flex items-center gap-2 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
-                  {["All", "Software", "Hardware", "Dual Track"].map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`px-4 py-2.5 rounded-xl text-xs font-bold font-['Space_Grotesk'] tracking-wide transition-all whitespace-nowrap cursor-pointer ${
-                        selectedCategory === cat
-                          ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20"
-                          : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 border border-white/10"
-                      }`}
-                    >
-                      {cat === "All" ? "All Categories" : cat}
-                    </button>
-                  ))}
-                </div>
+                {/* Category Selector Tabs (hidden once a team identifies) */}
+                {!identified && (
+                  <div className="flex items-center gap-2 w-full lg:w-auto overflow-x-auto pb-1 lg:pb-0">
+                    {["All", "Software", "Hardware", "Dual Track"].map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setSelectedCategory(cat)}
+                        className={`px-4 py-2.5 rounded-xl text-xs font-bold font-['Space_Grotesk'] tracking-wide transition-all whitespace-nowrap cursor-pointer ${
+                          selectedCategory === cat
+                            ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20"
+                            : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 border border-white/10"
+                        }`}
+                      >
+                        {cat === "All" ? "All Categories" : cat}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              {/* Track Selector Horizontal Scroll Pills */}
-              <div className="space-y-2 border-t border-white/10 pt-4">
-                <label className="text-[11px] font-bold uppercase tracking-widest text-cyan-400 font-['Space_Grotesk'] flex items-center gap-1.5">
-                  <FiLayers /> Filter By Innovation Track:
-                </label>
-                <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
-                  {TRACKS_LIST.map((track) => (
-                    <button
-                      key={track}
-                      onClick={() => {
-                        setSelectedTrack(track);
-                        if (track === "All Tracks") {
-                          searchParams.delete("track");
-                          setSearchParams(searchParams);
-                        } else {
-                          setSearchParams({ track });
-                        }
-                      }}
-                      className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold font-['Space_Grotesk'] whitespace-nowrap transition-all cursor-pointer ${
-                        selectedTrack === track
-                          ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400 shadow-md shadow-cyan-500/20"
-                          : "bg-white/5 text-gray-400 hover:text-white border border-white/5 hover:border-white/20"
-                      }`}
-                    >
-                      {track}
-                    </button>
-                  ))}
+              {/* Track Selector Horizontal Scroll Pills (hidden once a team identifies) */}
+              {!identified && (
+                <div className="space-y-2 border-t border-white/10 pt-4">
+                  <label className="text-[11px] font-bold uppercase tracking-widest text-cyan-400 font-['Space_Grotesk'] flex items-center gap-1.5">
+                    <FiLayers /> Filter By Innovation Track:
+                  </label>
+                  <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
+                    {TRACKS_LIST.map((track) => (
+                      <button
+                        key={track}
+                        onClick={() => {
+                          setSelectedTrack(track);
+                          if (track === "All Tracks") {
+                            searchParams.delete("track");
+                            setSearchParams(searchParams);
+                          } else {
+                            setSearchParams({ track });
+                          }
+                        }}
+                        className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold font-['Space_Grotesk'] whitespace-nowrap transition-all cursor-pointer ${
+                          selectedTrack === track
+                            ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400 shadow-md shadow-cyan-500/20"
+                            : "bg-white/5 text-gray-400 hover:text-white border border-white/5 hover:border-white/20"
+                        }`}
+                      >
+                        {track}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
+
+            {/* Identity track lock banner */}
+            {identified && (
+              <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-100 flex items-center gap-2">
+                <FiLayers className="text-amber-400 shrink-0" />
+                <span>
+                  Showing statements for <strong className="text-amber-300">{identified.track}</strong> —{" "}
+                  {identified.teamName} ({identified.registrationId})
+                  {!identified.hardwareTrack && " · software statements release on-spot (Aug 22)"}
+                </span>
+              </div>
+            )}
 
             {/* Results Count Header */}
             <div className="flex items-center justify-between px-2">
@@ -535,7 +394,6 @@ function HardwareProblems() {
               </div>
             )}
           </motion.div>
-        )}
 
         {/* -------------------- DETAIL SPECIFICATION MODAL -------------------- */}
         <AnimatePresence>
