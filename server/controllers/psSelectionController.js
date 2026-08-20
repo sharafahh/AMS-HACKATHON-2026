@@ -1,26 +1,49 @@
 import Team from "../models/Team.js";
 import { PROBLEM_STATEMENTS } from "../data/problemStatements.js";
 
-// @desc    Look up a team by registration ID and return the problem statements
-//          available for their track, plus their current selection (if any)
-// @route   GET /api/ps-selection/:registrationId
-// @access  Public (registration ID is the participant credential)
+// @desc    Look up a team by registration ID OR leader email and return the
+//          problem statements available for their track, plus current selection
+// @route   GET /api/ps-selection/:identifier
+// @access  Public (visitor-provided team identity)
 export const getTeamSelection = async (req, res) => {
   try {
-    const registrationId = String(req.params.registrationId || "").trim().toUpperCase();
-    if (!registrationId) {
-      return res.status(400).json({ success: false, message: "Registration ID is required." });
+    const identifier = String(req.params.registrationId || req.params.identifier || "").trim();
+    if (!identifier) {
+      return res.status(400).json({ success: false, message: "Registration ID or email is required." });
     }
 
-    const team = await Team.findOne({
-      registrationId: { $regex: new RegExp(`^${registrationId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") },
-      isDeleted: { $ne: true },
-    })
-      .select("teamName track leader paymentStatus problemTitle problemAbstract selectedProblemId selectedAt registrationId")
-      .lean();
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier);
+    let team = null;
+
+    if (isEmail) {
+      // email lookup: leader email OR any member email (shared-mailbox teams)
+      const email = identifier.toLowerCase();
+      team = await Team.findOne({
+        isDeleted: { $ne: true },
+        $or: [
+          { "leader.email": email },
+          { "members.email": email },
+        ],
+      })
+        .select("teamName track leader paymentStatus problemTitle problemAbstract selectedProblemId selectedAt registrationId")
+        .lean();
+    } else {
+      const regId = identifier.toUpperCase();
+      team = await Team.findOne({
+        registrationId: { $regex: new RegExp(`^${regId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") },
+        isDeleted: { $ne: true },
+      })
+        .select("teamName track leader paymentStatus problemTitle problemAbstract selectedProblemId selectedAt registrationId")
+        .lean();
+    }
 
     if (!team) {
-      return res.status(404).json({ success: false, message: "No team found for this Registration ID. Double-check your ID from the confirmation email." });
+      return res.status(404).json({
+        success: false,
+        message: isEmail
+          ? "No team found for this email. Use the email your team leader registered with, or your Registration ID."
+          : "No team found for this Registration ID. Double-check your ID from the confirmation email.",
+      });
     }
 
     const eligible = ["PAID", "CASH_PAID", "WAIVED"].includes(team.paymentStatus);

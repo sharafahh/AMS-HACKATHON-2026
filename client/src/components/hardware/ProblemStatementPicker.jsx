@@ -9,17 +9,21 @@ import {
   FiClock,
   FiUser,
   FiLayers,
+  FiMail,
+  FiHash,
 } from "react-icons/fi";
 import { PROBLEM_STATEMENTS } from "../../data/problemStatements";
 
 /**
  * ProblemStatementPicker
- * Lets a registered team leader look up their team by Registration ID and
- * select one problem statement from their own track's hardware set.
- * Multiple teams may select the same statement (last write wins per team).
+ * Identity-first: a visitor enters their team's Registration ID OR leader email.
+ * On success the parent (HardwareProblems) is told which track the team belongs
+ * to so the whole page shows ONLY that track's statements. Teams on software-only
+ * tracks see a clean "software PS release on-spot" message. Multiple teams may
+ * select the same statement (last write wins per team).
  */
-export default function ProblemStatementPicker() {
-  const [regId, setRegId] = useState("");
+export default function ProblemStatementPicker({ onIdentify, onClearIdentity }) {
+  const [identity, setIdentity] = useState("");
   const [loading, setLoading] = useState(false);
   const [lookupError, setLookupError] = useState("");
   const [teamInfo, setTeamInfo] = useState(null);
@@ -31,11 +35,13 @@ export default function ProblemStatementPicker() {
   const [saveError, setSaveError] = useState("");
   const [justSaved, setJustSaved] = useState("");
 
+  const isEmailInput = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identity.trim());
+
   const handleLookup = async (e) => {
     e?.preventDefault();
-    const id = regId.trim().toUpperCase();
-    if (!id) {
-      setLookupError("Enter your Registration ID (e.g. HV26-XXXXX).");
+    const value = identity.trim();
+    if (!value) {
+      setLookupError("Enter your team's Registration ID (e.g. HV26-7VT23) or leader email.");
       return;
     }
     setLoading(true);
@@ -43,7 +49,7 @@ export default function ProblemStatementPicker() {
     setSaveError("");
     setJustSaved("");
     try {
-      const res = await fetch(`/api/ps-selection/${encodeURIComponent(id)}`);
+      const res = await fetch(`/api/ps-selection/${encodeURIComponent(value)}`);
       const data = await res.json();
       if (!data.success) {
         setTeamInfo(null);
@@ -51,19 +57,26 @@ export default function ProblemStatementPicker() {
         setSelected(null);
         setSoftwareNote(null);
         setLookupError(data.message || "Lookup failed. Try again.");
+        onClearIdentity?.();
         return;
       }
       setTeamInfo(data.team);
       setIsHardwareTrack(data.hardwareTrack);
       setSoftwareNote(data.softwareNote || null);
       setSelected(data.selectedProblem || null);
-      // Match full statement details from the shared client dataset
       setAvailable(
         (data.availableProblems || []).map((p) => {
           const full = PROBLEM_STATEMENTS.find((s) => s.id === p.id) || {};
           return { ...p, ...full };
         })
       );
+      // Tell the parent to constrain the page to this team's track
+      onIdentify?.({
+        track: data.team.track,
+        teamName: data.team.teamName,
+        registrationId: data.team.registrationId,
+        hardwareTrack: data.hardwareTrack,
+      });
     } catch (err) {
       setLookupError("Network error. Check your connection and try again.");
     } finally {
@@ -72,6 +85,10 @@ export default function ProblemStatementPicker() {
   };
 
   const handleSelect = async (problem) => {
+    if (!teamInfo?.registrationId) {
+      setSaveError("Missing registration ID — re-enter your team identity first.");
+      return;
+    }
     setSavingId(problem.id);
     setSaveError("");
     setJustSaved("");
@@ -80,7 +97,7 @@ export default function ProblemStatementPicker() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          registrationId: regId.trim().toUpperCase(),
+          registrationId: teamInfo.registrationId,
           problemId: problem.id,
         }),
       });
@@ -98,6 +115,16 @@ export default function ProblemStatementPicker() {
     }
   };
 
+  const handleClear = () => {
+    setTeamInfo(null);
+    setAvailable([]);
+    setSelected(null);
+    setSoftwareNote(null);
+    setLookupError("");
+    setIdentity("");
+    onClearIdentity?.();
+  };
+
   return (
     <div className="glass-card p-6 rounded-3xl border border-amber-500/25 bg-[#0b1329]/70 backdrop-blur-xl space-y-5">
       {/* Header */}
@@ -113,21 +140,26 @@ export default function ProblemStatementPicker() {
             </span>
           </h3>
           <p className="text-xs text-gray-400 leading-relaxed">
-            Enter your team&apos;s Registration ID from the confirmation email to see the official
-            statements for your track and lock in your pick.
+            Enter your team&apos;s <strong className="text-amber-300">Registration ID</strong> or the{" "}
+            <strong className="text-amber-300">leader&apos;s email</strong> to unlock your track&apos;s statements
+            and lock in your pick.
           </p>
         </div>
       </div>
 
-      {/* Registration ID lookup */}
+      {/* Identity form */}
       <form onSubmit={handleLookup} className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <FiKey className="absolute left-3.5 top-1/2 -translate-y-1/2 text-amber-400" />
+          {isEmailInput ? (
+            <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-amber-400" />
+          ) : (
+            <FiKey className="absolute left-3.5 top-1/2 -translate-y-1/2 text-amber-400" />
+          )}
           <input
             type="text"
-            value={regId}
-            onChange={(e) => setRegId(e.target.value.toUpperCase())}
-            placeholder="e.g. HV26-7VT23"
+            value={identity}
+            onChange={(e) => setIdentity(e.target.value)}
+            placeholder="e.g. HV26-7VT23 or leader@gmail.com"
             className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-amber-400 text-white placeholder-gray-500 text-sm font-mono focus:outline-none transition-colors"
           />
         </div>
@@ -139,11 +171,11 @@ export default function ProblemStatementPicker() {
           {loading ? (
             <span className="flex items-center gap-2">
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              Looking up...
+              Verifying...
             </span>
           ) : (
             <>
-              <FiArrowRight size={14} /> Find My Team
+              <FiArrowRight size={14} /> Identify My Team
             </>
           )}
         </button>
@@ -159,7 +191,6 @@ export default function ProblemStatementPicker() {
         </motion.p>
       )}
 
-      {/* Lookup result */}
       <AnimatePresence>
         {teamInfo && (
           <motion.div
@@ -172,15 +203,19 @@ export default function ProblemStatementPicker() {
               <span className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-200 font-semibold flex items-center gap-1.5">
                 <FiUser className="text-amber-400" /> {teamInfo.teamName}
               </span>
-              <span className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-200 font-mono font-semibold">
-                {teamInfo.registrationId}
+              <span className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-200 font-mono font-semibold flex items-center gap-1.5">
+                <FiHash className="text-amber-400" /> {teamInfo.registrationId}
               </span>
               <span className="px-3 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 font-semibold flex items-center gap-1.5">
                 <FiLayers className="text-cyan-400" /> {teamInfo.track}
               </span>
-              <span className="px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 font-semibold">
-                {teamInfo.paymentStatus}
-              </span>
+              <button
+                type="button"
+                onClick={handleClear}
+                className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white font-semibold transition-colors cursor-pointer"
+              >
+                Switch team
+              </button>
             </div>
 
             {/* Software-only track notice */}
