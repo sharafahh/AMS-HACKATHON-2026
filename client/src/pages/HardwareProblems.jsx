@@ -153,11 +153,6 @@ function HardwareProblems() {
               Official challenge statements across 12 innovation domains (Software & Hardware).
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold font-['Space_Grotesk'] flex items-center gap-1.5">
-              <FiUnlock size={13} /> Statements Live — Public
-            </span>
-          </div>
         </div>
           /* -------------------- UNLOCKED PROBLEM STATEMENTS CATALOG -------------------- */
           <motion.div
@@ -169,6 +164,8 @@ function HardwareProblems() {
             <ProblemStatementPicker onIdentify={handleIdentify} onClearIdentity={handleClearIdentity} />
 
             {/* Search & Filter Bar */}
+            {identified?.hasStatements && (
+              <>
             <div className="glass-card p-6 rounded-3xl border border-white/10 space-y-5 bg-[#0b1329]/70 backdrop-blur-xl">
               <div className="flex flex-col lg:flex-row items-center gap-4">
                 {/* Search Input */}
@@ -393,7 +390,11 @@ function HardwareProblems() {
                 ))}
               </div>
             )}
+              </>
+            )}
           </motion.div>
+
+
 
         {/* -------------------- DETAIL SPECIFICATION MODAL -------------------- */}
         <AnimatePresence>

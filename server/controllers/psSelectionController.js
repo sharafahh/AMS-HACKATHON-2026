@@ -25,7 +25,7 @@ export const getTeamSelection = async (req, res) => {
           { "members.email": email },
         ],
       })
-        .select("teamName track leader paymentStatus problemTitle problemAbstract selectedProblemId selectedAt registrationId")
+        .select("teamName track leader paymentStatus problemTitle problemAbstract selectedProblemId selectedAt registrationId participationType")
         .lean();
     } else {
       const regId = identifier.toUpperCase();
@@ -33,7 +33,7 @@ export const getTeamSelection = async (req, res) => {
         registrationId: { $regex: new RegExp(`^${regId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") },
         isDeleted: { $ne: true },
       })
-        .select("teamName track leader paymentStatus problemTitle problemAbstract selectedProblemId selectedAt registrationId")
+        .select("teamName track leader paymentStatus problemTitle problemAbstract selectedProblemId selectedAt registrationId participationType")
         .lean();
     }
 
@@ -53,6 +53,7 @@ export const getTeamSelection = async (req, res) => {
 
     const trackProblems = PROBLEM_STATEMENTS.filter((p) => p.track === team.track);
     const hardwareTrack = trackProblems.length > 0;
+    const participationType = team.participationType || (hardwareTrack ? "hardware" : "software");
 
     return res.status(200).json({
       success: true,
@@ -62,9 +63,10 @@ export const getTeamSelection = async (req, res) => {
         track: team.track,
         paymentStatus: team.paymentStatus,
         leaderName: team.leader?.name || "Team Leader",
+        participationType,
       },
       hardwareTrack,
-      availableProblems: hardwareTrack
+      availableProblems: hardwareTrack && participationType === "hardware"
         ? trackProblems
         : [],
       selectedProblem: team.selectedProblemId
@@ -73,9 +75,11 @@ export const getTeamSelection = async (req, res) => {
             title: team.problemTitle,
           }
         : null,
-      softwareNote: hardwareTrack
+      softwareNote: hardwareTrack && participationType === "hardware"
         ? null
-        : "Software problem statements for this track will be revealed on-spot at the event opening (Aug 22). Nothing to select yet.",
+        : participationType === "software"
+          ? "Software problem statements for your track will be revealed on-spot at the event opening (Aug 22). Check back then!"
+          : "Hardware problem statements for your track are still being finalised — check back soon.",
     });
   } catch (error) {
     console.error(`[${new Date().toISOString()}] PS-SELECTION lookup error: ${error.message}`);
