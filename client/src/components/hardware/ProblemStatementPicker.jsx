@@ -75,7 +75,9 @@ export default function ProblemStatementPicker({ onIdentify, onClearIdentity }) 
         track: data.team.track,
         teamName: data.team.teamName,
         registrationId: data.team.registrationId,
+        participationType: data.team.participationType,
         hardwareTrack: data.hardwareTrack,
+        hasStatements: (data.availableProblems || []).length > 0,
       });
     } catch (err) {
       setLookupError("Network error. Check your connection and try again.");

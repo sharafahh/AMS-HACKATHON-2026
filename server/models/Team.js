@@ -104,6 +104,12 @@ const teamSchema = new mongoose.Schema(
       default: "UNPAID",
       index: true,
     },
+    participationType: {
+      type: String,
+      enum: ["hardware", "software"],
+      default: "software",
+      index: true,
+    },
     isDeleted: {
       type: Boolean,
       default: false,
